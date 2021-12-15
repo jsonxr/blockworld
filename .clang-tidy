@@ -1,0 +1,2 @@
+---
+Checks: 'clang-diagnostic-*,clang-analyzer-*,bugprone-*,cert-*,clang-analyzer-*,concurrency-*,cppcoreguidelines-*,modernize-*,performance-*,portability-*,readability-*'
