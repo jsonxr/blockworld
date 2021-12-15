@@ -25,7 +25,7 @@ list(APPEND SOURCES
         src/main.cpp
         )
 
-add_executable(blockworld ${SOURCES})
+add_executable(blockworld ${SOURCES} src/core/WebGlRenderer.cpp src/core/WebGlRenderer.h)
 target_link_libraries(blockworld ${CONAN_LIBS})
 
 if (EMSCRIPTEN)
@@ -36,10 +36,6 @@ if (EMSCRIPTEN)
     # -O0
     # -O3 or
     # -Oz   but reduces code size even further, and may take longer to run. This can affect both wasm and JavaScript
-
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY dist)
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY dist)
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY dist)
 
     set(CMAKE_EXECUTABLE_SUFFIX .html)
     set_target_properties(blockworld PROPERTIES LINK_FLAGS ${EMCC_LINKER_FLAGS})

@@ -18,6 +18,7 @@ Install
 ```shell
 # Install conan dependencies
 conan install . -s build_type=Debug --install-folder=cmake-build-debug --build missing
+cd cmake-build-debug && cmake ..
 ```
 
 # Compile

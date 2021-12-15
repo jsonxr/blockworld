@@ -1,4 +1,5 @@
 #include "core.h"
+#include "core/WebGlRenderer.h"
 #include "core/Window.h"
 
 using namespace BlockWorld;
@@ -35,19 +36,16 @@ int main(void) {
   glfwSetErrorCallback(error_callback);
   if (!glfwInit()) exit(EXIT_FAILURE);
 
-  std::unique_ptr<Window> window =
-      Window::createWindow(windowWidth, windowHeight, windowTitle);
+  std::shared_ptr<Window> window = Window::createWindow(windowTitle);
+  
   if (window == nullptr) {
     return exitWithError("Failed to create GLFW window\n");
   }
+  std::unique_ptr<WebGlRenderer> renderer =
+      std::make_unique<WebGlRenderer>(window);
 
   loop = [&] {
-    float ratio;
-    int width, height;
-    glViewport(0, 0, width, height);
-    glClearColor(250.0f / 255.0f, 119.0f / 255.0f, 110.0f / 255.0f, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glfwSwapBuffers(window->nativeWindow.get());
+    renderer->render();
     glfwPollEvents();
   };
 

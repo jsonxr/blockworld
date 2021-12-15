@@ -12,17 +12,22 @@ typedef std::unique_ptr<GLFWwindow, Destroy_GLFWwindow> Smart_GLFWwindow;
 
 class Window {
  public:
-  Smart_GLFWwindow nativeWindow;
+  Window();
   Window(int windowWidth, int windowHeight);
-  static std::unique_ptr<Window> createWindow(int width, int height,
+  static std::shared_ptr<Window> createWindow(std::string title);
+  static std::shared_ptr<Window> createWindow(int width, int height,
                                               std::string title,
                                               bool fullScreenMode = false);
   bool shouldClose();
   void close();
+  int width() const { return _width; }
+  int height() const { return _height; }
+  GLFWwindow* nativeWindow() { return _nativeWindow.get(); }
 
  private:
-  int windowWidth{0};
-  int windowHeight{0};
+  Smart_GLFWwindow _nativeWindow;
+  int _width{};
+  int _height{};
 };
 
 }  // namespace BlockWorld
