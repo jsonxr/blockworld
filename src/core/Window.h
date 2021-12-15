@@ -2,7 +2,7 @@
 #define MINECRAFT_WINDOW_H
 #include "../core.h"
 
-namespace Minecraft {
+namespace BlockWorld {
 
 struct Destroy_GLFWwindow {
   void operator()(GLFWwindow* ptr) { glfwDestroyWindow(ptr); }
@@ -25,6 +25,6 @@ class Window {
   int windowHeight{0};
 };
 
-}  // namespace Minecraft
+}  // namespace BlockWorld
 
 #endif

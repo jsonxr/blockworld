@@ -2,7 +2,7 @@
 #define MINECRAFT_INPUT_H
 #include "../core.h"
 
-namespace Minecraft::Input {
+namespace BlockWorld::Input {
 
 extern std::array<bool, GLFW_KEY_LAST> keyPressedData;
 extern std::array<bool, GLFW_MOUSE_BUTTON_LAST> mouseButtonPressedData;
@@ -20,6 +20,6 @@ void mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 bool isKeyDown(int key);
 bool isMouseButtonDown(int mouseButton);
 
-}  // namespace Minecraft::Input
+}  // namespace BlockWorld::Input
 
 #endif

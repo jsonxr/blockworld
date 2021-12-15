@@ -1,11 +1,11 @@
 #include "core.h"
 #include "core/Window.h"
 
-using namespace Minecraft;
+using namespace BlockWorld;
 
 const int windowWidth = 1280;
 const int windowHeight = 720;
-const std::string windowTitle = "Minecraft";
+const std::string windowTitle = "BlockWorld";
 
 int exitWithError(const char* msg) {  // NOLINT
   std::cerr << msg << std::endl;

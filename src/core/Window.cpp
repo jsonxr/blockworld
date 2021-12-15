@@ -2,7 +2,7 @@
 
 #include "Input.h"
 
-namespace Minecraft {
+namespace BlockWorld {
 
 Window::Window(int windowWidth, int windowHeight)
     : windowWidth(windowWidth), windowHeight(windowHeight) {}
@@ -55,7 +55,7 @@ void Window::close() {
   glfwSetWindowShouldClose(nativeWindow.get(), GLFW_TRUE);
 }
 
-}  // namespace Minecraft
+}  // namespace BlockWorld
 
 //
 // void Window::installMainCallbacks() {
@@ -106,4 +106,4 @@ void Window::close() {
 //
 // Window::Window(int windowWidth, int windowHeight)
 //    : windowWidth(windowWidth), windowHeight(windowHeight) {}
-//}  // namespace Minecraft
+//}  // namespace BlockWorld

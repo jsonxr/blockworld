@@ -1,6 +1,6 @@
 #include "Input.h"
 
-namespace Minecraft::Input {
+namespace BlockWorld::Input {
 
 std::array<bool, GLFW_KEY_LAST> keyPressedData;
 std::array<bool, GLFW_MOUSE_BUTTON_LAST> mouseButtonPressedData;
@@ -49,4 +49,4 @@ bool isMouseButtonDown(int mouseButton) {
   return false;
 }
 
-}  // namespace Minecraft::Input
+}  // namespace BlockWorld::Input
