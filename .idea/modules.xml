@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/minecraft.iml" filepath="$PROJECT_DIR$/.idea/minecraft.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/blockworld.iml" filepath="$PROJECT_DIR$/.idea/blockworld.iml" />
     </modules>
   </component>
 </project>
