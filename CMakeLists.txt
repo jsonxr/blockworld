@@ -25,7 +25,7 @@ list(APPEND SOURCES
         src/main.cpp
         )
 
-add_executable(blockworld ${SOURCES} src/core/WebGlRenderer.cpp src/core/WebGlRenderer.h)
+add_executable(blockworld ${SOURCES} src/core/webgl/WebGLRenderer.cpp src/core/webgl/WebGLRenderer.h src/core/Scene.cpp src/core/Scene.h src/core/BufferGeometry.cpp src/core/BufferGeometry.h src/core/materials/ShaderMaterial.cpp src/core/materials/ShaderMaterial.h src/core/webgl/WebGLShader.cpp src/core/webgl/WebGLShader.h src/core/webgl/WebGLProgram.cpp src/core/webgl/WebGLProgram.h)
 target_link_libraries(blockworld ${CONAN_LIBS})
 
 if (EMSCRIPTEN)

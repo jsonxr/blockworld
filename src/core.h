@@ -10,14 +10,16 @@
 #include <glad/glad.h>
 #endif
 #include <GLFW/glfw3.h>
+
 #include "linmath.h"
 
 // Standard library stuff
+#include <stdint.h>
+#include <stdio.h>
+
 #include <array>
 #include <functional>
 #include <iostream>
-#include <stdint.h>
-#include <stdio.h>
 #include <string>
 #include <vector>
 
@@ -30,5 +32,7 @@ typedef int64_t int64;
 typedef int32_t int32;
 typedef int16_t int16;
 typedef int8_t int8;
+
+constexpr int MAX_LOG_LENGTH = 1024;
 
 #endif

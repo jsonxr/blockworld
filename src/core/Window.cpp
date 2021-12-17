@@ -1,24 +1,43 @@
 #include "Window.h"
 
+#include <utility>
+
 #include "Input.h"
 
 namespace BlockWorld {
 
-Window::Window(){};
-Window::Window(int width, int height) : _width(width), _height(height) {}
+constexpr int DEFAULT_WIDTH = 1280;
+constexpr int DEFAULT_HEIGHT = 720;
 
-std::shared_ptr<Window> Window::createWindow(std::string title) {
-  return createWindow(1280, 720, title);
+Window::Window() = default;
+
+Window::Window(int width,   // NOLINT(bugprone-easily-swappable-parameters)
+               int height)  // NOLINT(bugprone-easily-swappable-parameters)
+    : _width(width), _height(height) {}
+
+void window_size_callback(GLFWwindow* window, int width, int height) {
+  std::cout << "window_size_callback " << width << ", " << height << std::endl;
+  void* ptr = glfwGetWindowUserPointer(window);
+  auto* self = static_cast<Window*>(ptr);
+  self->onResize(width, height);
+}
+void Window::onResize(
+    int width, int height) {  // NOLINT(bugprone-easily-swappable-parameters)
+  this->_width = width;
+  this->_height = height;
 }
 
-std::shared_ptr<Window> Window::createWindow(int width, int height,
-                                             std::string title,
-                                             bool fullScreenMode) {
+auto Window::createWindow(const std::string& title) -> std::shared_ptr<Window> {
+  return createWindow(DEFAULT_WIDTH, DEFAULT_HEIGHT, title, false);
+}
+
+auto Window::createWindow(int width, int height, const std::string& title,
+                          bool fullScreenMode) -> std::shared_ptr<Window> {
   // Highest OpenGL version Mac supports is 4.1
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);  // Required for mac
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);  // Required for mac
 
   // Only supply the monitor if we want to start the window in full-screen
   // mode
@@ -31,7 +50,7 @@ std::shared_ptr<Window> Window::createWindow(int width, int height,
   res->_nativeWindow.reset(
       glfwCreateWindow(width, height, title.c_str(), primaryMonitor, nullptr));
   if (res->_nativeWindow == nullptr) {
-    printf("Failed to create GLFW window\n");
+    std::cerr << "Failed to create GLFW window\n" << std::endl;
     glfwTerminate();
     return nullptr;
   }
@@ -43,20 +62,22 @@ std::shared_ptr<Window> Window::createWindow(int width, int height,
   glfwMakeContextCurrent(res->_nativeWindow.get());
 
 #ifndef __EMSCRIPTEN__
-  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+  if (gladLoadGLLoader(
+          (GLADloadproc)
+              glfwGetProcAddress) ==  // NOLINT(cppcoreguidelines-pro-type-cstyle-cast)
+      0) {
     std::cerr << "Failed to initialize GLAD." << std::endl;
     return nullptr;
   }
 #endif
-
-  // Make sure not to call any OpenGL functions until *after* we initialize
-  // our function loader
-  glfwSwapInterval(1);
+  // Handle window resize
+  glfwSetWindowUserPointer(res->_nativeWindow.get(), res.get());
+  glfwSetWindowSizeCallback(res->_nativeWindow.get(), window_size_callback);
   return res;
 }
 
-bool Window::shouldClose() {
-  return glfwWindowShouldClose(_nativeWindow.get());
+auto Window::shouldClose() -> bool {
+  return glfwWindowShouldClose(_nativeWindow.get()) == GLFW_TRUE;
 }
 
 void Window::close() {
@@ -64,54 +85,3 @@ void Window::close() {
 }
 
 }  // namespace BlockWorld
-
-//
-// void Window::installMainCallbacks() {
-//  if (nativeWindow != nullptr) {
-//    glfwSetKeyCallback(nativeWindow, Input::keyCallback);
-//    glfwSetCursorPosCallback(nativeWindow, Input::mouseCallback);
-//    glfwSetMouseButtonCallback(nativeWindow, Input::mouseButtonCallback);
-//  }
-//}
-//
-// void Window::close() {
-//  if (nativeWindow != nullptr) {
-//    glfwSetWindowShouldClose(nativeWindow, GLFW_TRUE);
-//  }
-//}
-//
-// std::unique_ptr<Window> Window::createWindow(int width, int height,
-//                                             const char* title,
-//                                             bool fullScreenMode) {
-//  // Highest OpenGL version Mac supports is 4.1
-//  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-//  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-//  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-//  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);  // Required for mac
-//
-//  // Only supply the monitor if we want to start the window in full-screen
-//  mode std::unique_ptr<Window> res = std::make_unique<Window>(width, height);
-//  GLFWmonitor* primaryMonitor =
-//      fullScreenMode ? glfwGetPrimaryMonitor() : nullptr;
-//  res->nativeWindow =
-//      glfwCreateWindow(width, height, title, primaryMonitor, nullptr);
-//  if (res->nativeWindow == nullptr) {
-//    printf("Failed to create GLFW window\n");
-//    glfwTerminate();
-//    return nullptr;
-//  }
-//  glfwMakeContextCurrent(res->nativeWindow);
-//
-//  return res;
-//}
-//
-// void Window::freeWindow(std::unique_ptr<Window> window) {
-//  if (window) {
-//    glfwDestroyWindow(window->nativeWindow);
-//    delete window;
-//  }
-//}
-//
-// Window::Window(int width, int height)
-//    : width(width), height(height) {}
-//}  // namespace BlockWorld
