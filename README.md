@@ -73,6 +73,8 @@ open http://127.0.0.1:8080/blockworld.html
 * [what is this link?](https://www.youtube.com/watch?v=sMs28KxbHiA)
 * https://gist.github.com/ousttrue/0f3a11d5d28e365b129fe08f18f4e141
 * [setup on mac. need to code sign?](https://giovanni.codes/opengl-setup-in-macos/)
+* [Faithful 1.18 Resource Pack](https://faithful.team/faithful-1-18/)
+
 
 # C++ Standard
 
