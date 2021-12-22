@@ -8,6 +8,8 @@
 #include <iostream>
 #include <regex>
 
+#include "Assets.h"
+
 namespace BlockWorld {
 
 auto readAssetIntoString(const std::string &path) -> std::string {
@@ -35,6 +37,11 @@ auto readAssetIntoString(const std::string &path) -> std::string {
 }
 
 Material::Material() {
+  auto png = Assets::load("/textures/block/stone.png");
+  std::cout << "data: "
+            << " height=" << png->height << " width=" << png->width
+            << " channels=" << png->channels << std::endl;
+
   std::string vertexShaderSource = readAssetIntoString("/vertex.glsl");
   std::string fragmentShaderSource = readAssetIntoString("/fragment.glsl");
   // std::cout << file_contents << std::endl;

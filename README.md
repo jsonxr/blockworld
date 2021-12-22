@@ -75,17 +75,17 @@ open http://127.0.0.1:8080/blockworld.html
 * [setup on mac. need to code sign?](https://giovanni.codes/opengl-setup-in-macos/)
 * [Faithful 1.18 Resource Pack](https://faithful.team/faithful-1-18/)
 
-
 # C++ Standard
 
 https://en.cppreference.com/w/cpp/compiler_support
 
 # Libraries
 
-* [glfw](https://www.glfw.org/):  zlib/libpng License
-* [glad](https://github.com/Dav1dde/glad): MIT License
-* [glm](https://github.com/g-truc/glm): The Happy Bunny License or MIT License
-* [tinygltf](https://github.com/syoyo/tinygltf): MIT License
+* [glfw - GL windowing library](https://www.glfw.org/):  zlib/libpng License
+* [glad - GL bootstrap](https://github.com/Dav1dde/glad): MIT License
+* [glm - GL Math](https://github.com/g-truc/glm): The Happy Bunny License or MIT License
+* [tinygltf - GLTF file loading](https://github.com/syoyo/tinygltf): MIT License
+* [stb - image processing](https://github.com/nothings/stb): MIT License or Public Domain
 
 # TODO
 

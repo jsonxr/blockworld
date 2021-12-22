@@ -35,7 +35,7 @@ list(APPEND SOURCES
         src/main.cpp
         )
 
-add_executable(blockworld ${SOURCES})
+add_executable(blockworld ${SOURCES} src/stb.cpp src/core/Assets.cpp src/core/Assets.h)
 target_link_libraries(blockworld ${CONAN_LIBS})
 
 if (EMSCRIPTEN)
