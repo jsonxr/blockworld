@@ -7,39 +7,8 @@
 #include <fstream>
 #include <iostream>
 #include <regex>
-#include <sstream>
 
 namespace BlockWorld {
-
-// const char *vertexShaderSourcesave =
-//#ifdef __EMSCRIPTEN__
-//     "#version 300 es\n"
-//#else
-//     "#version 330 core\n"
-//#endif
-//     "layout (location = 0) in highp vec3 aPos;\n"
-//     "void main()\n"
-//     "{\n"
-//     "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-//     "}\0";
-
-// const char *fragmentShaderSourcesave =
-//#ifdef __EMSCRIPTEN__
-//     "#version 300 es\n"
-//#else
-//     "#version 330 core\n"
-//#endif
-//     "    out highp vec4 FragColor;\n"
-//
-//     "uniform highp vec4 ourColor;\n"  // we set this variable in the OpenGL
-//                                       // code.
-//
-//     "\n"
-//     "void main()\n"
-//     "{\n"
-//     //"  FragColor = vec4(1.0f, 0.2f, 0.2f, 1.0f);\n"
-//     "  FragColor = ourColor;\n"
-//     "}\n";
 
 auto readAssetIntoString(const std::string &path) -> std::string {
   constexpr const char *ASSETS_FILENAME =

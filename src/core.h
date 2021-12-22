@@ -12,6 +12,7 @@
 #include <GLFW/glfw3.h>
 
 #include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 
 //#include "linmath.h"
 
@@ -25,6 +26,7 @@
 #include <vector>
 
 using vec3 = glm::vec3;
+using vec4 = glm::vec4;
 
 using u64 = uint64_t;
 using u32 = uint32_t;

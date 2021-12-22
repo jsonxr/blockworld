@@ -17,37 +17,25 @@ endif ()
 
 include_directories(include)
 list(APPEND SOURCES
-        # src/core/materials
-        src/core/materials/ShaderMaterial.cpp
-        src/core/materials/ShaderMaterial.h
         # src/core/webgl
-        src/core/webgl/WebGLProgram.cpp
-        src/core/webgl/WebGLProgram.h
-        src/core/webgl/WebGLRenderer.cpp
-        src/core/webgl/WebGLRenderer.h
-        src/core/webgl/WebGLShader.cpp
-        src/core/webgl/WebGLShader.h
+        src/core/webgl/WebGLProgram.h src/core/webgl/WebGLProgram.cpp
+        src/core/webgl/WebGLRenderer.h src/core/webgl/WebGLRenderer.cpp
+        src/core/webgl/WebGLShader.h src/core/webgl/WebGLShader.cpp
         # src/core
-        src/core/BufferGeometry.cpp
-        src/core/BufferGeometry.h
-        src/core/Camera.cpp
-        src/core/Camera.h
-        src/core/Input.h
-        src/core/Input.cpp
-        src/core/Material.cpp
-        src/core/Material.h
-        src/core/Mesh.cpp
-        src/core/Mesh.h
-        src/core/Scene.cpp
-        src/core/Scene.h
-        src/core/Window.h
-        src/core/Window.cpp
+        src/core/BoxGeometry.h src/core/BoxGeometry.cpp
+        src/core/BufferGeometry.h src/core/BufferGeometry.cpp
+        src/core/Camera.h src/core/Camera.cpp
+        src/core/Input.h src/core/Input.cpp
+        src/core/Material.h src/core/Material.cpp
+        src/core/Mesh.h src/core/Mesh.cpp
+        src/core/Scene.h src/core/Scene.cpp
+        src/core/Window.h src/core/Window.cpp
         # src
         src/core.h
         src/main.cpp
         )
 
-add_executable(blockworld ${SOURCES} src/core/BoxGeometry.cpp src/core/BoxGeometry.h)
+add_executable(blockworld ${SOURCES})
 target_link_libraries(blockworld ${CONAN_LIBS})
 
 if (EMSCRIPTEN)

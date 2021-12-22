@@ -19,6 +19,7 @@ class WebGLProgram {
   ~WebGLProgram();
   [[nodiscard]] auto handle() const -> GLuint { return _handle; };
   [[nodiscard]] auto use() const noexcept -> bool;
+  void setUniform(const std::string& name, const vec4& value) const;
 
   // Copy: not supported
   WebGLProgram(const WebGLProgram& other) = delete;    // copy constructor

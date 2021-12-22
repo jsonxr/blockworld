@@ -60,11 +60,10 @@ void Mesh::compile() {
 
 void Mesh::render() const {
   if (_material->getProgram().use() && VAO != 0) {
-    float timeValue = glfwGetTime();
-    float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-    int vertexColorLocation =
-        glGetUniformLocation(_material->getProgram().handle(), "ourColor");
-    glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+    double timeValue = glfwGetTime();
+    float greenValue = (sin(timeValue) / 2.0F) + 0.5F;
+    _material->getProgram().setUniform("ourColor",
+                                       vec4{0.F, greenValue, 0.F, 1.0F});
 
     GLsizei indexCount = _bufferGeometry->getIndices().size();
     glBindVertexArray(VAO);

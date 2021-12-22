@@ -85,3 +85,8 @@ https://en.cppreference.com/w/cpp/compiler_support
 * [glm](https://github.com/g-truc/glm): The Happy Bunny License or MIT License
 * [tinygltf](https://github.com/syoyo/tinygltf): MIT License
 
+# TODO
+
+* Modify cmake to recompile for asset change
+    * [blog article](https://jeremimucha.com/2021/05/cmake-managing-resources/)
+    * [gist](https://gist.github.com/jamcodes/f79b3be24ed40c6c224cc9e91d3061cc)

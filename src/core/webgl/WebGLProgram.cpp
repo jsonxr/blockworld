@@ -24,7 +24,9 @@ WebGLProgram::WebGLProgram(const WebGLShader& vertexShader,
               << log.data() << std::endl;
     glDeleteProgram(_handle);
     _handle = 0;
+    return;
   }
+
   std::cout << "WebGLProgram " << _handle << std::endl;
 }
 
@@ -43,6 +45,12 @@ auto WebGLProgram::use() const noexcept -> bool {
     std::cerr << "WebGLProgram can't use" << _handle << std::endl;
   }
   return _handle != 0U;
+}
+
+void WebGLProgram::setUniform(const std::string& name,
+                              const vec4& value) const {
+  glUniform4f(glGetUniformLocation(_handle, name.c_str()), value[0], value[1],
+              value[2], value[3]);
 }
 
 }  // namespace BlockWorld
