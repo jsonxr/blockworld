@@ -8,18 +8,11 @@
 
 namespace BlockWorld {
 
-WebGLProgram::~WebGLProgram() {
-  if (_handle > 0) {
-    glDeleteProgram(_handle);
-  }
-}
-
-WebGLProgram::WebGLProgram(
-    const std::vector<std::shared_ptr<WebGLShader>>& shaders)
+WebGLProgram::WebGLProgram(const WebGLShader& vertexShader,
+                           const WebGLShader& fragmentShader)
     : _handle(glCreateProgram()) {
-  for (const auto& shader : shaders) {
-    glAttachShader(_handle, shader->handle());
-  }
+  glAttachShader(_handle, vertexShader.handle());
+  glAttachShader(_handle, fragmentShader.handle());
   glLinkProgram(_handle);
 
   GLint isCompiled = GL_FALSE;
@@ -32,6 +25,24 @@ WebGLProgram::WebGLProgram(
     glDeleteProgram(_handle);
     _handle = 0;
   }
+  std::cout << "WebGLProgram " << _handle << std::endl;
+}
+
+WebGLProgram::~WebGLProgram() {
+  std::cout << "~WebGLProgram " << _handle << std::endl;
+  if (_handle > 0) {
+    glDeleteProgram(_handle);
+    _handle = 0;
+  }
+}
+
+auto WebGLProgram::use() const noexcept -> bool {
+  if (_handle > 0) {
+    glUseProgram(_handle);
+  } else {
+    std::cerr << "WebGLProgram can't use" << _handle << std::endl;
+  }
+  return _handle != 0U;
 }
 
 }  // namespace BlockWorld

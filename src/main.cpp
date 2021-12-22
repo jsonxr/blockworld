@@ -1,4 +1,8 @@
 #include "core.h"
+#include "core/BoxGeometry.h"
+#include "core/BufferGeometry.h"
+#include "core/Camera.h"
+#include "core/Scene.h"
 #include "core/Window.h"
 #include "core/webgl/WebGLRenderer.h"
 
@@ -37,28 +41,48 @@ auto main() -> int {
     return EXIT_FAILURE;
   }
 
-  std::shared_ptr<Window> window = Window::createWindow(windowTitle);
+  Window window{windowTitle, WindowSize{640, 480}};
 
-  if (window == nullptr) {
+  if (window.nativeWindow() == nullptr) {
     return exitWithError("Failed to create GLFW window\n");
   }
-  std::unique_ptr<WebGLRenderer> renderer =
-      std::make_unique<WebGLRenderer>(window);
+
+  auto geometry = BoxGeometry::create({1, 1, 1});
+
+  std::cout << "geometry=" << *geometry << std::endl;
+  auto material = std::make_unique<Material>();
+  std::cout << "cube1 " << *geometry << std::endl;
+
+  // auto cube = std::make_unique<Mesh>(std::move(geometry),
+  // std::move(material));
+  auto cube = std::make_unique<Mesh>(std::move(geometry), std::move(material));
+
+  // auto cube = std::make_unique<Mesh>(geometry, material);
+  //  std::cout << "Mesh: " << cube.get() << std::endl;
+  std::cout << "cube2 " << geometry << std::endl;
+  std::cout << "after cube2";
+  Scene scene{};
+  scene.add(std::move(cube));
+
+  Camera camera{};
+  WebGLRenderer renderer{};
+  renderer.compile(scene);
 
   loop = [&] {
-    renderer->render();
+    // or... loop = [&window, &scene, &camera, &renderer] {
+    renderer.render(window, scene, camera);
     glfwPollEvents();
   };
 
 #ifdef __EMSCRIPTEN__
   emscripten_set_main_loop(main_loop, 0, true);
 #else
-  while (!window->shouldClose()) {
-    main_loop();
+  while (!window.shouldClose()) {
+    loop();
   }
 #endif
 
-  window->close();
+  window.close();
 
   glfwTerminate();
   exit(EXIT_SUCCESS);

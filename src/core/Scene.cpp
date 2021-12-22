@@ -4,4 +4,10 @@
 
 #include "Scene.h"
 
-namespace BlockWorld {}
+namespace BlockWorld {
+
+void Scene::add(std::unique_ptr<Mesh> mesh) {
+  _meshes.push_back(std::move(mesh));
+}
+
+}  // namespace BlockWorld

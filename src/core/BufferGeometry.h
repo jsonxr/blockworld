@@ -5,22 +5,43 @@
 #ifndef BLOCKWORLD_BUFFERGEOMETRY_H
 #define BLOCKWORLD_BUFFERGEOMETRY_H
 
-#include <array>
 #include <vector>
 
+#include "../core.h"
 namespace BlockWorld {
-
-struct Vertex {
-  std::array<float, 4> color;
-  std::array<float, 3> position;
-};
 
 class BufferGeometry {
  public:
-  static std::shared_ptr<BufferGeometry> create(std::string title);
-  void setVertices(std::vector<Vertex> vertices);
-  std::vector<Vertex> _vertices;
+  BufferGeometry() { std::cout << "BufferGeometry" << std::endl; };
+  BufferGeometry(std::vector<float> vertices, std::vector<u32> indices);
+  [[nodiscard]] auto getVertices() const -> const std::vector<float>& {
+    return _vertices;
+  };
+  [[nodiscard]] auto getIndices() const -> const std::vector<u32>& {
+    return _indices;
+  };
+
+  // Copy: not supported
+  BufferGeometry(const BufferGeometry& other) = delete;  // copy constructor
+  auto operator=(const BufferGeometry& other) = delete;  // copy assignment
+  // Move
+  BufferGeometry(BufferGeometry&& other) noexcept
+      : _indices(std::exchange(other._indices, std::vector<u32>{})),
+        _vertices(
+            std::exchange(other._vertices, std::vector<float>{})){};  // move
+  auto operator=(BufferGeometry&& other) noexcept -> BufferGeometry& {
+    std::swap(_vertices, other._vertices);
+    std::swap(_indices, other._indices);
+    return *this;
+  }
+
+ private:
+  std::vector<float> _vertices{};
+  std::vector<u32> _indices{};
 };
+
+auto operator<<(std::ostream& out, const BufferGeometry& geometry)
+    -> std::ostream&;
 
 }  // namespace BlockWorld
 #endif  // BLOCKWORLD_BUFFERGEOMETRY_H

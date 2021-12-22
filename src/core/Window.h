@@ -4,32 +4,66 @@
 
 namespace BlockWorld {
 
-struct Destroy_GLFWwindow {
-  void operator()(GLFWwindow* ptr) { glfwDestroyWindow(ptr); }
+constexpr int DEFAULT_WIDTH = 1280;
+constexpr int DEFAULT_HEIGHT = 720;
+
+struct WindowSize {
+  int width{DEFAULT_WIDTH};
+  int height{DEFAULT_HEIGHT};
 };
 
-using Smart_GLFWwindow = std::unique_ptr<GLFWwindow, Destroy_GLFWwindow>;
+// struct Destroy_GLFWwindow {
+//   void operator()(GLFWwindow* ptr) { glfwDestroyWindow(ptr); }
+// };
+
+// using Smart_GLFWwindow = std::unique_ptr<GLFWwindow, Destroy_GLFWwindow>;
 
 class Window {
  public:
   Window();
-  Window(int windowWidth, int windowHeight);
-  static auto createWindow(const std::string& title) -> std::shared_ptr<Window>;
-  static auto createWindow(int width, int height, const std::string& title,
-                           bool fullScreenMode = false)
-      -> std::shared_ptr<Window>;
-  auto shouldClose() -> bool;
-  void close();
-  [[nodiscard]] auto width() const -> int { return _width; }
-  [[nodiscard]] auto height() const -> int { return _height; }
-  auto nativeWindow() -> GLFWwindow* { return _nativeWindow.get(); }
+  explicit Window(const char* title);
+  explicit Window(const char* title, WindowSize size,
+                  bool fullScreenMode = false);
+  ~Window();
+
+  //  static auto createWindow(const std::string& title) ->
+  //  std::shared_ptr<Window>; static auto createWindow(WindowSize size, const
+  //  std::string& title,
+  //                           bool fullScreenMode = false)
+  //      -> std::shared_ptr<Window>;
+
+  [[nodiscard("tidy told me to")]] auto shouldClose() const noexcept -> bool;
+  void close() noexcept;
+  [[nodiscard("tidy told me to")]] auto width() const noexcept -> int {
+    return _size.width;
+  }
+  [[nodiscard("tidy told me to")]] auto height() const noexcept -> int {
+    return _size.height;
+  }
+  [[nodiscard("tidy told me to")]] auto nativeWindow() const noexcept
+      -> GLFWwindow* {
+    return ptr;
+  }
 
   void onResize(int width, int height);
 
+  // Copy: not supported
+  Window(const Window& other) = delete;          // copy constructor
+  auto operator=(const Window& other) = delete;  // copy assignment
+  // Move
+  Window(Window&& other) noexcept
+      : _size(other._size),
+        ptr(std::exchange(other.ptr, nullptr)){};  // move constructor
+  auto operator=(Window&& other) noexcept -> Window& {
+    _size = other._size;
+    std::swap(ptr, other.ptr);
+    return *this;
+  }
+
  private:
-  Smart_GLFWwindow _nativeWindow;
-  int _width{};
-  int _height{};
+  GLFWwindow* ptr;
+  // Smart_GLFWwindow _nativeWindow;
+  WindowSize _size{};
 };
 
 }  // namespace BlockWorld

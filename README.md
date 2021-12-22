@@ -18,7 +18,8 @@ Install
 ```shell
 # Install conan dependencies
 conan install . -s build_type=Debug --install-folder=cmake-build-debug --build missing
-cd cmake-build-debug && cmake ..
+# dont do below, click on that conan install at the bottom and then reload the cmake project in the ide
+#cd cmake-build-debug && cmake ..
 ```
 
 # Compile
@@ -26,9 +27,9 @@ cd cmake-build-debug && cmake ..
 ```shell
 # Debug dependencies
 mkdir build
-conan install . -s build_type=Debug -s compiler.libcxx=libc++ -s cppstd=20 --install-folder=build --build missing
+conan install . -s build_type=Debug -s compiler.libcxx=libc++ -s cppstd=17 --install-folder=build --build missing
 # Release dependencies
-# conan install . -s build_type=Release -s compiler.libcxx=libc++ -s cppstd=20 --install-folder=cmake-build-release --build missing
+# conan install . -s build_type=Release -s compiler.libcxx=libc++ -s cppstd=17 --install-folder=cmake-build-release --build missing
 cd build
 cmake .. && cmake --build .
 
@@ -45,18 +46,16 @@ Uses Experimental Features: [WebAssembly Roadmap](https://webassembly.org/roadma
 * WebGPU
 
 ```shell
-mkdir build-wasm
-conan install . -s build_type=Debug -s compiler.libcxx=libc++ -s cppstd=20 --install-folder=build-wasm --build missing
+conan install . -s build_type=Debug -s compiler.libcxx=libc++ -s cppstd=17 --install-folder=build-wasm --build missing
 cd build-wasm
 emcmake cmake ..
 cmake --build .
 
 # Run app...
-cd bin
-npx http-server .  # This assumes node is installed...
+npx http-server bin  # This assumes node is installed...
 open http://127.0.0.1:8080/blockworld.html
 
-#emcc src/main.cpp -o cmake-build-wasm/index.html -Iinclude -s USE_WEBGL2=1 -s USE_GLFW=3 -s WASM=1 -std=c++20 -fwasm-exceptions
+#emcc src/main.cpp -o cmake-build-wasm/index.html -Iinclude -s USE_WEBGL2=1 -s USE_GLFW=3 -s WASM=1 -std=c++17 -fwasm-exceptions
 ```
 
 [wasm cmake dependencies](https://stackoverflow.com/questions/55869531/how-to-use-emscripten-with-cmake-for-project-dependencies)
@@ -74,4 +73,15 @@ open http://127.0.0.1:8080/blockworld.html
 * [what is this link?](https://www.youtube.com/watch?v=sMs28KxbHiA)
 * https://gist.github.com/ousttrue/0f3a11d5d28e365b129fe08f18f4e141
 * [setup on mac. need to code sign?](https://giovanni.codes/opengl-setup-in-macos/)
+
+# C++ Standard
+
+https://en.cppreference.com/w/cpp/compiler_support
+
+# Libraries
+
+* [glfw](https://www.glfw.org/):  zlib/libpng License
+* [glad](https://github.com/Dav1dde/glad): MIT License
+* [glm](https://github.com/g-truc/glm): The Happy Bunny License or MIT License
+* [tinygltf](https://github.com/syoyo/tinygltf): MIT License
 

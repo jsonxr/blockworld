@@ -11,28 +11,37 @@
 #endif
 #include <GLFW/glfw3.h>
 
-#include "linmath.h"
+#include <glm/vec3.hpp>
+
+//#include "linmath.h"
 
 // Standard library stuff
-#include <stdint.h>
-#include <stdio.h>
-
 #include <array>
+#include <cstdint>
+#include <cstdio>
 #include <functional>
 #include <iostream>
 #include <string>
 #include <vector>
 
-typedef uint64_t uint64;
-typedef uint32_t uint32;
-typedef uint16_t uint16;
-typedef uint8_t uint8;
+using vec3 = glm::vec3;
 
-typedef int64_t int64;
-typedef int32_t int32;
-typedef int16_t int16;
-typedef int8_t int8;
+using u64 = uint64_t;
+using u32 = uint32_t;
+using u16 = uint16_t;
+using u8 = uint8_t;
+
+using i64 = int64_t;
+using i32 = int32_t;
+using i16 = int16_t;
+using i8 = int8_t;
 
 constexpr int MAX_LOG_LENGTH = 1024;
+
+#ifdef __EMSCRIPTEN__
+const bool isEMSCRIPTEN = true;
+#else
+const bool isEMSCRIPTEN = false;
+#endif
 
 #endif

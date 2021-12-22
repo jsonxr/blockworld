@@ -11,34 +11,31 @@
 
 namespace BlockWorld {
 
-enum WebGLShaderType : GLenum {
-  none = 0,
+enum class WebGLShaderType : GLenum {
   fragment = GL_FRAGMENT_SHADER,
   vertex = GL_VERTEX_SHADER,
 };
 
 class WebGLShader {
  public:
+  WebGLShader() : _handle(0){};
   WebGLShader(WebGLShaderType type, const char* source);
   ~WebGLShader();
   [[nodiscard]] auto handle() const -> GLuint { return this->_handle; };
 
+  // Copy: not supported
+  WebGLShader(const WebGLShader& other) = delete;
+  auto operator=(const WebGLShader& other) = delete;
+  // Move
+  WebGLShader(WebGLShader&& other) noexcept
+      : _handle(std::exchange(other._handle, NULL)){};
+  auto operator=(WebGLShader&& other) noexcept -> WebGLShader& {
+    std::swap(_handle, other._handle);
+    return *this;
+  }
+
  private:
   GLuint _handle;
-  WebGLShaderType _type;
-  // Intentionally private or Unimplemented since we don't copy or move
-  WebGLShader(const WebGLShader& other);                     // copy constructor
-  auto operator=(const WebGLShader& other) -> WebGLShader&;  // copy assignment
-  WebGLShader(WebGLShader&& other) noexcept                  // move constructor
-      : _handle(std::exchange(other._handle, NULL)),
-        _type(std::exchange(other._type, none)){};
-  auto operator=(WebGLShader&& other) noexcept
-      -> WebGLShader&  // move assignment
-  {
-    std::swap(_handle, other._handle);
-    std::swap(_type, other._type);
-    return *this;
-  };
 };
 
 }  // namespace BlockWorld
