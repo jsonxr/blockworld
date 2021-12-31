@@ -21,9 +21,9 @@ struct WindowSize {
 class Window {
  public:
   Window();
-  explicit Window(const char* title);
+  explicit Window(const char* title) noexcept;
   explicit Window(const char* title, WindowSize size,
-                  bool fullScreenMode = false);
+                  bool fullScreenMode = false) noexcept;
   ~Window();
 
   //  static auto createWindow(const std::string& title) ->

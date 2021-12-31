@@ -70,10 +70,10 @@ open http://127.0.0.1:8080/blockworld.html
 # Resources
 
 * [Definitive Guide to Creating a Window | How to Code Minecraft Ep. 1](https://www.youtube.com/watch?v=HhH_9DnMBgw)
-* [what is this link?](https://www.youtube.com/watch?v=sMs28KxbHiA)
-* https://gist.github.com/ousttrue/0f3a11d5d28e365b129fe08f18f4e141
 * [setup on mac. need to code sign?](https://giovanni.codes/opengl-setup-in-macos/)
 * [Faithful 1.18 Resource Pack](https://faithful.team/faithful-1-18/)
+* [Better way to handle opengl resources](https://github.com/polytypic/gl.cpp)
+* [glTF 2.0 Overview](https://kcoley.github.io/glTF/specification/2.0/figures/gltfOverview-2.0.0a.png)
 
 # C++ Standard
 

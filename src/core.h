@@ -9,8 +9,11 @@
 #else
 #include <glad/glad.h>
 #endif
+
 #include <GLFW/glfw3.h>
 
+// include <glm/glm.hpp>
+#include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
@@ -27,6 +30,7 @@
 
 using vec3 = glm::vec3;
 using vec4 = glm::vec4;
+using mat4 = glm::mat4;
 
 using u64 = uint64_t;
 using u32 = uint32_t;
@@ -41,9 +45,9 @@ using i8 = int8_t;
 constexpr int MAX_LOG_LENGTH = 1024;
 
 #ifdef __EMSCRIPTEN__
-const bool isEMSCRIPTEN = true;
+constexpr auto isEMSCRIPTEN() -> bool { return true; }
 #else
-const bool isEMSCRIPTEN = false;
+constexpr auto isEMSCRIPTEN() -> bool { return false; }
 #endif
 
 #endif

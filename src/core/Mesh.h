@@ -1,7 +1,3 @@
-//
-// Created by Jason Rowland on 12/17/21.
-//
-
 #ifndef BLOCKWORLD_MESH_H
 #define BLOCKWORLD_MESH_H
 
@@ -10,31 +6,24 @@
 
 namespace BlockWorld {
 
-class Mesh {
- public:
-  Mesh() { std::cout << "Mesh" << std::endl; };
-  Mesh(std::unique_ptr<BufferGeometry> bufferGeometry,
-       std::unique_ptr<Material> material);
-  void compile();
-  void render() const;
-
-  [[nodiscard]] auto getBufferGeometry() const -> const BufferGeometry* {
-    return _bufferGeometry.get();
-  };
-  [[nodiscard]] auto getMaterial() const -> const Material* {
-    return _material.get();
-  };
-
- private:
-  std::unique_ptr<BufferGeometry> _bufferGeometry;
-  std::unique_ptr<Material> _material;
-
-  GLuint VAO{};
-  GLuint VBO{};
-  GLuint EBO{};
+enum class MeshMode {
+  triangles,
+  points,
+  lines,
 };
 
-auto operator<<(std::ostream& out, Mesh mesh) -> std::ostream&;
+class Mesh {
+ public:
+  Mesh() = default;
+  Mesh(std::shared_ptr<BufferGeometry> bufferGeometry,
+       std::shared_ptr<Material> material) noexcept;
+  void render() const;
+
+ private:
+  std::shared_ptr<BufferGeometry> _bufferGeometry{};
+  std::shared_ptr<Material> _material{};
+  MeshMode _mode{MeshMode::triangles};
+};
 
 }  // namespace BlockWorld
 #endif  // BLOCKWORLD_MESH_H

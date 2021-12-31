@@ -1,7 +1,3 @@
-//
-// Created by Jason Rowland on 12/15/21.
-//
-
 #ifndef BLOCKWORLD_WEBGLSHADER_H
 #define BLOCKWORLD_WEBGLSHADER_H
 

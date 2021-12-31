@@ -1,6 +1,3 @@
-//
-// Created by Jason Rowland on 12/14/21.
-//
 #include "WebGLRenderer.h"
 
 #include "../../core.h"
@@ -16,18 +13,7 @@ static GLuint EBO;
 
 // unsigned int shaderProgram;
 
-WebGLRenderer::~WebGLRenderer() { std::cout << "~WebGLRenderer" << std::endl; }
-
 WebGLRenderer::WebGLRenderer() { glfwSwapInterval(1); }
-
-void WebGLRenderer::compile(Scene &scene) {
-  const auto &meshes = scene.getMeshes();
-  std::cout << "renderer compile mesh.size=" << meshes.size() << std::endl;
-
-  for (const auto &mesh : scene.getMeshes()) {
-    mesh->compile();
-  }
-}
 
 void WebGLRenderer::render(const Window &window, Scene &scene, Camera &camera) {
   // glViewport(0, 0, window.width(), window.height());
@@ -35,15 +21,11 @@ void WebGLRenderer::render(const Window &window, Scene &scene, Camera &camera) {
   glClear(GL_COLOR_BUFFER_BIT);
   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-  const auto &meshes = scene.getMeshes();
-  for (const auto &mesh : scene.getMeshes()) {
-    mesh->render();
+  const auto &nodes = scene.getNodes();
+  for (const auto &node : nodes) {
+    node->render();
   }
-  //
-  //  program.use();
-  //  glBindVertexArray(VAO);
-  //  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-  //
+
   glfwSwapBuffers(window.nativeWindow());
 }
 

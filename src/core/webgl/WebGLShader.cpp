@@ -1,6 +1,3 @@
-//
-// Created by Jason Rowland on 12/15/21.
-//
 #include "WebGLShader.h"
 
 namespace BlockWorld {

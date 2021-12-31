@@ -36,10 +36,11 @@ std::function<void()> loop;
 void main_loop() { loop(); }
 
 auto main() -> int {
-  glfwSetErrorCallback(error_callback);
   if (glfwInit() == 0) {
     return EXIT_FAILURE;
   }
+
+  glfwSetErrorCallback(error_callback);
 
   Window window{windowTitle, WindowSize{640, 480}};
 
@@ -48,25 +49,15 @@ auto main() -> int {
   }
 
   auto geometry = BoxGeometry::create({1, 1, 1});
-
-  std::cout << "geometry=" << *geometry << std::endl;
-  auto material = std::make_unique<Material>();
-  std::cout << "cube1 " << *geometry << std::endl;
-
-  // auto cube = std::make_unique<Mesh>(std::move(geometry),
-  // std::move(material));
-  auto cube = std::make_unique<Mesh>(std::move(geometry), std::move(material));
-
-  // auto cube = std::make_unique<Mesh>(geometry, material);
-  //  std::cout << "Mesh: " << cube.get() << std::endl;
-  std::cout << "cube2 " << geometry << std::endl;
-  std::cout << "after cube2";
+  auto material =
+      std::make_shared<Material>("/textures/block/grass_block_side.png");
+  auto cube = std::make_shared<Mesh>(std::move(geometry), std::move(material));
+  //
   Scene scene{};
   scene.add(std::move(cube));
-
+  //
   Camera camera{};
   WebGLRenderer renderer{};
-  renderer.compile(scene);
 
   loop = [&] {
     // or... loop = [&window, &scene, &camera, &renderer] {

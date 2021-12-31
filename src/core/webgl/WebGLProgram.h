@@ -1,7 +1,3 @@
-//
-// Created by Jason Rowland on 12/15/21.
-//
-
 #ifndef BLOCKWORLD_WEBGLPROGRAM_H
 #define BLOCKWORLD_WEBGLPROGRAM_H
 
@@ -13,13 +9,17 @@ namespace BlockWorld {
 
 class WebGLProgram {
  public:
-  WebGLProgram() : _handle(0){};
+  WebGLProgram() = default;
   WebGLProgram(const WebGLShader& vertexShader,
                const WebGLShader& fragmentShader);
   ~WebGLProgram();
   [[nodiscard]] auto handle() const -> GLuint { return _handle; };
   [[nodiscard]] auto use() const noexcept -> bool;
+
+  auto getUniformLocation(const char* name) const -> int;
+  void setUniform(const std::string& name, const mat4& value) const;
   void setUniform(const std::string& name, const vec4& value) const;
+  void setUniform(const std::string& name, int value) const;
 
   // Copy: not supported
   WebGLProgram(const WebGLProgram& other) = delete;    // copy constructor

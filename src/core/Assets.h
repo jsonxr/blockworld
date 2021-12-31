@@ -1,7 +1,3 @@
-//
-// Created by Jason Rowland on 12/22/21.
-//
-
 #ifndef BLOCKWORLD_ASSETS_H
 #define BLOCKWORLD_ASSETS_H
 
@@ -10,40 +6,53 @@
 
 namespace BlockWorld {
 
-struct ImagePng {
+class AssetPng {
  public:
-  int height{};
-  int width{};
-  int channels{};
-  unsigned char* data{nullptr};
+  [[nodiscard]] auto height() const -> int { return _height; };
+  [[nodiscard]] auto width() const -> int { return _width; };
+  [[nodiscard]] auto channels() const -> int { return _channels; };
+  [[nodiscard]] auto data() const -> unsigned char* { return _data; };
 
-  ImagePng(){};
-  ~ImagePng() {
-    if (data != nullptr) {
-      stbi_image_free(data);
+  AssetPng() = default;
+  explicit AssetPng(const char* filename) {
+    stbi_set_flip_vertically_on_load(1);
+    _data = stbi_load(filename, &_width, &_height, &_channels, 0);
+  }
+  ~AssetPng() {
+    if (_data != nullptr) {
+      std::cout << "AssetPng free data" << std::endl;
+      stbi_image_free(_data);
+      _data = nullptr;
     }
   };
   // Copy: not supported
-  ImagePng(const ImagePng& other) = delete;        // copy constructor
-  auto operator=(const ImagePng& other) = delete;  // copy assignment
+  AssetPng(const AssetPng& other) = delete;        // copy constructor
+  auto operator=(const AssetPng& other) = delete;  // copy assignment
   // Move
-  ImagePng(ImagePng&& other) noexcept
-      : height(std::exchange(other.height, 0)),
-        width(std::exchange(other.width, 0)),
-        channels(std::exchange(other.channels, 0)),
-        data(std::exchange(other.data, nullptr)){};  // move
-  auto operator=(ImagePng&& other) noexcept -> ImagePng& {
-    std::swap(height, other.height);
-    std::swap(width, other.width);
-    std::swap(channels, other.channels);
-    std::swap(data, other.data);
+  AssetPng(AssetPng&& other) noexcept
+      : _width(std::exchange(other._width, 0)),
+        _height(std::exchange(other._height, 0)),
+        _channels(std::exchange(other._channels, 0)),
+        _data(std::exchange(other._data, nullptr)){};  // move
+  auto operator=(AssetPng&& other) noexcept -> AssetPng& {
+    std::swap(_width, other._width);
+    std::swap(_height, other._height);
+    std::swap(_channels, other._channels);
+    std::swap(_data, other._data);
     return *this;
   }
+
+ private:
+  int _height{};
+  int _width{};
+  int _channels{};
+  unsigned char* _data{nullptr};
 };
 
 class Assets {
  public:
-  static auto load(std::string filename) -> std::unique_ptr<ImagePng>;
+  static auto loadPng(const char* filename) -> std::unique_ptr<AssetPng>;
+  static auto loadString(const char* filename) -> std::string;
 };
 
 }  // namespace BlockWorld

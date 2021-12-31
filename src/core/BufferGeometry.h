@@ -1,7 +1,3 @@
-//
-// Created by Jason Rowland on 12/15/21.
-//
-
 #ifndef BLOCKWORLD_BUFFERGEOMETRY_H
 #define BLOCKWORLD_BUFFERGEOMETRY_H
 
@@ -12,16 +8,19 @@ namespace BlockWorld {
 
 class BufferGeometry {
  public:
-  BufferGeometry() { std::cout << "BufferGeometry" << std::endl; };
-  BufferGeometry(std::vector<float> vertices, std::vector<u32> indices);
+  BufferGeometry() noexcept { std::cout << "BufferGeometry" << std::endl; };
+  BufferGeometry(std::vector<float> vertices,
+                 std::vector<u32> indices) noexcept;
   [[nodiscard]] auto getVertices() const -> const std::vector<float>& {
     return _vertices;
   };
   [[nodiscard]] auto getIndices() const -> const std::vector<u32>& {
     return _indices;
   };
+  void render();
 
   // Copy: not supported
+  ~BufferGeometry();
   BufferGeometry(const BufferGeometry& other) = delete;  // copy constructor
   auto operator=(const BufferGeometry& other) = delete;  // copy assignment
   // Move
@@ -38,6 +37,9 @@ class BufferGeometry {
  private:
   std::vector<float> _vertices{};
   std::vector<u32> _indices{};
+  GLuint VAO{0};
+  GLuint VBO{0};
+  GLuint EBO{0};
 };
 
 auto operator<<(std::ostream& out, const BufferGeometry& geometry)

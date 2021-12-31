@@ -1,7 +1,3 @@
-//
-// Created by Jason Rowland on 12/19/21.
-//
-
 #ifndef BLOCKWORLD_BOXGEOMETRY_H
 #define BLOCKWORLD_BOXGEOMETRY_H
 

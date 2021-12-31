@@ -22,9 +22,10 @@ list(APPEND SOURCES
         src/core/webgl/WebGLRenderer.h src/core/webgl/WebGLRenderer.cpp
         src/core/webgl/WebGLShader.h src/core/webgl/WebGLShader.cpp
         # src/core
+        src/core/Assets.h src/core/Assets.cpp
         src/core/BoxGeometry.h src/core/BoxGeometry.cpp
         src/core/BufferGeometry.h src/core/BufferGeometry.cpp
-        src/core/Camera.h src/core/Camera.cpp
+        src/core/Camera.h
         src/core/Input.h src/core/Input.cpp
         src/core/Material.h src/core/Material.cpp
         src/core/Mesh.h src/core/Mesh.cpp
@@ -33,9 +34,10 @@ list(APPEND SOURCES
         # src
         src/core.h
         src/main.cpp
+        src/stb.cpp
         )
 
-add_executable(blockworld ${SOURCES} src/stb.cpp src/core/Assets.cpp src/core/Assets.h)
+add_executable(blockworld ${SOURCES})
 target_link_libraries(blockworld ${CONAN_LIBS})
 
 if (EMSCRIPTEN)
@@ -67,7 +69,7 @@ if (EMSCRIPTEN)
     # SAFE_HEAP_LOG (writes safe heap operations
     # STACK_OVERFLOW_CHECK=2 enables slightly more detailed stack guard checks, which can give a more precise callstack at the expense of some performance
 
-    set(EMCC_LINKER_FLAGS "-O0 --bind -s WASM=1 -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s USE_GLFW=3 -s WASM_BIGINT=1 -std=c++${CMAKE_CXX_STANDARD} --embed-file ${PROJECT_SOURCE_DIR}/assets@/assets -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s GL_ASSERTIONS=1")
+    set(EMCC_LINKER_FLAGS "-O0 -s EXIT_RUNTIME=1 --bind -s WASM=1 -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s USE_GLFW=3 -s WASM_BIGINT=1 -std=c++${CMAKE_CXX_STANDARD} --embed-file ${PROJECT_SOURCE_DIR}/assets@/assets -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s GL_ASSERTIONS=1")
 
     set(CMAKE_EXECUTABLE_SUFFIX .html)
     set_target_properties(blockworld PROPERTIES LINK_FLAGS ${EMCC_LINKER_FLAGS})
