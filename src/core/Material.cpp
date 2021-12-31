@@ -91,10 +91,10 @@ void Material::render() {
   }
 
   mat4 model = mat4(1.0F);
-  model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+  model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
 
   mat4 view = mat4(1.0F);
-  view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+  view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
 
   mat4 projection = glm::perspective(
       glm::radians(45.0F), (float)DEFAULT_WIDTH / (float)DEFAULT_HEIGHT, 0.1F,

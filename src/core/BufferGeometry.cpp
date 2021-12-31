@@ -23,13 +23,13 @@ BufferGeometry::~BufferGeometry() {
   }
 }
 
-BufferGeometry::BufferGeometry(std::vector<float> vertices,
+BufferGeometry::BufferGeometry(std::vector<GLfloat> vertices,
                                std::vector<u32> indices) noexcept
     : _vertices(std::move(vertices)), _indices(std::move(indices)) {
   std::cout << "BufferGeometry size=" << _vertices.size() << std::endl;
 
   // TODO: Figure out how to be certain we only have max int values
-  GLsizei vertexSize = _vertices.size() * sizeof(float);
+  GLsizei vertexSize = _vertices.size() * sizeof(GLfloat);
   GLsizei indicesSize = _indices.size() * sizeof(u32);
 
   if (vertexSize < 0 || indicesSize < 0) {
@@ -51,27 +51,26 @@ BufferGeometry::BufferGeometry(std::vector<float> vertices,
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, _indices.data(),
                GL_STATIC_DRAW);
 
-  constexpr int STRIDE = 8 * sizeof(float);
+  constexpr int STRIDE = 5 * sizeof(GLfloat);
   auto* offsetPosition = (void*)nullptr;
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, STRIDE, offsetPosition);
   glEnableVertexAttribArray(0);
+  //  auto* offsetColor = (void*)(3 * sizeof(GLfloat));
+  //  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, STRIDE, offsetColor);
+  //  glEnableVertexAttribArray(1);
 
-  auto* offsetColor = (void*)(3 * sizeof(float));
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, STRIDE, offsetColor);
+  auto* offsetTexture = (void*)(3 * sizeof(GLfloat));
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, STRIDE, offsetTexture);
   glEnableVertexAttribArray(1);
-
-  auto* offsetTexture = (void*)(6 * sizeof(float));
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, STRIDE, offsetTexture);
-  glEnableVertexAttribArray(2);
 
   std::cout << "Compiled mesh VAO=" << VAO << " VBO=" << VBO << " EBO=" << EBO
             << std::endl;
 }
 
 void BufferGeometry::render() {
-  glBindVertexArray(VAO);
-  // glDrawArrays(GL_TRIANGLES, 6, GL_UNSIGNED_INT);
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+  glBindVertexArray(VAO);  // Is this even needed?
+  glDrawArrays(GL_TRIANGLES, 0, _vertices.size());
+  // glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0);
 }
 
 auto operator<<(std::ostream& out, const BufferGeometry& geometry)

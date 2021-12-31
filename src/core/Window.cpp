@@ -44,9 +44,8 @@ Window::Window(const char* title, WindowSize size, bool fullScreenMode) noexcept
   glfwMakeContextCurrent(nativeWindow);
 
 #ifndef __EMSCRIPTEN__
-  if (gladLoadGLLoader(
-          (GLADloadproc)  // NOLINT(cppcoreguidelines-pro-type-cstyle-cast)
-          glfwGetProcAddress) == 0) {
+  auto loader = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+  if (loader == 0) {
     std::cerr << "Failed to initialize GLAD." << std::endl;
     return;
   }

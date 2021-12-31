@@ -1,14 +1,13 @@
 #version 330 core
 
-out highp vec4 FragColor;
+out highp vec4 color;
 
-in highp vec3 ourColor;
-in highp vec2 TexCoord;
+in highp vec2 UV;
 
 uniform sampler2D texture0;
 
 void main() {
-  FragColor = texture(texture0, TexCoord);
+  color = texture(texture0, UV);
 }
 
 

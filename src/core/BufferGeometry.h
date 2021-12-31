@@ -9,7 +9,7 @@ namespace BlockWorld {
 class BufferGeometry {
  public:
   BufferGeometry() noexcept { std::cout << "BufferGeometry" << std::endl; };
-  BufferGeometry(std::vector<float> vertices,
+  BufferGeometry(std::vector<GLfloat> vertices,
                  std::vector<u32> indices) noexcept;
   [[nodiscard]] auto getVertices() const -> const std::vector<float>& {
     return _vertices;
@@ -27,7 +27,7 @@ class BufferGeometry {
   BufferGeometry(BufferGeometry&& other) noexcept
       : _indices(std::exchange(other._indices, std::vector<u32>{})),
         _vertices(
-            std::exchange(other._vertices, std::vector<float>{})){};  // move
+            std::exchange(other._vertices, std::vector<GLfloat>{})){};  // move
   auto operator=(BufferGeometry&& other) noexcept -> BufferGeometry& {
     std::swap(_vertices, other._vertices);
     std::swap(_indices, other._indices);
@@ -35,7 +35,7 @@ class BufferGeometry {
   }
 
  private:
-  std::vector<float> _vertices{};
+  std::vector<GLfloat> _vertices{};
   std::vector<u32> _indices{};
   GLuint VAO{0};
   GLuint VBO{0};
