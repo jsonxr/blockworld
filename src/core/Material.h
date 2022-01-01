@@ -16,6 +16,7 @@ class Material {
  public:
   explicit Material(const char* textureFilename = nullptr);
   ~Material() = default;
+  void setModelMatrix(const mat4 model) { _program.setUniform("model", model); }
   void render();
 
   // Copy: not supported
