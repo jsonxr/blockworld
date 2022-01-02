@@ -1,5 +1,5 @@
-#ifndef BLOCKWORLD_WEBGLPROGRAM_H
-#define BLOCKWORLD_WEBGLPROGRAM_H
+#ifndef BLOCK_WORLD_WEBGLPROGRAM_H
+#define BLOCK_WORLD_WEBGLPROGRAM_H
 
 #include <array>
 
@@ -16,6 +16,7 @@ class WebGLProgram {
   [[nodiscard]] auto handle() const -> GLuint { return _handle; };
   [[nodiscard]] auto use() const noexcept -> bool;
 
+  void debug();
   auto getUniformLocation(const char* name) const -> int;
   void setUniform(const std::string& name, const mat4& value) const;
   void setUniform(const std::string& name, const vec4& value) const;
@@ -34,8 +35,10 @@ class WebGLProgram {
 
  private:
   GLuint _handle;
+  std::vector<std::string> _uniforms{};
+  std::vector<std::string> _attributes{};
 };
 
 }  // namespace BlockWorld
 
-#endif  // BLOCKWORLD_WEBGLPROGRAM_H
+#endif  // BLOCK_WORLD_WEBGLPROGRAM_H

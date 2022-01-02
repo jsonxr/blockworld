@@ -1,23 +1,8 @@
-#ifndef MINECRAFT_CLONE_CORE_H
-#define MINECRAFT_CLONE_CORE_H
+#ifndef BLOCK_WORLD_CORE_H
+#define BLOCK_WORLD_CORE_H
 
-// Glad and GLFW
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#define GL_GLEXT_PROTOTYPES
-#define EGL_EGLEXT_PROTOTYPES
-#else
-#include <glad/glad.h>
-#endif
-
-#include <GLFW/glfw3.h>
-
-// include <glm/glm.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-
-//#include "linmath.h"
+#include "vendor/glfw.h"
+#include "vendor/glm.h"
 
 // Standard library stuff
 #include <array>
@@ -27,10 +12,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
-using vec3 = glm::vec3;
-using vec4 = glm::vec4;
-using mat4 = glm::mat4;
 
 using u64 = uint64_t;
 using u32 = uint32_t;
@@ -50,4 +31,4 @@ constexpr auto isEMSCRIPTEN() -> bool { return true; }
 constexpr auto isEMSCRIPTEN() -> bool { return false; }
 #endif
 
-#endif
+#endif  // BLOCK_WORLD_CORE_H

@@ -1,5 +1,5 @@
-#ifndef BLOCKWORLD_ASSETS_H
-#define BLOCKWORLD_ASSETS_H
+#ifndef BLOCK_WORLD_ASSETS_H
+#define BLOCK_WORLD_ASSETS_H
 
 #include "../core.h"
 #include "stb_image.h"
@@ -57,4 +57,4 @@ class Assets {
 
 }  // namespace BlockWorld
 
-#endif  // BLOCKWORLD_ASSETS_H
+#endif  // BLOCK_WORLD_ASSETS_H

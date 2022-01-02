@@ -1,7 +1,8 @@
-#ifndef BLOCKWORLD_MESH_H
-#define BLOCKWORLD_MESH_H
+#ifndef BLOCK_WORLD_MESH_H
+#define BLOCK_WORLD_MESH_H
 
 #include "BufferGeometry.h"
+#include "Camera.h"
 #include "Material.h"
 
 namespace BlockWorld {
@@ -17,7 +18,7 @@ class Mesh {
   Mesh() = default;
   Mesh(std::shared_ptr<BufferGeometry> bufferGeometry,
        std::shared_ptr<Material> material) noexcept;
-  void render() const;
+  void render(Camera &camera) const;
 
  private:
   std::shared_ptr<BufferGeometry> _bufferGeometry{};
@@ -26,4 +27,4 @@ class Mesh {
 };
 
 }  // namespace BlockWorld
-#endif  // BLOCKWORLD_MESH_H
+#endif  // BLOCK_WORLD_MESH_H

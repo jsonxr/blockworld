@@ -1,0 +1,8 @@
+#ifndef BLOCK_WORLD_STB_H
+#define BLOCK_WORLD_STB_H
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+#undef STB_IMAGE_IMPLEMENTATION
+
+#endif  // BLOCK_WORLD_STB_H

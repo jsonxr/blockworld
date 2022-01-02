@@ -74,6 +74,7 @@ open http://127.0.0.1:8080/blockworld.html
 * [Faithful 1.18 Resource Pack](https://faithful.team/faithful-1-18/)
 * [Better way to handle opengl resources](https://github.com/polytypic/gl.cpp)
 * [glTF 2.0 Overview](https://kcoley.github.io/glTF/specification/2.0/figures/gltfOverview-2.0.0a.png)
+* [Gaffer on Games - Fix your timestep](https://gafferongames.com/post/fix_your_timestep/)
 
 # C++ Standard
 

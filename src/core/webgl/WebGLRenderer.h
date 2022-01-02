@@ -1,5 +1,5 @@
-#ifndef BLOCKWORLD_WEBGLRENDERER_H
-#define BLOCKWORLD_WEBGLRENDERER_H
+#ifndef BLOCK_WORLD_WEBGLRENDERER_H
+#define BLOCK_WORLD_WEBGLRENDERER_H
 
 #include <map>
 
@@ -20,4 +20,4 @@ class WebGLRenderer {
 
 }  // namespace BlockWorld
 
-#endif  // BLOCKWORLD_WEBGLRENDERER_H
+#endif  // BLOCK_WORLD_WEBGLRENDERER_H

@@ -1,5 +1,5 @@
-#ifndef BLOCKWORLD_SCENE_H
-#define BLOCKWORLD_SCENE_H
+#ifndef BLOCK_WORLD_SCENE_H
+#define BLOCK_WORLD_SCENE_H
 
 #include "../core.h"
 #include "Mesh.h"
@@ -30,4 +30,4 @@ class Scene {
 
 }  // namespace BlockWorld
 
-#endif  // BLOCKWORLD_SCENE_H
+#endif  // BLOCK_WORLD_SCENE_H

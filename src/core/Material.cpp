@@ -75,7 +75,7 @@ Material::Material(const char* textureFilename) {
   // glBindTexture(GL_TEXTURE_2D, NULL);
 }
 
-void Material::render() {
+void Material::render(Camera& camera) {
   if (!_program.use()) {
     std::cerr << "WebGLMaterial::use program not available" << std::endl;
     return;
@@ -90,17 +90,13 @@ void Material::render() {
     _program.setUniform("texture0", 0);
   }
 
-  const float radius = 30.0f;
-  float camX = sin(glfwGetTime()) * radius;
-  float camZ = cos(glfwGetTime()) * radius;
-  mat4 view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0),
-                          glm::vec3(0.0, 1.0, 0.0));
-  // view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
+  auto view = camera.get_view_matrix();
   _program.setUniform("view", view);
 
-  mat4 projection = glm::perspective(
-      glm::radians(45.0F), (float)DEFAULT_WIDTH / (float)DEFAULT_HEIGHT, 0.1F,
-      100.0F);
+  //  mat4 projection = glm::perspective(
+  //      glm::radians(45.0F), (float)DEFAULT_WIDTH / (float)DEFAULT_HEIGHT,
+  //      0.1F, 100.0F);
+  auto projection = camera.get_projection_matrix();
   _program.setUniform("projection", projection);
 }
 

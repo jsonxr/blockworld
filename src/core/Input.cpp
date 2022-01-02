@@ -17,9 +17,9 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action,
   }
 }
 
-void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
-  mouseX = (float)xpos;
-  mouseY = (float)ypos;
+void mouseCallback(GLFWwindow* window, double xPos, double yPos) {
+  mouseX = (float)xPos;
+  mouseY = (float)yPos;
 }
 
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {

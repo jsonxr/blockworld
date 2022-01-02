@@ -1,25 +1,10 @@
 #version 330 core
+precision highp float;
 
-out highp vec4 color;
-
-in highp vec2 UV;
-
+in vec2 UV;
 uniform sampler2D texture0;
+out vec4 color;
 
 void main() {
   color = texture(texture0, UV);
 }
-
-
-//out highp vec4 FragColor;
-//
-//in highp vec3 ourColor;
-//in highp vec2 TexCoord;
-//
-//// texture sampler
-//uniform sampler2D texture1;
-//
-//void main()
-//{
-//  FragColor = texture(texture1, TexCoord);
-//}

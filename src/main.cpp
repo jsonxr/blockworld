@@ -2,6 +2,7 @@
 #include "core/BoxGeometry.h"
 #include "core/BufferGeometry.h"
 #include "core/Camera.h"
+#include "core/Input.h"
 #include "core/Scene.h"
 #include "core/Window.h"
 #include "core/webgl/WebGLRenderer.h"
@@ -35,6 +36,27 @@ static void error_callback(int error, const char* description) {
 std::function<void()> loop;
 void main_loop() { loop(); }
 
+void processInput(Window& win, Camera& camera, double deltaTime) {
+  auto window = win.nativeWindow();
+
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+    glfwSetWindowShouldClose(window, 1);
+  }
+
+  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+    camera.process_keyboard(CameraMovement::FORWARD, deltaTime);
+  }
+  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+    camera.process_keyboard(CameraMovement::BACKWARD, deltaTime);
+  }
+  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+    camera.process_keyboard(CameraMovement::LEFT, deltaTime);
+  }
+  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+    camera.process_keyboard(CameraMovement::RIGHT, deltaTime);
+  }
+}
+
 auto main() -> int {
   if (glfwInit() == 0) {
     return EXIT_FAILURE;
@@ -56,10 +78,26 @@ auto main() -> int {
   Scene scene{};
   scene.add(std::move(cube));
   //
-  Camera camera{};
+  Camera camera{{vec3(0.0F, 0.0F, 3.0F)}};
+  // Camera camera(vec3(0.0f, 0.0f, 3.0f));
   WebGLRenderer renderer{};
 
+  // timing
+  GLdouble deltaTime{};
+  GLdouble lastFrame{};
+
   loop = [&] {
+    // per-frame time logic
+    // --------------------
+    GLdouble currentFrame = glfwGetTime();
+    deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
+
+    // input
+    // -----
+    processInput(window, camera, deltaTime);
+    // camera.process_mouse_movement(Input::mouseX, Input::mouseY);
+
     // or... loop = [&window, &scene, &camera, &renderer] {
     renderer.render(window, scene, camera);
     glfwPollEvents();

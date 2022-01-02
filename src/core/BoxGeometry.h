@@ -1,5 +1,5 @@
-#ifndef BLOCKWORLD_BOXGEOMETRY_H
-#define BLOCKWORLD_BOXGEOMETRY_H
+#ifndef BLOCK_WORLD_BOXGEOMETRY_H
+#define BLOCK_WORLD_BOXGEOMETRY_H
 
 #include <utility>
 
@@ -11,4 +11,4 @@ auto create(vec3 size) -> std::unique_ptr<BufferGeometry>;
 
 }  // namespace BlockWorld::BoxGeometry
 
-#endif  // BLOCKWORLD_BOXGEOMETRY_H
+#endif  // BLOCK_WORLD_BOXGEOMETRY_H

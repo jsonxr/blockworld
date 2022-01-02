@@ -25,16 +25,19 @@ list(APPEND SOURCES
         src/core/Assets.h src/core/Assets.cpp
         src/core/BoxGeometry.h src/core/BoxGeometry.cpp
         src/core/BufferGeometry.h src/core/BufferGeometry.cpp
-        src/core/Camera.h
+        src/core/Camera.h src/core/Camera.cpp
         src/core/Input.h src/core/Input.cpp
         src/core/Material.h src/core/Material.cpp
         src/core/Mesh.h src/core/Mesh.cpp
         src/core/Scene.h src/core/Scene.cpp
         src/core/Window.h src/core/Window.cpp
+        # src/vendor
+        src/vendor/stb.cpp
+        src/vendor/glm.h
+        src/vendor/glfw.h
         # src
         src/core.h
         src/main.cpp
-        src/stb.cpp
         )
 
 add_executable(blockworld ${SOURCES})

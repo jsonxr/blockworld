@@ -1,6 +1,7 @@
-#ifndef BLOCKWORLD_MATERIAL_H
-#define BLOCKWORLD_MATERIAL_H
+#ifndef BLOCK_WORLD_MATERIAL_H
+#define BLOCK_WORLD_MATERIAL_H
 
+#include "Camera.h"
 #include "webgl/WebGLProgram.h"
 
 namespace BlockWorld {
@@ -17,7 +18,7 @@ class Material {
   explicit Material(const char* textureFilename = nullptr);
   ~Material() = default;
   void setModelMatrix(const mat4 model) { _program.setUniform("model", model); }
-  void render();
+  void render(Camera& camera);
 
   // Copy: not supported
   Material(const Material& other) = delete;        // copy constructor
@@ -39,4 +40,4 @@ class Material {
 
 }  // namespace BlockWorld
 
-#endif  // BLOCKWORLD_MATERIAL_H
+#endif  // BLOCK_WORLD_MATERIAL_H

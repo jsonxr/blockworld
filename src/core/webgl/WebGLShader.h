@@ -1,5 +1,5 @@
-#ifndef BLOCKWORLD_WEBGLSHADER_H
-#define BLOCKWORLD_WEBGLSHADER_H
+#ifndef BLOCK_WORLD_WEBGLSHADER_H
+#define BLOCK_WORLD_WEBGLSHADER_H
 
 #include <string>
 
@@ -36,4 +36,4 @@ class WebGLShader {
 
 }  // namespace BlockWorld
 
-#endif  // BLOCKWORLD_WEBGLSHADER_H
+#endif  // BLOCK_WORLD_WEBGLSHADER_H
