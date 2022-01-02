@@ -83,8 +83,6 @@ BufferGeometry::BufferGeometry(std::vector<GLfloat> vertices) noexcept
 
 #endif
 
-
-
   glGenBuffers(1, &VBO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, vertexSize, _vertices.data(), GL_STATIC_DRAW);
@@ -116,7 +114,9 @@ BufferGeometry::BufferGeometry(std::vector<GLfloat> vertices) noexcept
 
 void BufferGeometry::render() {
   glBindVertexArray(VAO);  // Is this even needed?
-  glDrawArrays(GL_TRIANGLES, 0, (GLsizei)_vertices.size());
+  constexpr int STRIDE_COMPONENT_COUNT = 5;
+  glDrawArrays(GL_TRIANGLES, 0,
+               (GLsizei)_vertices.size() / STRIDE_COMPONENT_COUNT);
   //  glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0);
 }
 
