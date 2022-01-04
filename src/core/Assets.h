@@ -14,17 +14,19 @@ class AssetPng {
   [[nodiscard]] auto data() const -> unsigned char* { return _data; };
 
   AssetPng() = default;
-  explicit AssetPng(const char* filename) {
+  explicit AssetPng(const char* filename)
+      : _data(stbi_load(filename, &_width, &_height, &_channels, 0)) {
     stbi_set_flip_vertically_on_load(1);
-    _data = stbi_load(filename, &_width, &_height, &_channels, 0);
   }
+
   ~AssetPng() {
     if (_data != nullptr) {
       std::cout << "AssetPng free data" << std::endl;
       stbi_image_free(_data);
       _data = nullptr;
     }
-  };
+  }
+
   // Copy: not supported
   AssetPng(const AssetPng& other) = delete;        // copy constructor
   auto operator=(const AssetPng& other) = delete;  // copy assignment

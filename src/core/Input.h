@@ -17,8 +17,8 @@ void mouseCallback(GLFWwindow* window, double xPos, double yPos);
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 void mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
-bool isKeyDown(int key);
-bool isMouseButtonDown(int mouseButton);
+auto isKeyDown(int key) -> bool;
+auto isMouseButtonDown(int mouseButton) -> bool;
 
 }  // namespace BlockWorld::Input
 

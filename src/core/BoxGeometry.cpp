@@ -4,57 +4,59 @@
 
 namespace BlockWorld::BoxGeometry {
 
+constexpr float HALF = 0.5F;
+
 auto create(vec3 size) -> std::unique_ptr<BufferGeometry> {
   std::cout << size[0] << "," << size[1] << "," << size[2] << std::endl;
 
   std::vector<GLfloat> vertices{
       // Back
-      -0.5, -0.5, -0.5, 0.0, 0.0,  // F
-      0.5, -0.5, -0.5, 1.0, 0.0,   // E
-      0.5, 0.5, -0.5, 1.0, 1.0,    // H
-      0.5, 0.5, -0.5, 1.0, 1.0,    // H
-      -0.5, 0.5, -0.5, 0.0, 1.0,   // G
-      -0.5, -0.5, -0.5, 0.0, 0.0,  // F
+      -HALF, -HALF, -HALF, 0.0, 0.0,  // F
+      HALF, -HALF, -HALF, 1.0, 0.0,   // E
+      HALF, HALF, -HALF, 1.0, 1.0,    // H
+      HALF, HALF, -HALF, 1.0, 1.0,    // H
+      -HALF, HALF, -HALF, 0.0, 1.0,   // G
+      -HALF, -HALF, -HALF, 0.0, 0.0,  // F
 
       // Front
-      -0.5, -0.5, 0.5, 0.0, 0.0,  // A
-      0.5, -0.5, 0.5, 1.0, 0.0,   // B
-      0.5, 0.5, 0.5, 1.0, 1.0,    // C
-      0.5, 0.5, 0.5, 1.0, 1.0,    // C
-      -0.5, 0.5, 0.5, 0.0, 1.0,   // C
-      -0.5, -0.5, 0.5, 0.0, 0.0,  // A
+      -HALF, -HALF, HALF, 0.0, 0.0,  // A
+      HALF, -HALF, HALF, 1.0, 0.0,   // B
+      HALF, HALF, HALF, 1.0, 1.0,    // C
+      HALF, HALF, HALF, 1.0, 1.0,    // C
+      -HALF, HALF, HALF, 0.0, 1.0,   // C
+      -HALF, -HALF, HALF, 0.0, 0.0,  // A
 
       // Left
-      -0.5, 0.5, 0.5, 1.0, 0.0,    // D
-      -0.5, 0.5, -0.5, 1.0, 1.0,   // G
-      -0.5, -0.5, -0.5, 0.0, 1.0,  // F
-      -0.5, -0.5, -0.5, 0.0, 1.0,  // F
-      -0.5, -0.5, 0.5, 0.0, 0.0,   // A
-      -0.5, 0.5, 0.5, 1.0, 0.0,    // D
+      -HALF, HALF, HALF, 1.0, 0.0,    // D
+      -HALF, HALF, -HALF, 1.0, 1.0,   // G
+      -HALF, -HALF, -HALF, 0.0, 1.0,  // F
+      -HALF, -HALF, -HALF, 0.0, 1.0,  // F
+      -HALF, -HALF, HALF, 0.0, 0.0,   // A
+      -HALF, HALF, HALF, 1.0, 0.0,    // D
 
       // Right
-      0.5, 0.5, 0.5, 1.0, 0.0,    // C
-      0.5, 0.5, -0.5, 1.0, 1.0,   // H
-      0.5, -0.5, -0.5, 0.0, 1.0,  // E
-      0.5, -0.5, -0.5, 0.0, 1.0,  // E
-      0.5, -0.5, 0.5, 0.0, 0.0,   // B
-      0.5, 0.5, 0.5, 1.0, 0.0,    // C
+      HALF, HALF, HALF, 1.0, 0.0,    // C
+      HALF, HALF, -HALF, 1.0, 1.0,   // H
+      HALF, -HALF, -HALF, 0.0, 1.0,  // E
+      HALF, -HALF, -HALF, 0.0, 1.0,  // E
+      HALF, -HALF, HALF, 0.0, 0.0,   // B
+      HALF, HALF, HALF, 1.0, 0.0,    // C
 
       // Bottom
-      -0.5, -0.5, -0.5, 0.0, 1.0,  // F
-      0.5, -0.5, -0.5, 1.0, 1.0,   // E
-      0.5, -0.5, 0.5, 1.0, 0.0,    // B
-      0.5, -0.5, 0.5, 1.0, 0.0,    // B
-      -0.5, -0.5, 0.5, 0.0, 0.0,   // A
-      -0.5, -0.5, -0.5, 0.0, 1.0,  // F
+      -HALF, -HALF, -HALF, 0.0, 1.0,  // F
+      HALF, -HALF, -HALF, 1.0, 1.0,   // E
+      HALF, -HALF, HALF, 1.0, 0.0,    // B
+      HALF, -HALF, HALF, 1.0, 0.0,    // B
+      -HALF, -HALF, HALF, 0.0, 0.0,   // A
+      -HALF, -HALF, -HALF, 0.0, 1.0,  // F
 
       // Top
-      -0.5, 0.5, -0.5, 0.0, 1.0,  // G
-      0.5, 0.5, -0.5, 1.0, 1.0,   // H
-      0.5, 0.5, 0.5, 1.0, 0.0,    // C
-      0.5, 0.5, 0.5, 1.0, 0.0,    // C
-      -0.5, 0.5, 0.5, 0.0, 0.0,   // D
-      -0.5, 0.5, -0.5, 0.0, 1.0   // G
+      -HALF, HALF, -HALF, 0.0, 1.0,  // G
+      HALF, HALF, -HALF, 1.0, 1.0,   // H
+      HALF, HALF, HALF, 1.0, 0.0,    // C
+      HALF, HALF, HALF, 1.0, 0.0,    // C
+      -HALF, HALF, HALF, 0.0, 0.0,   // D
+      -HALF, HALF, -HALF, 0.0, 1.0   // G
 
   };
 

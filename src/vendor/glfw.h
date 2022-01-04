@@ -1,7 +1,3 @@
-//
-// Created by Jason Rowland on 1/1/22.
-//
-
 #ifndef BLOCK_WORLD_GLFW_H
 #define BLOCK_WORLD_GLFW_H
 

@@ -16,6 +16,8 @@ constexpr float SENSITIVITY = 0.1F;
 constexpr float ZOOM = 45.0F;
 constexpr float ZOOM_MIN = 1.0F;
 constexpr float ZOOM_MAX = 45.0F;
+constexpr float CAMERA_NEAR = 0.1F;
+constexpr float CAMERA_FAR = 100.0F;
 
 constexpr vec3 POSITION = vec3(0.0F, 0.0F, 0.0F);
 constexpr vec3 WORLD_UP = vec3(0.0F, 1.0F, 0.0F);
@@ -33,8 +35,8 @@ struct CameraOptions {
   float zoom{ZOOM};
   float width{DEFAULT_WIDTH};
   float height{DEFAULT_HEIGHT};
-  float near{0.1F};
-  float far{100.F};
+  float near{CAMERA_NEAR};
+  float far{CAMERA_FAR};
 };
 
 class Camera {
@@ -53,8 +55,8 @@ class Camera {
   vec3 _front = FRONT;
   vec3 _right{};
   bool _mouse_moved{true};
-  float _lastX{0 / 2.0};
-  float _lastY{0 / 2.0};
+  float _lastX{};
+  float _lastY{};
 
   // calculates the front vector from the Camera's (updated) Euler Angles
   void update_camera_vectors();
