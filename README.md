@@ -22,6 +22,14 @@ conan install . -s build_type=Debug --install-folder=cmake-build-debug --build m
 #cd cmake-build-debug && cmake ..
 ```
 
+# VSCode
+
+* [C/C++ for VSCode](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
+* [CMake Tools for VSCode](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools)
+* [Clang-Tidy for VSCode](https://marketplace.visualstudio.com/items?itemName=notskm.clang-tidy)
+* [Conan for VSCode](https://marketplace.visualstudio.com/items?itemName=disroop.conan)
+* [Visual Studio Code - Get started with CMake Tools](https://code.visualstudio.com/docs/cpp/CMake-linux)
+
 # Compile
 
 ```shell

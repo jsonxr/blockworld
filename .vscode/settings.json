@@ -1,3 +1,13 @@
 {
-    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
-}
+    "editor.formatOnSave": true,
+    "clang-tidy.fixOnSave": true,
+    "clang-tidy.buildPath": "build",
+    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.autoAddFileAssociations": false,
+    "C_Cpp.clang_format_style": "file",
+    "C_Cpp.clang_format_fallbackStyle": "Google",
+    "C_Cpp.clang_format_sortIncludes": true,
+    "C_Cpp.default.cppStandard": "c++20",
+    "C_Cpp.default.cStandard": "c17",
+    "cmake.configureOnOpen": true
+  }
