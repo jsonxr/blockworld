@@ -4,7 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/include",
-                "~/.conan/data/**"
+                "~/.conan/data/**",
+                "~/.conan/data/glad/0.1.34/_/_/package/505b829cbfbc1bfe3a7a165bf7a834d006e61de6/include"
             ],
             "defines": [],
             "macFrameworkPath": [
