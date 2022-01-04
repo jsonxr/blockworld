@@ -23,7 +23,8 @@ auto Assets::loadString(const char *filename) -> std::string {
 
   std::ifstream input_file(fullFilename);
   if (!input_file.is_open()) {
-    std::cerr << "Could not open the file - '" << filename << "'" << std::endl;
+    std::cerr << "Could not open the file - '" << fullFilename << "'"
+              << std::endl;
     exit(EXIT_FAILURE);
   }
   auto contents = std::string((std::istreambuf_iterator<char>(input_file)),

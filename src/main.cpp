@@ -64,7 +64,7 @@ auto main() -> int {
 
   glfwSetErrorCallback(error_callback);
 
-  Window window{windowTitle, WindowSize{640, 480}};
+  Window window{windowTitle, WindowSize{DEFAULT_WIDTH, DEFAULT_HEIGHT}};
 
   if (window.nativeWindow() == nullptr) {
     return exitWithError("Failed to create GLFW window\n");
