@@ -27,9 +27,9 @@ conan install . -s build_type=Debug --install-folder=cmake-build-debug --build m
 ```shell
 # Debug dependencies
 mkdir build
-conan install . -s build_type=Debug -s compiler.libcxx=libc++ -s cppstd=17 --install-folder=build --build missing
+conan install . -s build_type=Debug -s compiler.libcxx=libc++ -s cppstd=20 --install-folder=build --build missing
 # Release dependencies
-# conan install . -s build_type=Release -s compiler.libcxx=libc++ -s cppstd=17 --install-folder=cmake-build-release --build missing
+# conan install . -s build_type=Release -s compiler.libcxx=libc++ -s cppstd=20 --install-folder=cmake-build-release --build missing
 cd build
 cmake .. && cmake --build .
 
@@ -46,7 +46,7 @@ Uses Experimental Features: [WebAssembly Roadmap](https://webassembly.org/roadma
 * WebGPU
 
 ```shell
-conan install . -s build_type=Debug -s compiler.libcxx=libc++ -s cppstd=17 --install-folder=build-wasm --build missing
+conan install . -s build_type=Debug -s compiler.libcxx=libc++ -s cppstd=20 --install-folder=build-wasm --build missing
 cd build-wasm
 emcmake cmake ..
 cmake --build .
@@ -55,7 +55,7 @@ cmake --build .
 npx http-server bin  # This assumes node is installed...
 open http://127.0.0.1:8080/blockworld.html
 
-#emcc src/main.cpp -o cmake-build-wasm/index.html -Iinclude -s USE_WEBGL2=1 -s USE_GLFW=3 -s WASM=1 -std=c++17 -fwasm-exceptions
+#emcc src/main.cpp -o cmake-build-wasm/index.html -Iinclude -s USE_WEBGL2=1 -s USE_GLFW=3 -s WASM=1 -std=c++20 -fwasm-exceptions
 ```
 
 [wasm cmake dependencies](https://stackoverflow.com/questions/55869531/how-to-use-emscripten-with-cmake-for-project-dependencies)
