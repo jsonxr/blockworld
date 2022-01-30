@@ -43,12 +43,11 @@ Install
 # Compile
 
 ```sh
-# Debug dependencies
-export BUILD_DIR=build
-conan install . -s build_type=Debug -s compiler.libcxx=libc++ -s cppstd=20 --install-folder=$BUILD_DIR --build missing
-cd $BUILD_DIR
-cmake ..
-cmake --build .
+# libc++ vs stdlibc++ might depend on platform...
+# https://stackoverflow.com/questions/14972425/should-i-use-libc-or-libstdc
+# Install
+conan install . -s build_type=Debug -s compiler.libcxx=libc++ -s cppstd=20 --install-folder=build --build missing
+cd build && cmake .. && cmake --build .
 
 # Run app...
 bin/blockworld
@@ -67,9 +66,7 @@ Uses Experimental Features: [WebAssembly Roadmap](https://webassembly.org/roadma
 
 ```sh
 conan install . -s build_type=Debug -s compiler.libcxx=libc++ -s cppstd=20 --install-folder=build-wasm --build missing
-cd build-wasm
-emcmake cmake ..
-cmake --build .
+cd build-wasm && emcmake cmake .. && cmake --build .
 
 # Run app...
 npx http-server bin  # This assumes node is installed...

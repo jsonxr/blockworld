@@ -1,6 +1,5 @@
 [requires]
 boost/1.78.0
-fmt/8.1.1
 glfw/3.3.6
 glad/0.1.34
 glm/0.9.9.8

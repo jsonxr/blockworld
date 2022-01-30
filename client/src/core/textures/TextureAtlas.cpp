@@ -1,7 +1,5 @@
 #include "core/textures/TextureAtlas.h"
 
-#include <fmt/format.h>
-
 #include "core.h"
 #include "core/Assets.h"
 
@@ -151,30 +149,33 @@ void copyPixels(const TextureAtlas &atlas, const TextureRect &texture,
   }
 }
 
-void outputTextureGrid(TextureAtlas &atlas) {
-  auto used = atlas.pack();
-  std::string display;
+// fmt::format causes emscripten to fail to link
+//
+// void outputTextureGrid(TextureAtlas &atlas) {
+//   auto used = atlas.pack();
+//   std::string display;
 
-  uint16 output_y_slots =
-      atlas.get_height() / atlas.get_min_size() +
-      std::min(1, atlas.get_height() % atlas.get_min_size());
-  uint16 output_x_slots = atlas.get_width() / atlas.get_min_size() +
-                          std::min(1, atlas.get_width() % atlas.get_min_size());
+//   uint16 output_y_slots =
+//       atlas.get_height() / atlas.get_min_size() +
+//       std::min(1, atlas.get_height() % atlas.get_min_size());
+//   uint16 output_x_slots = atlas.get_width() / atlas.get_min_size() +
+//                           std::min(1, atlas.get_width() %
+//                           atlas.get_min_size());
 
-  for (uint16 i = 0; i < output_y_slots; i++) {
-    for (uint16 j = 0; j < output_x_slots; j++) {
-      int offset = (i * output_x_slots) + j;
-      if (used->at(offset) == 0) {
-        display += fmt::format("{:>4} ", "");
-      } else {
-        display += fmt::format("{:>4} ", used->at(offset));
-      };
-    }
-    display += "\n";
-  }
+//   for (uint16 i = 0; i < output_y_slots; i++) {
+//     for (uint16 j = 0; j < output_x_slots; j++) {
+//       int offset = (i * output_x_slots) + j;
+//       if (used->at(offset) == 0) {
+//         display += fmt::format("{:>4} ", "");
+//       } else {
+//         display += fmt::format("{:>4} ", used->at(offset));
+//       };
+//     }
+//     display += "\n";
+//   }
 
-  std::cout << display << std::endl;
-}
+//   std::cout << display << std::endl;
+// }
 
 //------------------------------------------------------------------------------
 // TextureAtlas

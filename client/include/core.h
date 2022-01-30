@@ -1,10 +1,6 @@
 #ifndef BLOCK_WORLD_CORE_H
 #define BLOCK_WORLD_CORE_H
 
-#include "vendor/glfw.h"
-#include "vendor/glm.h"
-
-// Standard library stuff
 #include <array>
 #include <cstdint>
 #include <cstdio>
@@ -12,6 +8,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+
+#include "vendor/glfw.h"
+#include "vendor/glm.h"
 
 using uint64 = uint64_t;
 using uint32 = uint32_t;

@@ -1,7 +1,5 @@
 #include "core/Input.h"
 
-#include <fmt/format.h>
-
 #include "core/Window.h"
 
 namespace block_world {
@@ -14,7 +12,6 @@ void Input::key_callback(int key, int /*scancode*/, int action, int /*mods*/) {
 }
 
 void Input::mouse_callback(double xPos, double yPos) {
-  std::cout << fmt::format("mouse_callback {},{}", xPos, yPos) << std::endl;
   x_pos_ = static_cast<int>(xPos);
   y_pos_ = static_cast<int>(yPos);
 

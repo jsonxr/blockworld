@@ -1,7 +1,5 @@
 #include "core/BoxGeometry.h"
 
-#include <fmt/format.h>
-
 #include "core/BufferGeometry.h"
 
 namespace block_world::box_geometry {
