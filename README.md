@@ -37,30 +37,6 @@ Install
   unzip  ~/Library/Application\ Support/minecraft/versions/$MINECRAFT_VERSION/$MINECRAFT_VERSION.jar "assets/minecraft/models/block/*" "assets/minecraft/textures/block/*" -d client
   ```
 
-# CLion
-
-- [CLion IDE](https://www.jetbrains.com/clion/)
-- [CLion Conan plugin](https://intellij-support.jetbrains.com/hc/en-us/community/posts/360008851580-How-to-use-Conan-Package-Manager-for-C-on-CLion-Mac)
-- [GLSL Support plugin](https://plugins.jetbrains.com/plugin/6993-glsl-support)
-
-```sh
-# Install conan dependencies
-conan install . -s build_type=Debug --install-folder=cmake-build-debug --build missing
-# dont do below, click on that conan install at the bottom and then reload the cmake project in the ide
-#cd cmake-build-debug && cmake ..
-```
-
-# VSCode
-
-Install the following plugins, then follow compile directions.
-
-- [C/C++ for VSCode](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
-- [CMake Tools for VSCode](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools)
-- [Clang-Tidy for VSCode](https://marketplace.visualstudio.com/items?itemName=notskm.clang-tidy)
-- [Conan for VSCode](https://marketplace.visualstudio.com/items?itemName=disroop.conan)
-- [Visual Studio Code - Get started with CMake Tools](https://code.visualstudio.com/docs/cpp/CMake-linux)
-- clang-tidy, clang-format: `brew install llvm`
-
 # Compile
 
 ```sh
@@ -107,6 +83,30 @@ open http://127.0.0.1:8080/blockworld.html
 - [zero cost exceptions](https://github.com/WebAssembly/design/issues/1078)
 - [-fwasm-exceptions (enable wasm exceptions)](https://emscripten.org/docs/porting/exceptions.html)
 - [-s DISABLE_EXCEPTION_CATCHING=0 (is this old?)](https://brionv.com/log/2019/10/24/exception-handling-in-emscripten-how-it-works-and-why-its-disabled-by-default/)
+
+# CLion
+
+- [CLion IDE](https://www.jetbrains.com/clion/)
+- [CLion Conan plugin](https://intellij-support.jetbrains.com/hc/en-us/community/posts/360008851580-How-to-use-Conan-Package-Manager-for-C-on-CLion-Mac)
+- [GLSL Support plugin](https://plugins.jetbrains.com/plugin/6993-glsl-support)
+
+```sh
+# Install conan dependencies
+conan install . -s build_type=Debug --install-folder=cmake-build-debug --build missing
+# dont do below, click on that conan install at the bottom and then reload the cmake project in the ide
+#cd cmake-build-debug && cmake ..
+```
+
+# VSCode
+
+Install the following plugins, then follow compile directions.
+
+- [C/C++ for VSCode](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
+- [CMake Tools for VSCode](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools)
+- [Clang-Tidy for VSCode](https://marketplace.visualstudio.com/items?itemName=notskm.clang-tidy)
+- [Conan for VSCode](https://marketplace.visualstudio.com/items?itemName=disroop.conan)
+- [Visual Studio Code - Get started with CMake Tools](https://code.visualstudio.com/docs/cpp/CMake-linux)
+- clang-tidy, clang-format: `brew install llvm`
 
 # Resources
 

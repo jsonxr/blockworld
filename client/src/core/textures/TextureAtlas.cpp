@@ -2,6 +2,7 @@
 
 #include <fmt/format.h>
 
+#include "core.h"
 #include "core/Assets.h"
 
 namespace block_world {
@@ -13,8 +14,8 @@ namespace block_world {
 // https://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Rectangle_difference
 
 struct Position {
-  ushort x;
-  ushort y;
+  uint16 x;
+  uint16 y;
 };
 
 void sortTextureRects(std::vector<TextureRect> &rects) {
@@ -30,14 +31,14 @@ void sortTextureRects(std::vector<TextureRect> &rects) {
 
 auto checkPosition(const TextureAtlas &atlas, const TextureRect &texture,
                    const TextureGrid &used, const Position &pos) -> bool {
-  ushort pos_x = pos.x;
-  ushort pos_y = pos.y;
-  ushort out_x_slots = atlas.get_width() / atlas.get_min_size();
-  ushort out_y_slots = atlas.get_height() / atlas.get_min_size();
+  uint16 pos_x = pos.x;
+  uint16 pos_y = pos.y;
+  uint16 out_x_slots = atlas.get_width() / atlas.get_min_size();
+  uint16 out_y_slots = atlas.get_height() / atlas.get_min_size();
 
-  ushort y_slots = texture.height / atlas.get_min_size() +
+  uint16 y_slots = texture.height / atlas.get_min_size() +
                    std::min(1, texture.height % atlas.get_min_size());
-  ushort x_slots = texture.width / atlas.get_min_size() +
+  uint16 x_slots = texture.width / atlas.get_min_size() +
                    std::min(1, texture.width % atlas.get_min_size());
 
   if ((pos_x + x_slots > out_x_slots) || (pos_y + y_slots > out_y_slots)) {
@@ -45,8 +46,8 @@ auto checkPosition(const TextureAtlas &atlas, const TextureRect &texture,
   }
 
   bool open = true;
-  for (ushort y = 0; y < y_slots; y++) {
-    for (ushort x = 0; x < x_slots; x++) {
+  for (uint16 y = 0; y < y_slots; y++) {
+    for (uint16 x = 0; x < x_slots; x++) {
       int offset = ((pos_y + y) * out_x_slots) + (pos_x + x);
       open = open && (used.at(offset) == 0);
     }
@@ -56,19 +57,19 @@ auto checkPosition(const TextureAtlas &atlas, const TextureRect &texture,
 
 void markPosition(const TextureAtlas &atlas, TextureRect &texture,
                   TextureGrid &used, const Position &pos) {
-  ushort y_slots = texture.height / atlas.get_min_size() +
+  uint16 y_slots = texture.height / atlas.get_min_size() +
                    std::min(1, texture.height % atlas.get_min_size());
-  ushort x_slots = texture.width / atlas.get_min_size() +
+  uint16 x_slots = texture.width / atlas.get_min_size() +
                    std::min(1, texture.width % atlas.get_min_size());
 
-  ushort pos_x = pos.x;
-  ushort pos_y = pos.y;
+  uint16 pos_x = pos.x;
+  uint16 pos_y = pos.y;
 
-  ushort out_x_slots = atlas.get_width() / atlas.get_min_size();
-  ushort out_y_slots = atlas.get_height() / atlas.get_min_size();
+  uint16 out_x_slots = atlas.get_width() / atlas.get_min_size();
+  uint16 out_y_slots = atlas.get_height() / atlas.get_min_size();
 
-  for (ushort y = 0; y < y_slots; y++) {
-    for (ushort x = 0; x < x_slots; x++) {
+  for (uint16 y = 0; y < y_slots; y++) {
+    for (uint16 x = 0; x < x_slots; x++) {
       int offset = ((pos_y + y) * out_x_slots) + (pos_x + x);
       used.at(offset) = texture.id;
     }
@@ -77,14 +78,14 @@ void markPosition(const TextureAtlas &atlas, TextureRect &texture,
 
 auto findPosition(const TextureAtlas &atlas, const TextureRect &texture,
                   const TextureGrid &used) -> std::optional<Position> {
-  ushort output_y_slots =
+  uint16 output_y_slots =
       atlas.get_height() / atlas.get_min_size() +
       std::min(1, atlas.get_height() % atlas.get_min_size());
-  ushort output_x_slots = atlas.get_width() / atlas.get_min_size() +
+  uint16 output_x_slots = atlas.get_width() / atlas.get_min_size() +
                           std::min(1, atlas.get_width() % atlas.get_min_size());
 
-  for (ushort y = 0; y < output_y_slots; y++) {
-    for (ushort x = 0; x < output_x_slots; x++) {
+  for (uint16 y = 0; y < output_y_slots; y++) {
+    for (uint16 x = 0; x < output_x_slots; x++) {
       Position pos{x, y};
       if (checkPosition(atlas, texture, used, pos)) {
         return pos;
@@ -130,7 +131,7 @@ void copyPixels(const TextureAtlas &atlas, const TextureRect &texture,
   // Image
   auto image = std::make_unique<Image>(texture.path);
 
-  for (ushort y = 0; y < texture.height; y++) {
+  for (uint16 y = 0; y < texture.height; y++) {
     int offset = y * texture.width * kChannels;
     unsigned char *current_raw_pixel = &image->get_pixels()[offset];
 
@@ -154,14 +155,14 @@ void outputTextureGrid(TextureAtlas &atlas) {
   auto used = atlas.pack();
   std::string display;
 
-  ushort output_y_slots =
+  uint16 output_y_slots =
       atlas.get_height() / atlas.get_min_size() +
       std::min(1, atlas.get_height() % atlas.get_min_size());
-  ushort output_x_slots = atlas.get_width() / atlas.get_min_size() +
+  uint16 output_x_slots = atlas.get_width() / atlas.get_min_size() +
                           std::min(1, atlas.get_width() % atlas.get_min_size());
 
-  for (ushort i = 0; i < output_y_slots; i++) {
-    for (ushort j = 0; j < output_x_slots; j++) {
+  for (uint16 i = 0; i < output_y_slots; i++) {
+    for (uint16 j = 0; j < output_x_slots; j++) {
       int offset = (i * output_x_slots) + j;
       if (used->at(offset) == 0) {
         display += fmt::format("{:>4} ", "");
@@ -179,7 +180,7 @@ void outputTextureGrid(TextureAtlas &atlas) {
 // TextureAtlas
 //------------------------------------------------------------------------------
 
-auto TextureAtlas::add(TextureRect &&region) -> ushort {
+auto TextureAtlas::add(TextureRect &&region) -> uint16 {
   region.id = regions_.size();
   regions_.emplace_back(region);
   return region.id;

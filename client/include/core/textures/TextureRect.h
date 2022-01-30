@@ -16,12 +16,12 @@ struct UV {
 
 struct TextureRect {
  public:
-  ushort id{};
+  uint16 id{};
   std::string name{};
-  ushort x{};
-  ushort y{};
-  ushort width{};
-  ushort height{};
+  uint16 x{};
+  uint16 y{};
+  uint16 width{};
+  uint16 height{};
   std::filesystem::path path{};
   UV uv{};
 };
