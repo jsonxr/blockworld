@@ -1,6 +1,8 @@
 #ifndef MINECRAFT_WINDOW_H
 #define MINECRAFT_WINDOW_H
 #include "core.h"
+#include "core/Camera.h"
+#include "core/Input.h"
 
 namespace block_world {
 
@@ -12,6 +14,8 @@ struct WindowSize {
   int height{kDefaultWindowHeight};
 };
 
+enum class CursorMode { kHidden, kLocked, kNormal };
+
 // struct Destroy_GLFWwindow {
 //   void operator()(GLFWwindow* ptr) { glfwDestroyWindow(ptr); }
 // };
@@ -20,50 +24,56 @@ struct WindowSize {
 
 class Window {
  public:
+  //----------------------------------------------------------------------------
+  // Constructors
+  //----------------------------------------------------------------------------
   Window();
   explicit Window(const char *title) noexcept;
   explicit Window(const char *title, WindowSize size,
                   bool fullScreenMode = false) noexcept;
-  ~Window();
-
-  //  static auto createWindow(const std::string& title) ->
-  //  std::shared_ptr<Window>; static auto createWindow(WindowSize size, const
-  //  std::string& title,
-  //                           bool fullScreenMode = false)
-  //      -> std::shared_ptr<Window>;
-
-  [[nodiscard("tidy told me to")]] auto shouldClose() const noexcept -> bool;
-  void close() noexcept;
-  [[nodiscard("tidy told me to")]] auto width() const noexcept -> int {
-    return size_.width;
-  }
-  [[nodiscard("tidy told me to")]] auto height() const noexcept -> int {
-    return size_.height;
-  }
-  [[nodiscard("tidy told me to")]] auto nativeWindow() const noexcept
-      -> GLFWwindow * {
-    return ptr_;
-  }
-
-  void onResize(int width, int height);
-
-  // Copy: not supported
+  //----------------------------------------------------------------------------
+  // Copy/Move/Destruct
+  //----------------------------------------------------------------------------
   Window(const Window &other) = delete;          // copy constructor
   auto operator=(const Window &other) = delete;  // copy assignment
-  // Move
   Window(Window &&other) noexcept
       : size_(other.size_),
-        ptr_(std::exchange(other.ptr_, nullptr)){};  // move constructor
+        native_window_(std::exchange(other.native_window_, nullptr)),
+        primary_monitor_(std::exchange(other.primary_monitor_,
+                                       nullptr)){};  // move constructor
   auto operator=(Window &&other) noexcept -> Window & {
     size_ = other.size_;
-    std::swap(ptr_, other.ptr_);
+    std::swap(native_window_, other.native_window_);
+    std::swap(primary_monitor_, other.primary_monitor_);
     return *this;
   }
+  ~Window();
+
+  //----------------------------------------------------------------------------
+  // Properties
+  //----------------------------------------------------------------------------
+  auto camera() -> Camera & { return camera_; }
+  auto input() -> Input & { return input_; }
+  auto shouldClose() const noexcept -> bool;
+  auto width() const noexcept -> int { return size_.width; }
+  auto height() const noexcept -> int { return size_.height; }
+  auto nativeWindow() const noexcept -> GLFWwindow * { return native_window_; }
+
+  //----------------------------------------------------------------------------
+  // Methods
+  //----------------------------------------------------------------------------
+  void close() noexcept;
+  void onResize(int width, int height);
+  void process(double deltaTime);
+  void setCursorMode(CursorMode cursorMode);
+  static void pollEvents();
 
  private:
-  GLFWwindow *ptr_;
-  // Smart_GLFWwindow _nativeWindow;
+  GLFWwindow *native_window_ = nullptr;
+  GLFWmonitor *primary_monitor_ = nullptr;
   WindowSize size_{};
+  Camera camera_{};
+  Input input_{};
 };
 
 }  // namespace block_world

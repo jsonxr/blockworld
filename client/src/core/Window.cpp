@@ -6,13 +6,47 @@
 
 namespace block_world {
 
-void windowsize_callback(GLFWwindow *window, int width, int height) {
-  std::cout << "windowsize__callback " << width << ", " << height << std::endl;
-  void *ptr = glfwGetWindowUserPointer(window);
-  auto *self = static_cast<Window *>(ptr);
-  self->onResize(width, height);
+//------------------------------------------------------------------------------
+// glfw Callbacks
+//------------------------------------------------------------------------------
+
+void windowsize_callback(GLFWwindow *native_window, int width, int height) {
+  auto *window = static_cast<Window *>(glfwGetWindowUserPointer(native_window));
+  if (window == nullptr) {
+    return;
+  }
+  window->onResize(width, height);
 }
 
+void key_callback(GLFWwindow *native_window, int key, int scancode, int action,
+                  int mods) {
+  auto *window = static_cast<Window *>(glfwGetWindowUserPointer(native_window));
+  if (window == nullptr) {
+    return;
+  }
+  window->input().key_callback(key, scancode, action, mods);
+}
+
+void mouse_callback(GLFWwindow *native_window, double xPos, double yPos) {
+  auto *window = static_cast<Window *>(glfwGetWindowUserPointer(native_window));
+  if (window == nullptr) {
+    return;
+  }
+  window->input().mouse_callback(xPos, yPos);
+}
+
+void mouse_button_callback(GLFWwindow *native_window, int button, int action,
+                           int mods) {
+  auto *window = static_cast<Window *>(glfwGetWindowUserPointer(native_window));
+  if (window == nullptr) {
+    return;
+  }
+  window->input().mouse_button_callback(button, action, mods);
+}
+
+//------------------------------------------------------------------------------
+// Constructors
+//------------------------------------------------------------------------------
 Window::Window() : Window("OpenGL Window", WindowSize{}, false) {}
 Window::Window(const char *title) noexcept
     : Window(title, WindowSize{}, false) {}
@@ -27,21 +61,16 @@ Window::Window(const char *title, WindowSize size, bool fullScreenMode) noexcept
 #endif
 
   // Is primaryMonitor leaking memory?
-  GLFWmonitor *primary_monitor =
-      fullScreenMode ? glfwGetPrimaryMonitor() : nullptr;
-  GLFWwindow *native_window = glfwCreateWindow(size.width, size.height, title,
-                                               primary_monitor, nullptr);
-  ptr_ = native_window;
+  primary_monitor_ = fullScreenMode ? glfwGetPrimaryMonitor() : nullptr;
+  native_window_ = glfwCreateWindow(size.width, size.height, title,
+                                    primary_monitor_, nullptr);
 
-  if (native_window == nullptr) {
+  if (native_window_ == nullptr) {
     std::cerr << "Failed to create GLFW window\n" << std::endl;
     return;
   }
 
-  glfwSetKeyCallback(native_window, input::keyCallback);
-  glfwSetCursorPosCallback(native_window, input::mouseCallback);
-  glfwSetMouseButtonCallback(native_window, input::mouseButtonCallback);
-  glfwMakeContextCurrent(native_window);
+  glfwMakeContextCurrent(native_window_);
 
 #ifndef __EMSCRIPTEN__
   auto loader =
@@ -53,29 +82,66 @@ Window::Window(const char *title, WindowSize size, bool fullScreenMode) noexcept
 #endif
 
   // Handle window resize
-  glfwSetWindowUserPointer(native_window, this);
-  glfwSetWindowSizeCallback(native_window, windowsize_callback);
+  glfwSetWindowUserPointer(native_window_, this);
+  glfwSetWindowSizeCallback(native_window_, windowsize_callback);
+  // Input
+  glfwSetKeyCallback(native_window_, key_callback);
+  glfwSetCursorPosCallback(native_window_, mouse_callback);
+  glfwSetMouseButtonCallback(native_window_, mouse_button_callback);
 }
 
+//------------------------------------------------------------------------------
+// Copy/Move/Destruct
+//------------------------------------------------------------------------------
 Window::~Window() {
-  if (ptr_ != nullptr) {
+  if (native_window_ != nullptr) {
     close();
-    glfwDestroyWindow(ptr_);
-    ptr_ = nullptr;
+    native_window_ = nullptr;
   }
+  if (primary_monitor_) {
+    primary_monitor_ = nullptr;
+  }
+  glfwTerminate();
 };
 
-void Window::onResize(
-    int width, int height) {  // NOLINT(bugprone-easily-swappable-parameters)
+//------------------------------------------------------------------------------
+// Events
+//------------------------------------------------------------------------------
+void Window::onResize(int width, int height) {
   this->size_.width = width;
   this->size_.height = height;
   glViewport(0, 0, width, height);
+  float aspect = static_cast<float>(width) / static_cast<float>(height);
+  camera_.set_aspect(aspect);
 }
 
+//------------------------------------------------------------------------------
+// Properties
+//------------------------------------------------------------------------------
 auto Window::shouldClose() const noexcept -> bool {
-  return glfwWindowShouldClose(ptr_) == GLFW_TRUE;
+  return glfwWindowShouldClose(native_window_) == GLFW_TRUE;
 }
 
-void Window::close() noexcept { glfwSetWindowShouldClose(ptr_, GLFW_TRUE); }
+//------------------------------------------------------------------------------
+// Methods
+//------------------------------------------------------------------------------
+void Window::close() noexcept {
+  glfwSetWindowShouldClose(native_window_, GLFW_TRUE);
+  glfwDestroyWindow(native_window_);
+}
+void Window::process(double deltaTime) {
+  input_.process(camera_, deltaTime);
+  // camera_.set_position
+}
+
+void Window::setCursorMode(CursorMode cursorMode) {
+  int glfw_cursor_mode =
+      cursorMode == CursorMode::kLocked   ? GLFW_CURSOR_DISABLED
+      : cursorMode == CursorMode::kNormal ? GLFW_CURSOR_NORMAL
+                                          : GLFW_CURSOR_HIDDEN;
+  glfwSetInputMode((GLFWwindow *)native_window_, GLFW_CURSOR, glfw_cursor_mode);
+}
+
+void Window::pollEvents() { glfwPollEvents(); }
 
 }  // namespace block_world

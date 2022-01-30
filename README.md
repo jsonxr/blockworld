@@ -32,9 +32,12 @@ Install
 
 - [Conan package manager](https://conan.io/) - `brew install conan`
 - Copy minecraft files...
+
   ```shell
-  export MINECRAFT_VERSION=1.18.1
-  unzip  ~/Library/Application\ Support/minecraft/versions/$MINECRAFT_VERSION/$MINECRAFT_VERSION.jar "assets/minecraft/models/block/*" "assets/minecraft/textures/block/*" -d client
+  # Show available versions of minecraft on a mac
+  bin/minecraft-extract
+  # Extract specific version of minecraft
+  bin/minecraft-extract 1.18.1
   ```
 
 # Compile

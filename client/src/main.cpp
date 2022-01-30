@@ -15,19 +15,19 @@
 #include "core/textures/TextureRect.h"
 #include "core/webgl/WebGLRenderer.h"
 #include "utils.h"
+
 // using namespace block_world;
-using block_world::Camera;
-using block_world::CameraMovement;
 using block_world::Material;
 using block_world::Mesh;
 using block_world::Scene;
+using block_world::TextureAtlas;
 using block_world::WebGLRenderer;
 using block_world::Window;
 using block_world::WindowSize;
 
 constexpr auto kWindowTitle = "BlockWorld";
 
-int exitWithError(const char *msg) {  // NOLINT
+auto exitWithError(const char *msg) -> int {
   std::cerr << msg << std::endl;
   glfwTerminate();
   std::cerr << "goodbye" << std::endl;
@@ -52,26 +52,38 @@ static void error_callback(int error, const char *description) {
 std::function<void()> loop;
 void main_loop() { loop(); }
 
-void processInput(Window &win, Camera &camera, double deltaTime) {
-  auto *window = win.nativeWindow();
+// void processInput(Window &win, Camera &camera, double deltaTime) {
+//   auto *window = win.nativeWindow();
 
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-    glfwSetWindowShouldClose(window, 1);
-  }
+//   float sensitivity = 0.1f;
+//   float mx = block_world::input::mouse_x;
+//   float my = block_world::input::mouse_y;
+//   mx *= sensitivity;
+//   my *= sensitivity;
 
-  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-    camera.process_keyboard(CameraMovement::kForward, deltaTime);
-  }
-  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-    camera.process_keyboard(CameraMovement::kBackward, deltaTime);
-  }
-  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-    camera.process_keyboard(CameraMovement::kLeft, deltaTime);
-  }
-  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-    camera.process_keyboard(CameraMovement::kRight, deltaTime);
-  }
-}
+//   camera.orientation.x += my;
+//   camera.orientation.y += mx;
+
+//   if (camera.orientation.x > 89.0f) camera.orientation.x = 89.0f;
+//   if (camera.orientation.x < -89.0f) camera.orientation.x = -89.0f;
+
+//   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+//     glfwSetWindowShouldClose(window, 1);
+//   }
+
+//   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+//     camera.process_keyboard(CameraMovement::kForward, deltaTime);
+//   }
+//   if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+//     camera.process_keyboard(CameraMovement::kBackward, deltaTime);
+//   }
+//   if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+//     camera.process_keyboard(CameraMovement::kLeft, deltaTime);
+//   }
+//   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+//     camera.process_keyboard(CameraMovement::kRight, deltaTime);
+//   }
+// }
 
 auto getFiles(const std::string &path) -> std::vector<std::filesystem::path> {
   std::vector<std::filesystem::path> files_in_directory;
@@ -83,9 +95,9 @@ auto getFiles(const std::string &path) -> std::vector<std::filesystem::path> {
 }
 
 auto main2() -> int {
-  auto atlas = block_world::TextureAtlas::loadFromDirectory(
-      "minecraft:block/", "/minecraft/textures/block",
-      block_world::Size{512, 1024});
+  auto atlas = TextureAtlas::loadFromDirectory("minecraft:block/",
+                                               "/minecraft/textures/block",
+                                               block_world::Size{512, 1024});
   atlas->save("test.png");
   return 0;
 }
@@ -110,10 +122,10 @@ auto main() -> int {  // NOLINT(bugprone-exception-escape)
   auto atlas = block_world::TextureAtlas::loadFromDirectory(
       "minecraft:block/", "/minecraft/textures/block",
       block_world::Size{512, 1024});
-  auto grass_side =
-      atlas->getRectByName("minecraft:block/grass_block_side.png");
-  auto top = atlas->getRectByName("minecraft:block/azalea_top.png");
-  auto dirt = atlas->getRectByName("minecraft:block/dirt.png");
+  atlas->save("test.png");
+  auto grass_side = atlas->getRectByName("minecraft:block/grass_block_side");
+  auto top = atlas->getRectByName("minecraft:block/azalea_top");
+  auto dirt = atlas->getRectByName("minecraft:block/dirt");
   if (!grass_side) {
     std::cout << "no grass_side...!!!!!!!!!!!!!!!" << std::endl;
   }
@@ -123,24 +135,17 @@ auto main() -> int {  // NOLINT(bugprone-exception-escape)
       {1, 1, 1}, {grass_side->uv, grass_side->uv, top->uv, dirt->uv,
                   grass_side->uv, grass_side->uv});
 
-  // block_world::TextureArray textures{};
-  // textures.add("/textures/block/grass_block_side.png");
-  // textures.add("/textures/block/dirt.png");
-  std::cout << "material..." << std::endl;
   auto material = std::make_shared<Material>(std::move(atlas));
-  std::cout << "cube..." << std::endl;
   auto cube = std::make_shared<Mesh>(std::move(geometry), std::move(material));
-  std::cout << "scene..." << std::endl;
   //
   Scene scene{};
   scene.add(std::move(cube));
 
-  std::cout << "camera..." << std::endl;
-  //
-  Camera camera{{vec3(0.0F, 0.0F, 3.0F)}};
+  // Camera camera{{vec3(0.0, 0.0, 3.0)}};
+  // camera.set_position({0.0, 0.0, 1.0});
+  // camera.set_fov(45.0);
+  // camera.set_orientation({0.0, 0.0, 0.0});
 
-  std::cout << "renderer..." << std::endl;
-  // Camera camera(vec3(0.0f, 0.0f, 3.0f));
   WebGLRenderer renderer{};
 
   // timing
@@ -156,25 +161,27 @@ auto main() -> int {  // NOLINT(bugprone-exception-escape)
 
     // input
     // -----
-    processInput(window, camera, delta_time);
+    window.process(delta_time);
+
+    // input.process(camera, delta_time);
+    // processInput(window, camera, delta_time);
     // camera.process_mouse_movement(input::mouse_x, input::mouse_y);
 
     // or... loop = [&window, &scene, &camera, &renderer] {
-    block_world::WebGLRenderer::render(window, scene, camera);
-    glfwPollEvents();
+    block_world::WebGLRenderer::render(window, scene, window.camera());
+    block_world::Window::pollEvents();
   };
 
 #ifdef __EMSCRIPTEN__
   emscripten_set_main_loop(main_loop, 0, true);
 #else
-  while (!window.shouldClose()) {
+  while (!window.shouldClose() &&
+         !window.input().isKeyPressed(GLFW_KEY_ESCAPE)) {
     loop();
   }
 #endif
 
   window.close();
 
-  glfwTerminate();
-  exit(EXIT_SUCCESS);
-  return 0;
+  return EXIT_SUCCESS;
 }

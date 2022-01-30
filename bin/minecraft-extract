@@ -1,0 +1,22 @@
+#!/bin/sh
+
+MINECRAFT_VERSION=$1
+if [ "$MINECRAFT_VERSION" == "" ]; then
+  versions=`ls -t ~/Library/Application\ Support/minecraft/versions/ | grep -E '^[0-9]+\.[0-9]+\.[0-9]+' | sort --reverse`
+  echo "Available versions: " $versions
+
+  versions=($versions)
+  latest=${versions[0]}
+  echo "latest: $latest"
+  exit 1
+fi
+
+# versions=`ls -t ~/Library/Application\ Support/minecraft/versions/ | grep -E '^[0-9]+\.[0-9]+\.[0-9]+' | sort --reverse`
+# versions=($versions)
+# MINECRAFT_VERSION=${versions[0]}
+
+TEMP=$(mktemp -d)
+rm -rf client/assets/minecraft
+unzip  ~/Library/Application\ Support/minecraft/versions/$MINECRAFT_VERSION/$MINECRAFT_VERSION.jar "assets/minecraft/*" "data/minecraft/*" -d $TEMP
+mv $TEMP/assets/minecraft client/assets
+mv $TEMP/data/minecraft client/assets/minecraft/data

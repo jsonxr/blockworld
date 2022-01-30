@@ -1,7 +1,6 @@
 #ifndef BLOCK_WORLD_CAMERA_H
 #define BLOCK_WORLD_CAMERA_H
 
-#include "Window.h"
 #include "vendor/glm.h"
 
 namespace block_world {
@@ -24,18 +23,22 @@ constexpr vec3 kFront = glm::vec3(0.0F, 0.0F, -1.0F);
 
 enum class CameraMovement { kForward, kBackward, kLeft, kRight };
 struct CameraOptions {
-  vec3 position = kPosition;
-  vec3 up = kWorldUp;
-  vec3 worldUp = kWorldUp;
-  float yaw = {kYaw};
-  float pitch{kPitch};
-  float speed{kSpeed};
-  float sensitivity{kSensitivity};
-  float zoom{kZoom};
-  float width{kDefaultWindowWidth};
-  float height{kDefaultWindowHeight};
-  float near{kCameraNear};
-  float far{kCameraFar};
+  vec3 position{0.0, 1.6, 3.0};
+  vec3 orientation{0.0, 0.0, 0.0};
+
+  float fov{45.0};
+  float near{0.1F};
+  float far{100.0F};
+  float aspect{1920.F / 1080.F};  // width/height of window
+  // vec3 up = kWorldUp;
+  // vec3 worldUp = kWorldUp;
+  // float yaw = {kYaw};
+  // float pitch{kPitch};
+  // float speed{kSpeed};
+  // float sensitivity{kSensitivity};
+  // float zoom{kZoom};
+  // float width{kDefaultWindowWidth};
+  // float height{kDefaultWindowHeight};
 };
 
 class Camera {
@@ -43,24 +46,26 @@ class Camera {
   Camera() = default;
   explicit Camera(CameraOptions options);
 
-  [[nodiscard]] auto get_view_matrix() const -> mat4;
+  [[nodiscard]] auto get_view_matrix() -> mat4;
   [[nodiscard]] auto get_projection_matrix() const -> mat4;
 
-  void process_keyboard(CameraMovement direction, double deltaTime);
-  void process_mouse_movement(float xPos, float yPos,
-                              bool constrainPitch = true);
-  void process_mouse_scroll(float yOffset);
+  void set_aspect(float aspect) { options_.aspect = aspect; }
+  void set_position(const vec3 &pos) { options_.position = pos; }
+  void set_fov(float fov) { options_.fov = fov; }
+  void set_orientation(const vec3 &orientation) {}
+
+  auto orientation() -> vec3 & { return options_.orientation; }
+  auto position() -> vec3 & { return options_.position; }
+  auto forward() -> const vec3 & { return forward_; }
 
  private:
+  glm::vec3 forward_{};
   CameraOptions options_{};
-  vec3 front_ = kFront;
-  vec3 right_{};
-  bool mouse_moved_{true};
-  float lastX_{};
-  float lastY_{};
+  glm::mat4x4 view_matrix_{};
+  glm::mat4x4 projection_matrix_{};
 
   // calculates the front vector from the Camera's (updated) Euler Angles
-  void update_camera_vectors();
+  void update_camera_vectors() const;
 };
 
 }  // namespace block_world

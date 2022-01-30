@@ -26,7 +26,7 @@ class TextureAtlas {
  public:
   TextureAtlas()
       : width_(kTextureAtlasDefaultSize), height_(kTextureAtlasDefaultSize){};
-  explicit TextureAtlas(uint16 width, uint16 height,  // NOLINT
+  explicit TextureAtlas(uint16 width, uint16 height,
                         uint16 min_size = kTextureAtlasMinSize)
       : width_(width), height_(height), min_size_(min_size) {}
 

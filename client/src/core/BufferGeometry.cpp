@@ -101,7 +101,7 @@ BufferGeometry::BufferGeometry(std::vector<GLfloat> vertices) noexcept
                         static_cast<GLvoid *>(nullptr));
 
   const auto *offset_texture =
-      (const GLvoid *)(kPositionFloats * sizeof(GLfloat));  // NOLINT
+      (const GLvoid *)(kPositionFloats * sizeof(GLfloat));
   glVertexAttribPointer(kLocTexture, kTextureFloats, GL_FLOAT, GL_FALSE,
                         kStride, offset_texture);
 
@@ -114,7 +114,7 @@ void BufferGeometry::render() {
   glBindVertexArray(glVao_);  // Is this even needed?
   constexpr int kStrideComponentCount = 5;
   glDrawArrays(GL_TRIANGLES, 0,
-               (GLsizei)vertices_.size() / kStrideComponentCount);  // NOLINT
+               (GLsizei)vertices_.size() / kStrideComponentCount);
   //  glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0);
 }
 

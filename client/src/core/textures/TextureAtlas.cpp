@@ -219,8 +219,8 @@ auto TextureAtlas::compile() -> GLuint {
 
 void TextureAtlas::save(const std::string &filename) {
   auto pixels = this->generatePixels();
-  stbi_write_png(filename.c_str(), width_, height_, 4, pixels->data(),
-                 width_ * sizeof(Pixel));
+  int size = width_ * static_cast<int>(sizeof(Pixel));
+  stbi_write_png(filename.c_str(), width_, height_, 4, pixels->data(), size);
 }
 
 auto TextureAtlas::getRectByName(const std::string &name)
@@ -234,7 +234,7 @@ auto TextureAtlas::getRectByName(const std::string &name)
   return std::nullopt;
 }
 
-auto TextureAtlas::loadFromDirectory(const std::string &prefix,  // NOLINT
+auto TextureAtlas::loadFromDirectory(const std::string &prefix,
                                      const std::string &path, const Size size)
     -> std::unique_ptr<TextureAtlas> {
   auto atlas = std::make_unique<TextureAtlas>(size.width, size.height);
@@ -242,7 +242,7 @@ auto TextureAtlas::loadFromDirectory(const std::string &prefix,  // NOLINT
       path, ".+\\.png",
       [&atlas, &prefix](const std::filesystem::path &filepath) {
         auto image = std::make_unique<block_world::Image>(filepath);
-        std::string name = prefix + image->get_path().filename().string();
+        std::string name = prefix + image->get_path().stem().string();
         block_world::TextureRect rect{};
         rect.name = name;
         rect.path = image->get_path();

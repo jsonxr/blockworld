@@ -30,7 +30,6 @@ list(APPEND SOURCES
         client/src/core/webgl/WebGLShader.cpp
         # src/core
         client/src/core/textures/TextureAtlas.cpp
-        client/src/core/textures/TextureArray.cpp
 
         client/src/core/Assets.cpp
         client/src/core/BoxGeometry.cpp
@@ -40,8 +39,6 @@ list(APPEND SOURCES
         client/src/core/Material.cpp
         client/src/core/Mesh.cpp
         client/src/core/Scene.cpp
-        
-
         client/src/core/Window.cpp
 
 

@@ -54,7 +54,7 @@ Material::Material(std::unique_ptr<TextureAtlas> textures)
   // // Performance, make sure we only use power of 2 textures
   // if (!isPowerOf2(png->width()) || !isPowerOf2(png->height())) {
   //   std::cerr << "image not power of 2" << std::endl;
-  //   exit(EXIT_FAILURE);  // NOLINT(concurrency-mt-unsafe)
+  //   exit(EXIT_FAILURE);
   // }
 
   // glGenTextures(1, &texture_);
