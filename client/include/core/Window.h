@@ -4,7 +4,7 @@
 #include "core/Camera.h"
 #include "core/Input.h"
 
-namespace block_world {
+namespace app {
 
 constexpr int kDefaultWindowWidth = 1280;
 constexpr int kDefaultWindowHeight = 720;
@@ -76,6 +76,6 @@ class Window {
   Input input_{};
 };
 
-}  // namespace block_world
+}  // namespace app
 
 #endif

@@ -3,7 +3,7 @@
 #include "../core.h"
 #include "core/Camera.h"
 
-namespace block_world {
+namespace app {
 
 class Input {
  public:
@@ -29,7 +29,7 @@ class Input {
   std::array<bool, GLFW_MOUSE_BUTTON_LAST> mouse_button_pressed_data_{};
 };
 
-// namespace block_world
+// namespace app
 
 // extern std::array<bool, GLFW_KEY_LAST> key_pressed_data;
 // extern std::array<bool, GLFW_MOUSE_BUTTON_LAST> mouse_button_pressed_data;
@@ -48,6 +48,6 @@ class Input {
 // auto isKeyDown(int key) -> bool;
 // auto isMouseButtonDown(int mouseButton) -> bool;
 
-}  // namespace block_world
+}  // namespace app
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef BLOCK_WORLD_TEXTURES_TEXTUREATLAS_H
-#define BLOCK_WORLD_TEXTURES_TEXTUREATLAS_H
+#ifndef APP_TEXTURES_TEXTUREATLAS_H
+#define APP_TEXTURES_TEXTUREATLAS_H
 
 #include <optional>
 #include <vector>
@@ -9,7 +9,7 @@
 #include "TextureRect.h"
 #include "core.h"
 
-namespace block_world {
+namespace app {
 
 constexpr uint16 kTextureAtlasDefaultSize = 1024;
 constexpr uint16 kTextureAtlasMinSize = 16;
@@ -26,7 +26,7 @@ class TextureAtlas {
  public:
   TextureAtlas()
       : width_(kTextureAtlasDefaultSize), height_(kTextureAtlasDefaultSize){};
-  explicit TextureAtlas(uint16 width, uint16 height,
+  explicit TextureAtlas(uint16 width, uint16 height,  // NOLINT
                         uint16 min_size = kTextureAtlasMinSize)
       : width_(width), height_(height), min_size_(min_size) {}
 
@@ -44,7 +44,7 @@ class TextureAtlas {
                                 const std::string &filepath,
                                 Size size = Size{kTextureAtlasDefaultSize,
                                                  kTextureAtlasDefaultSize})
-      -> std::unique_ptr<TextureAtlas>;
+      -> std::shared_ptr<TextureAtlas>;
 
  private:
   uint16 min_size_{kTextureAtlasMinSize};
@@ -54,6 +54,6 @@ class TextureAtlas {
   GLuint handle_{0};
 };
 
-}  // namespace block_world
+}  // namespace app
 
-#endif  // BLOCK_WORLD_TEXTURES_TEXTUREATLAS_H
+#endif  // APP_TEXTURES_TEXTUREATLAS_H

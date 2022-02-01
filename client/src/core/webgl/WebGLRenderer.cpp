@@ -5,7 +5,7 @@
 #include "core/webgl/WebGLProgram.h"
 #include "core/webgl/WebGLShader.h"
 
-namespace block_world {
+namespace app {
 
 static GLuint vao;
 static GLuint vbo;
@@ -31,4 +31,4 @@ void WebGLRenderer::render(const Window &window, Scene &scene, Camera &camera) {
   glfwSwapBuffers(window.nativeWindow());
 }
 
-}  // namespace block_world
+}  // namespace app

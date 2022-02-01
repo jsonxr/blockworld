@@ -1,18 +1,18 @@
-#ifndef BLOCK_WORLD_MATERIAL_H
-#define BLOCK_WORLD_MATERIAL_H
+#ifndef APP_MATERIAL_H
+#define APP_MATERIAL_H
 
 #include "Camera.h"
 #include "textures/TextureAtlas.h"
 #include "webgl/WebGLProgram.h"
 
-namespace block_world {
+namespace app {
 
 class Material {
  public:
-  explicit Material(std::unique_ptr<TextureAtlas> textures);
+  explicit Material(std::shared_ptr<TextureAtlas> textures);
   ~Material() = default;
   void setModelMatrix(const mat4 model) const {
-    block_world::WebGLProgram::set_uniform(loc_model_, model);
+    app::WebGLProgram::set_uniform(loc_model_, model);
   }
   void render(Camera &camera);
 
@@ -42,13 +42,13 @@ class Material {
  private:
   WebGLProgram program_{};
   GLuint texture_{};
-  std::unique_ptr<TextureAtlas> textures_{};
+  std::shared_ptr<TextureAtlas> textures_{};
   int loc_model_{};
   int loc_texture0_{};
   int loc_view_{};
   int loc_projection_{};
 };
 
-}  // namespace block_world
+}  // namespace app
 
-#endif  // BLOCK_WORLD_MATERIAL_H
+#endif  // APP_MATERIAL_H

@@ -3,7 +3,7 @@
 #include <array>
 #include <cmath>
 
-namespace block_world {
+namespace app {
 
 constexpr float kThird = 0.3F;
 constexpr float kHalf = 0.5F;
@@ -40,4 +40,4 @@ void Mesh::render(Camera &camera) const {
   }
 }
 
-}  // namespace block_world
+}  // namespace app

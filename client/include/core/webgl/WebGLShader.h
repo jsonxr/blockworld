@@ -1,11 +1,11 @@
-#ifndef BLOCK_WORLD_WEBGLSHADER_H
-#define BLOCK_WORLD_WEBGLSHADER_H
+#ifndef APP_WEBGLSHADER_H
+#define APP_WEBGLSHADER_H
 
 #include <string>
 
 #include "core.h"
 
-namespace block_world {
+namespace app {
 
 enum class WebGLShaderType : GLenum {
   kFragment = GL_FRAGMENT_SHADER,
@@ -34,6 +34,6 @@ class WebGLShader {
   GLuint handle_{0};
 };
 
-}  // namespace block_world
+}  // namespace app
 
-#endif  // BLOCK_WORLD_WEBGLSHADER_H
+#endif  // APP_WEBGLSHADER_H

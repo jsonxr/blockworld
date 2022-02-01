@@ -4,7 +4,7 @@
 
 #include "vendor/glm.h"
 
-namespace block_world {
+namespace app {
 
 WebGLProgram::WebGLProgram(const WebGLShader &vertexShader,
                            const WebGLShader &fragmentShader)
@@ -99,4 +99,4 @@ void WebGLProgram::set_uniform(int loc, const int value) {
   glUniform1i(loc, value);
 }
 
-}  // namespace block_world
+}  // namespace app

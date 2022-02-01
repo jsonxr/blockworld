@@ -6,7 +6,7 @@
 
 #include "utils.h"
 
-namespace block_world {
+namespace app {
 
 namespace fs = std::filesystem;
 
@@ -88,4 +88,4 @@ auto Assets::loadString(const std::string &filename) -> std::string {
   return contents;
 }
 
-}  // namespace block_world
+}  // namespace app

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-namespace block_world {
+namespace app {
 
 BufferGeometry::~BufferGeometry() {
   std::cout << "~BufferGeometry"
@@ -24,45 +24,6 @@ BufferGeometry::~BufferGeometry() {
   }
 }
 
-// BufferGeometry::BufferGeometry(std::vector<GLfloat> vertices) noexcept
-//     : vertices_(std::move(vertices)) {
-//   std::cout << "BufferGeometry size=" << vertices_.size() << std::endl;
-//
-//   // TODO: Figure out how to be certain we only have max int values
-//   GLsizei vertexSize = vertices_.size() * sizeof(GLfloat);
-//
-//   if (vertexSize < 0) {
-//     std::cerr << "Nothing in the mesh to compile. skipping..." << std::endl;
-//     return;
-//   }
-//
-//   // Create Buffers
-//
-//   glGenVertexArrays(1, &glVao_);
-//   glBindVertexArray(glVao_);
-//
-//   glGenBuffers(1, &glVbo_);
-//   glBindBuffer(GL_ARRAY_BUFFER, glVbo_);
-//   glBufferData(GL_ARRAY_BUFFER, vertexSize, vertices_.data(),
-//   GL_STATIC_DRAW);
-//
-//   constexpr int STRIDE = 5 * sizeof(GLfloat);
-//   auto* offsetPosition = (void*)nullptr;
-//   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, STRIDE, offsetPosition);
-//   glEnableVertexAttribArray(0);
-//   //  auto* offsetColor = (void*)(3 * sizeof(GLfloat));
-//   //  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, STRIDE, offsetColor);
-//   //  glEnableVertexAttribArray(1);
-//
-//   auto* offsetTexture = (void*)(3 * sizeof(GLfloat));
-//   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, STRIDE, offsetTexture);
-//   glEnableVertexAttribArray(1);
-//
-//   std::cout << "Compiled mesh glVao_=" << glVao_ << " glVbo_=" << glVbo_ << "
-//   glEbo_=" << glEbo_
-//             << std::endl;
-// }
-
 BufferGeometry::BufferGeometry(std::vector<GLfloat> vertices) noexcept
     : vertices_(std::move(vertices)) {
   std::cout << "BufferGeometry size=" << vertices_.size() << std::endl;
@@ -76,14 +37,14 @@ BufferGeometry::BufferGeometry(std::vector<GLfloat> vertices) noexcept
   }
 
   // Create Buffers
-  if (!kIsEmScripten) {
-    glGenVertexArrays(1, &glVao_);
-    glBindVertexArray(glVao_);
-  }
+
+  glGenVertexArrays(1, &glVao_);
+  glBindVertexArray(glVao_);
 
   glGenBuffers(1, &glVbo_);
   glBindBuffer(GL_ARRAY_BUFFER, glVbo_);
-  glBufferData(GL_ARRAY_BUFFER, vertex_size, vertices_.data(), GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, vertex_size, vertices_.data(),  // NOLINT
+               GL_STATIC_DRAW);
 
   //  glGenBuffers(1, &glEbo_);
   //  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, glEbo_);
@@ -101,7 +62,7 @@ BufferGeometry::BufferGeometry(std::vector<GLfloat> vertices) noexcept
                         static_cast<GLvoid *>(nullptr));
 
   const auto *offset_texture =
-      (const GLvoid *)(kPositionFloats * sizeof(GLfloat));
+      (const GLvoid *)(kPositionFloats * sizeof(GLfloat));  // NOLINT
   glVertexAttribPointer(kLocTexture, kTextureFloats, GL_FLOAT, GL_FALSE,
                         kStride, offset_texture);
 
@@ -124,4 +85,4 @@ auto operator<<(std::ostream &out, const BufferGeometry &geometry)
   return out;
 }
 
-}  // namespace block_world
+}  // namespace app

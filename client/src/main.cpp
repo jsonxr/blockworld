@@ -13,15 +13,16 @@
 #include "core/textures/TextureRect.h"
 #include "core/webgl/WebGLRenderer.h"
 #include "utils.h"
+#include "world/Chunk.h"
 
-// using namespace block_world;
-using block_world::Material;
-using block_world::Mesh;
-using block_world::Scene;
-using block_world::TextureAtlas;
-using block_world::WebGLRenderer;
-using block_world::Window;
-using block_world::WindowSize;
+using namespace app;
+// using app::Material;
+// using app::Mesh;
+// using app::Scene;
+// using app::TextureAtlas;
+// using app::WebGLRenderer;
+// using app::Window;
+// using app::WindowSize;
 
 constexpr auto kWindowTitle = "BlockWorld";
 
@@ -50,55 +51,22 @@ static void error_callback(int error, const char *description) {
 std::function<void()> loop;
 void main_loop() { loop(); }
 
-// void processInput(Window &win, Camera &camera, double deltaTime) {
-//   auto *window = win.nativeWindow();
-
-//   float sensitivity = 0.1f;
-//   float mx = block_world::input::mouse_x;
-//   float my = block_world::input::mouse_y;
-//   mx *= sensitivity;
-//   my *= sensitivity;
-
-//   camera.orientation.x += my;
-//   camera.orientation.y += mx;
-
-//   if (camera.orientation.x > 89.0f) camera.orientation.x = 89.0f;
-//   if (camera.orientation.x < -89.0f) camera.orientation.x = -89.0f;
-
-//   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-//     glfwSetWindowShouldClose(window, 1);
-//   }
-
-//   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-//     camera.process_keyboard(CameraMovement::kForward, deltaTime);
-//   }
-//   if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-//     camera.process_keyboard(CameraMovement::kBackward, deltaTime);
-//   }
-//   if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-//     camera.process_keyboard(CameraMovement::kLeft, deltaTime);
-//   }
-//   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-//     camera.process_keyboard(CameraMovement::kRight, deltaTime);
-//   }
+// auto getFiles(const std::string &path) -> std::vector<std::filesystem::path>
+// {
+//   std::vector<std::filesystem::path> files_in_directory;
+//   std::copy(std::filesystem::directory_iterator(path),
+//             std::filesystem::directory_iterator(),
+//             std::back_inserter(files_in_directory));
+//   std::sort(files_in_directory.begin(), files_in_directory.end());
+//   return files_in_directory;
 // }
 
-auto getFiles(const std::string &path) -> std::vector<std::filesystem::path> {
-  std::vector<std::filesystem::path> files_in_directory;
-  std::copy(std::filesystem::directory_iterator(path),
-            std::filesystem::directory_iterator(),
-            std::back_inserter(files_in_directory));
-  std::sort(files_in_directory.begin(), files_in_directory.end());
-  return files_in_directory;
-}
-
-auto main2() -> int {
-  auto atlas = TextureAtlas::loadFromDirectory("minecraft:block/",
-                                               "/minecraft/textures/block",
-                                               block_world::Size{512, 1024});
-  atlas->save("test.png");
-  return 0;
-}
+// auto main2() -> int {
+//   auto atlas = TextureAtlas::loadFromDirectory(
+//       "minecraft:block/", "/minecraft/textures/block", app::Size{512, 1024});
+//   atlas->save("test.png");
+//   return 0;
+// }
 
 auto main() -> int {  // NOLINT(bugprone-exception-escape)
   if (glfwInit() == 0) {
@@ -110,39 +78,38 @@ auto main() -> int {  // NOLINT(bugprone-exception-escape)
 
   glfwSetErrorCallback(error_callback);
 
-  Window window{kWindowTitle, WindowSize{block_world::kDefaultWindowWidth,
-                                         block_world::kDefaultWindowHeight}};
+  Window window{kWindowTitle, WindowSize{app::kDefaultWindowWidth,
+                                         app::kDefaultWindowHeight}};
 
   if (window.nativeWindow() == nullptr) {
     return exitWithError("Failed to create GLFW window\n");
   }
 
-  auto atlas = block_world::TextureAtlas::loadFromDirectory(
-      "minecraft:block/", "/minecraft/textures/block",
-      block_world::Size{512, 1024});
+  auto atlas = app::TextureAtlas::loadFromDirectory(
+      "minecraft:block/", "/minecraft/textures/block", app::Size{512, 1024});
   atlas->save("test.png");
+
+  // auto material = std::make_shared<Material>(atlas);
+  // auto chunk = std::make_shared<Chunk>();
+  // ChunkGfx chunk_gfx{chunk, atlas};
+
+  // xp,xn,yp,yn,zp,zn
+
   auto grass_side = atlas->getRectByName("minecraft:block/grass_block_side");
   auto top = atlas->getRectByName("minecraft:block/azalea_top");
   auto dirt = atlas->getRectByName("minecraft:block/dirt");
   if (!grass_side) {
     std::cout << "no grass_side...!!!!!!!!!!!!!!!" << std::endl;
   }
-
-  // xp,xn,yp,yn,zp,zn
-  auto geometry = block_world::box_geometry::create(
+  auto geometry = app::box_geometry::create(
       {1, 1, 1}, {grass_side->uv, grass_side->uv, top->uv, dirt->uv,
                   grass_side->uv, grass_side->uv});
 
   auto material = std::make_shared<Material>(std::move(atlas));
-  auto cube = std::make_shared<Mesh>(std::move(geometry), std::move(material));
+  auto cube = std::make_shared<Mesh>(std::move(geometry), material);
   //
   Scene scene{};
   scene.add(std::move(cube));
-
-  // Camera camera{{vec3(0.0, 0.0, 3.0)}};
-  // camera.set_position({0.0, 0.0, 1.0});
-  // camera.set_fov(45.0);
-  // camera.set_orientation({0.0, 0.0, 0.0});
 
   WebGLRenderer renderer{};
 
@@ -159,15 +126,26 @@ auto main() -> int {  // NOLINT(bugprone-exception-escape)
 
     // input
     // -----
+    app::Window::pollEvents();
     window.process(delta_time);
 
-    // input.process(camera, delta_time);
-    // processInput(window, camera, delta_time);
-    // camera.process_mouse_movement(input::mouse_x, input::mouse_y);
+    glClearColor(0.F, 0.F, 0.F, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
 
-    // or... loop = [&window, &scene, &camera, &renderer] {
-    block_world::WebGLRenderer::render(window, scene, window.camera());
-    block_world::Window::pollEvents();
+    material->render(window.camera());
+
+    // material->render(window.camera());
+    // chunk_gfx.render();
+
+    //   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    const auto &nodes = scene.getNodes();
+    for (const auto &node : nodes) {
+      node->render(window.camera());
+    }
+
+    glfwSwapBuffers(window.nativeWindow());
   };
 
 #ifdef __EMSCRIPTEN__
@@ -180,6 +158,6 @@ auto main() -> int {  // NOLINT(bugprone-exception-escape)
 #endif
 
   window.close();
-
+  glfwTerminate();
   return EXIT_SUCCESS;
 }

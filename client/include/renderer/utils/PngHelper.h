@@ -1,5 +1,5 @@
 
-#ifndef BLOCK_WORLD_PNG_HELPER_H
-#define BLOCK_WORLD_PNG_HELPER_H
+#ifndef APP_PNG_HELPER_H
+#define APP_PNG_HELPER_H
 
-#endif  // BLOCK_WORLD_PNG_HELPER_H
+#endif  // APP_PNG_HELPER_H

@@ -1,3 +1,9 @@
+[tint index](https://forums.minecraftforge.net/topic/29532-18-solved-tintindex-anyone-gotten-it-to-do-anything-useful/) - How to blend color for grass
+
+[Minecraft shaders](https://minecraft.fandom.com/wiki/Shaders)
+[Minecraft Modding - Block Models](http://greyminecraftcoder.blogspot.com/2014/12/block-models-18.html) Information on blocks
+[Minecraft Modding - Lighting](http://greyminecraftcoder.blogspot.com/2014/12/lighting-18.html)
+
 # Example
 
 ```javascript

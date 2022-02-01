@@ -2,7 +2,7 @@
 
 #include "core/BufferGeometry.h"
 
-namespace block_world::box_geometry {
+namespace app::box_geometry {
 
 constexpr float kHalf = 0.5F;
 
@@ -22,7 +22,7 @@ constexpr float kHalf = 0.5F;
 auto create(vec3 size, const std::vector<UV> &uv)
     -> std::unique_ptr<BufferGeometry> {
   // std::vector<vec2> uv = {{0.0, 1.0}};
-  int uvsize = uv.size();
+  int uvsize = static_cast<int>(uv.size());
 
   float x_size = size.x / 2.0F;
   float y_size = size.y / 2.0F;
@@ -96,7 +96,7 @@ auto create(vec3 size, const std::vector<UV> &uv)
   };
   // clang-format on
 
-  //  std::vector<u32> indices{
+  //  std::vector<uint16> indices{
   //      0, 1, 2, 2, 3, 0,  // front
   //      1, 5, 6, 6, 2, 1,  // right
   //      7, 6, 5, 5, 4, 7,  // back
@@ -109,4 +109,4 @@ auto create(vec3 size, const std::vector<UV> &uv)
   return geometry;
 }
 
-}  // namespace block_world::box_geometry
+}  // namespace app::box_geometry

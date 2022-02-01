@@ -1,5 +1,5 @@
-#ifndef BLOCK_WORLD_STB_H
-#define BLOCK_WORLD_STB_H
+#ifndef APP_STB_H
+#define APP_STB_H
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_NO_JPEG
@@ -19,4 +19,4 @@
 #include <stb_image_write.h>
 #undef STB_IMAGE_WRITE_IMPLEMENTATION
 
-#endif  // BLOCK_WORLD_STB_H
+#endif  // APP_STB_H

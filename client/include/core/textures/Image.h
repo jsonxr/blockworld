@@ -1,5 +1,5 @@
-#ifndef BLOCK_WORLD_TEXTURES_IMAGE_H
-#define BLOCK_WORLD_TEXTURES_IMAGE_H
+#ifndef APP_TEXTURES_IMAGE_H
+#define APP_TEXTURES_IMAGE_H
 
 #include <stb_image.h>
 #include <stb_image_write.h>
@@ -10,7 +10,7 @@
 
 #include "Pixel.h"
 
-namespace block_world {
+namespace app {
 
 constexpr auto isPowerOf2(int value) -> bool {
   // value can't be zero
@@ -84,6 +84,6 @@ class Image {
   unsigned char *pixels_ = nullptr;
 };
 
-}  // namespace block_world
+}  // namespace app
 
-#endif  // BLOCK_WORLD_TEXTURES_IMAGE_H
+#endif  // APP_TEXTURES_IMAGE_H

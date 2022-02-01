@@ -1,6 +1,6 @@
 #include "core/webgl/WebGLShader.h"
 
-namespace block_world {
+namespace app {
 
 WebGLShader::~WebGLShader() {
   std::cout << "~WebGLShader " << handle_ << std::endl;
@@ -31,4 +31,4 @@ WebGLShader::WebGLShader(WebGLShaderType type, const char *source)
   }
 }
 
-}  // namespace block_world
+}  // namespace app

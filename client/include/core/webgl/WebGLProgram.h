@@ -1,11 +1,11 @@
-#ifndef BLOCK_WORLD_WEBGLPROGRAM_H
-#define BLOCK_WORLD_WEBGLPROGRAM_H
+#ifndef APP_WEBGLPROGRAM_H
+#define APP_WEBGLPROGRAM_H
 
 #include <array>
 
 #include "core/webgl/WebGLShader.h"
 
-namespace block_world {
+namespace app {
 
 class WebGLProgram {
  public:
@@ -39,6 +39,6 @@ class WebGLProgram {
   std::vector<std::string> attributes_{};
 };
 
-}  // namespace block_world
+}  // namespace app
 
-#endif  // BLOCK_WORLD_WEBGLPROGRAM_H
+#endif  // APP_WEBGLPROGRAM_H

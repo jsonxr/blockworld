@@ -41,6 +41,8 @@ list(APPEND SOURCES
         client/src/core/Scene.cpp
         client/src/core/Window.cpp
 
+        client/src/world/Chunk.cpp
+
 
         # src
         client/src/main.cpp

@@ -1,5 +1,5 @@
-#ifndef BLOCK_WORLD_CORE_H
-#define BLOCK_WORLD_CORE_H
+#ifndef APP_CORE_H
+#define APP_CORE_H
 
 #include <array>
 #include <cstdint>
@@ -31,4 +31,4 @@ constexpr bool kIsEmScripten = true;
 constexpr bool kIsEmScripten = false;
 #endif
 
-#endif  // BLOCK_WORLD_CORE_H
+#endif  // APP_CORE_H

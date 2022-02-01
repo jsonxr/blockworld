@@ -2,7 +2,7 @@
 
 #include "core/Window.h"
 
-namespace block_world {
+namespace app {
 
 void Input::key_callback(int key, int /*scancode*/, int action, int /*mods*/) {
   if (key >= 0 && key < GLFW_KEY_LAST) {
@@ -62,9 +62,9 @@ void Input::process(Camera &camera, double /*deltaTime*/) {
   deltaMouseY_ = 0;
 }
 
-}  // namespace block_world
+}  // namespace app
 
-// namespace block_world::input {
+// namespace app::input {
 
 // std::array<bool, GLFW_KEY_LAST> key_pressed_data{};
 // std::array<bool, GLFW_MOUSE_BUTTON_LAST> mouse_button_pressed_data{};
@@ -139,4 +139,4 @@ void Input::process(Camera &camera, double /*deltaTime*/) {
 //   }
 // }
 
-// }  // namespace block_world::input
+// }  // namespace app::input

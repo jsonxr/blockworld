@@ -1,5 +1,5 @@
-#ifndef BLOCK_WORLD_TEXTURE_H
-#define BLOCK_WORLD_TEXTURE_H
+#ifndef APP_TEXTURE_H
+#define APP_TEXTURE_H
 
 #include <vector>
 
@@ -10,4 +10,4 @@
 #include "core/textures/TextureArray.h"
 #include "core/textures/TextureAtlas.h"
 
-#endif  // BLOCK_WORLD_TEXTURE_H
+#endif  // APP_TEXTURE_H

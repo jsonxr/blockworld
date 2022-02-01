@@ -1,10 +1,10 @@
-#ifndef BLOCK_WORLD_BUFFER_GEOMETRY_H
-#define BLOCK_WORLD_BUFFER_GEOMETRY_H
+#ifndef APP_BUFFER_GEOMETRY_H
+#define APP_BUFFER_GEOMETRY_H
 
 #include <vector>
 
 #include "../core.h"
-namespace block_world {
+namespace app {
 
 class BufferGeometry {
  public:
@@ -38,5 +38,5 @@ class BufferGeometry {
 auto operator<<(std::ostream &out, const BufferGeometry &geometry)
     -> std::ostream &;
 
-}  // namespace block_world
-#endif  // BLOCK_WORLD_BUFFER_GEOMETRY_H
+}  // namespace app
+#endif  // APP_BUFFER_GEOMETRY_H

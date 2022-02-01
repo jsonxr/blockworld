@@ -1,9 +1,9 @@
 #include "core/Scene.h"
 
-namespace block_world {
+namespace app {
 
 void Scene::add(std::shared_ptr<Mesh> mesh) {
   nodes_.emplace_back(std::move(mesh));
 }
 
-}  // namespace block_world
+}  // namespace app

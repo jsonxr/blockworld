@@ -1,5 +1,5 @@
-#ifndef BLOCK_WORLD_ASSETS_H
-#define BLOCK_WORLD_ASSETS_H
+#ifndef APP_ASSETS_H
+#define APP_ASSETS_H
 
 #include <filesystem>
 #include <map>
@@ -10,7 +10,7 @@
 #include "stb_image.h"
 #include "textures/Image.h"
 
-namespace block_world {
+namespace app {
 
 class Assets {
  public:
@@ -34,6 +34,6 @@ class Assets {
   static auto loadString(const std::string &filename) -> std::string;
 };
 
-}  // namespace block_world
+}  // namespace app
 
-#endif  // BLOCK_WORLD_ASSETS_H
+#endif  // APP_ASSETS_H

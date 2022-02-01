@@ -1,11 +1,11 @@
-#ifndef BLOCK_WORLD_MESH_H
-#define BLOCK_WORLD_MESH_H
+#ifndef APP_MESH_H
+#define APP_MESH_H
 
 #include "BufferGeometry.h"
 #include "Camera.h"
 #include "Material.h"
 
-namespace block_world {
+namespace app {
 
 enum class MeshMode {
   kTriangles,
@@ -26,5 +26,5 @@ class Mesh {
   MeshMode mode_{MeshMode::kTriangles};
 };
 
-}  // namespace block_world
-#endif  // BLOCK_WORLD_MESH_H
+}  // namespace app
+#endif  // APP_MESH_H

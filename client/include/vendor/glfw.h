@@ -1,5 +1,5 @@
-#ifndef BLOCK_WORLD_GLFW_H
-#define BLOCK_WORLD_GLFW_H
+#ifndef APP_GLFW_H
+#define APP_GLFW_H
 
 // Glad and GLFW
 #ifdef __EMSCRIPTEN__
@@ -12,4 +12,4 @@
 
 #include <GLFW/glfw3.h>
 
-#endif  // BLOCK_WORLD_GLFW_H
+#endif  // APP_GLFW_H

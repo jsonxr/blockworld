@@ -3,7 +3,7 @@
 #include "core.h"
 #include "core/Assets.h"
 
-namespace block_world {
+namespace app {
 
 //------------------------------------------------------------------------------
 // TexturePacker
@@ -237,22 +237,22 @@ auto TextureAtlas::getRectByName(const std::string &name)
 
 auto TextureAtlas::loadFromDirectory(const std::string &prefix,
                                      const std::string &path, const Size size)
-    -> std::unique_ptr<TextureAtlas> {
-  auto atlas = std::make_unique<TextureAtlas>(size.width, size.height);
-  Assets::forEachFile(
-      path, ".+\\.png",
-      [&atlas, &prefix](const std::filesystem::path &filepath) {
-        auto image = std::make_unique<block_world::Image>(filepath);
-        std::string name = prefix + image->get_path().stem().string();
-        block_world::TextureRect rect{};
-        rect.name = name;
-        rect.path = image->get_path();
-        rect.width = image->get_width();
-        rect.height = image->get_height();
-        atlas->add(std::move(rect));
-      });
+    -> std::shared_ptr<TextureAtlas> {
+  auto atlas = std::make_shared<TextureAtlas>(size.width, size.height);
+  Assets::forEachFile(path, ".+\\.png",
+                      [&atlas, &prefix](const std::filesystem::path &filepath) {
+                        auto image = std::make_unique<app::Image>(filepath);
+                        std::string name =
+                            prefix + image->get_path().stem().string();
+                        app::TextureRect rect{};
+                        rect.name = name;
+                        rect.path = image->get_path();
+                        rect.width = image->get_width();
+                        rect.height = image->get_height();
+                        atlas->add(std::move(rect));
+                      });
   atlas->generatePixels();
   return atlas;
 }
 
-}  // namespace block_world
+}  // namespace app

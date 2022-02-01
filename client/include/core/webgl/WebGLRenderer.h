@@ -1,5 +1,5 @@
-#ifndef BLOCK_WORLD_WEBGLRENDERER_H
-#define BLOCK_WORLD_WEBGLRENDERER_H
+#ifndef APP_WEBGLRENDERER_H
+#define APP_WEBGLRENDERER_H
 
 #include <map>
 
@@ -9,7 +9,7 @@
 #include "core/Window.h"
 #include "core/webgl/WebGLProgram.h"
 
-namespace block_world {
+namespace app {
 
 class WebGLRenderer {
  public:
@@ -18,6 +18,6 @@ class WebGLRenderer {
   static void render(const Window &window, Scene &scene, Camera &camera);
 };
 
-}  // namespace block_world
+}  // namespace app
 
-#endif  // BLOCK_WORLD_WEBGLRENDERER_H
+#endif  // APP_WEBGLRENDERER_H

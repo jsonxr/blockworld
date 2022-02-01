@@ -6,7 +6,7 @@
 #include "core/Assets.h"
 #include "core/Window.h"
 
-namespace block_world {
+namespace app {
 
 auto readAssetIntoString(const char *filename) -> std::string {
   std::string contents = Assets::loadString(filename);
@@ -20,7 +20,7 @@ auto readAssetIntoString(const char *filename) -> std::string {
   return contents;
 }
 
-Material::Material(std::unique_ptr<TextureAtlas> textures)
+Material::Material(std::shared_ptr<TextureAtlas> textures)
     : textures_(std::move(textures)) {
   std::string vertex_shader_source =
       readAssetIntoString("/shaders/vertex.glsl");
@@ -104,4 +104,4 @@ void Material::render(Camera &camera) {
   WebGLProgram::set_uniform(loc_projection_, projection);
 }
 
-}  // namespace block_world
+}  // namespace app

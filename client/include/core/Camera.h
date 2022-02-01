@@ -1,9 +1,9 @@
-#ifndef BLOCK_WORLD_CAMERA_H
-#define BLOCK_WORLD_CAMERA_H
+#ifndef APP_CAMERA_H
+#define APP_CAMERA_H
 
 #include "vendor/glm.h"
 
-namespace block_world {
+namespace app {
 
 constexpr float kYaw = 270.0F;
 constexpr float kPitch = 0.0F;
@@ -23,7 +23,7 @@ constexpr vec3 kFront = glm::vec3(0.0F, 0.0F, -1.0F);
 
 enum class CameraMovement { kForward, kBackward, kLeft, kRight };
 struct CameraOptions {
-  vec3 position{0.0, 1.6, 3.0};
+  vec3 position{0.0, 1.6, 5.0};
   vec3 orientation{0.0, 0.0, 0.0};
 
   float fov{45.0};
@@ -68,6 +68,6 @@ class Camera {
   void update_camera_vectors() const;
 };
 
-}  // namespace block_world
+}  // namespace app
 
-#endif  // BLOCK_WORLD_CAMERA_H
+#endif  // APP_CAMERA_H

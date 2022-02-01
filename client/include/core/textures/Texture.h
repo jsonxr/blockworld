@@ -1,11 +1,11 @@
-#ifndef BLOCK_WORLD_TEXTURES_TEXTURE_H
-#define BLOCK_WORLD_TEXTURES_TEXTURE_H
+#ifndef APP_TEXTURES_TEXTURE_H
+#define APP_TEXTURES_TEXTURE_H
 
 #include <vector>
 
 #include "core.h"
 
-namespace block_world {
+namespace app {
 
 struct Texture {
  public:
@@ -42,6 +42,6 @@ struct Texture {
   };
 };
 
-}  // namespace block_world
+}  // namespace app
 
-#endif  // BLOCK_WORLD_TEXTURES_TEXTURE_H
+#endif  // APP_TEXTURES_TEXTURE_H

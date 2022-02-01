@@ -1,12 +1,12 @@
-#ifndef BLOCK_WORLD_TEXTURES_TEXTURE_RECT_H
-#define BLOCK_WORLD_TEXTURES_TEXTURE_RECT_H
+#ifndef APP_TEXTURES_TEXTURE_RECT_H
+#define APP_TEXTURES_TEXTURE_RECT_H
 
 #include <filesystem>
 #include <vector>
 
 #include "core.h"
 
-namespace block_world {
+namespace app {
 
 struct UV {
  public:
@@ -26,6 +26,6 @@ struct TextureRect {
   UV uv{};
 };
 
-}  // namespace block_world
+}  // namespace app
 
-#endif  // BLOCK_WORLD_TEXTURES_TEXTURE_RECT_H
+#endif  // APP_TEXTURES_TEXTURE_RECT_H

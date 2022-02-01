@@ -2,7 +2,7 @@
 
 #include "vendor/glm.h"
 
-namespace block_world {
+namespace app {
 
 Camera::Camera(const CameraOptions options) : options_(options) {}
 
@@ -143,4 +143,4 @@ void Camera::update_camera_vectors() const {
   // options_.up = glm::normalize(glm::cross(right_, front_));
 }
 
-}  // namespace block_world
+}  // namespace app

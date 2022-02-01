@@ -1,10 +1,10 @@
-#ifndef BLOCK_WORLD_SCENE_H
-#define BLOCK_WORLD_SCENE_H
+#ifndef APP_SCENE_H
+#define APP_SCENE_H
 
 #include "../core.h"
 #include "Mesh.h"
 
-namespace block_world {
+namespace app {
 
 class Scene {
  public:
@@ -28,6 +28,6 @@ class Scene {
   std::vector<std::shared_ptr<Mesh>> nodes_;
 };
 
-}  // namespace block_world
+}  // namespace app
 
-#endif  // BLOCK_WORLD_SCENE_H
+#endif  // APP_SCENE_H

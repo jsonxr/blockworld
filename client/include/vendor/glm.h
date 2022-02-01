@@ -1,7 +1,7 @@
 #pragma clang diagnostic ignored "-Wdeprecated-volatile"
 
-#ifndef BLOCK_WORLD_GLM_H
-#define BLOCK_WORLD_GLM_H
+#ifndef APP_GLM_H
+#define APP_GLM_H
 
 #define GLM_FORCE_CXX11
 
@@ -20,4 +20,4 @@ using vec3 = glm::vec3;
 using vec4 = glm::vec4;
 using mat4 = glm::mat4;
 
-#endif  // BLOCK_WORLD_GLM_H
+#endif  // APP_GLM_H

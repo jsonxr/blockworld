@@ -4,7 +4,7 @@
 
 #include "core/Input.h"
 
-namespace block_world {
+namespace app {
 
 //------------------------------------------------------------------------------
 // glfw Callbacks
@@ -101,7 +101,6 @@ Window::~Window() {
   if (primary_monitor_) {
     primary_monitor_ = nullptr;
   }
-  glfwTerminate();
 };
 
 //------------------------------------------------------------------------------
@@ -144,4 +143,4 @@ void Window::setCursorMode(CursorMode cursorMode) {
 
 void Window::pollEvents() { glfwPollEvents(); }
 
-}  // namespace block_world
+}  // namespace app
