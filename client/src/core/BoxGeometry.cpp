@@ -105,7 +105,11 @@ auto create(vec3 size, const std::vector<UV> &uv)
   //      3, 2, 6, 6, 7, 3   // top
   //  };
 
-  auto geometry = make_unique<BufferGeometry>(vertices);
+  std::vector<BufferAttribute> attributes{{
+      {.type = GL_FLOAT, .count = 3},  // position
+      {.type = GL_FLOAT, .count = 2}   // uv
+  }};
+  auto geometry = make_unique<BufferGeometry>(vertices, attributes);
   return geometry;
 }
 

@@ -19,10 +19,7 @@ constexpr std::array<vec3, 10> kCubePositions{
 Mesh::Mesh(std::shared_ptr<BufferGeometry> bufferGeometry,
            std::shared_ptr<Material> material) noexcept
     : bufferGeometry_(std::move(bufferGeometry)),
-      material_(std::move(material)) {
-  std::cout << "Mesh(b,m) verts=" << bufferGeometry_->getVertices().size()
-            << std::endl;
-}
+      material_(std::move(material)) {}
 
 void Mesh::render(Camera &camera) const {
   material_->render(camera);

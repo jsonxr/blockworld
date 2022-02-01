@@ -137,6 +137,7 @@ https://en.cppreference.com/w/cpp/compiler_support
 - Modify cmake to recompile for asset change
   - [blog article](https://jeremimucha.com/2021/05/cmake-managing-resources/)
   - [gist](https://gist.github.com/jamcodes/f79b3be24ed40c6c224cc9e91d3061cc)
+- per vertex data... make vertex color use rgba=4bytes instead of 4 floats
 
 # WebGL2
 

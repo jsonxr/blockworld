@@ -29,6 +29,8 @@ struct ChunkGfx {
   std::shared_ptr<Chunk> chunk_;
   std::shared_ptr<TextureAtlas> atlas_;
   std::unique_ptr<std::array<Vertex, kChunkSize>> vertices_;
+  GLuint glVao_{0};
+  GLuint glVbo_{0};
 };
 
 }  // namespace app
