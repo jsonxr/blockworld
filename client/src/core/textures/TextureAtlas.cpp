@@ -117,7 +117,7 @@ auto setPositionsForRegions(const TextureAtlas &atlas,
                static_cast<float>(atlas.get_width());
     float vy = static_cast<float>(r.y + r.height) /
                static_cast<float>(atlas.get_height());
-    r.uv = {{ux, uy}, {vx, vy}};
+    r.uv = {ux, uy, vx, vy};
     markPosition(atlas, r, *used, *pos);
   }
 

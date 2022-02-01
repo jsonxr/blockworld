@@ -7,19 +7,19 @@ namespace app::box_geometry {
 constexpr float kHalf = 0.5F;
 
 /*
-       G--------H
-      /        /|
-     /        / |
-(u) D--------C  |
-    |  |     |  |
-    |  F --  |  E
-    | /      | /
-    |        |/
-    A--------B (v)
+                               G--------H
+                              /        /|
+                             /        / |
+                        (u) D--------C  |
+                            |  |     |  |
+                            |  F --  |  E
+                            | /      | /
+                            |        |/
+                            A--------B (v)
 
 */
 
-auto create(vec3 size, const std::vector<UV> &uv)
+auto create(vec3 size, const std::vector<vec4> &uv)
     -> std::unique_ptr<BufferGeometry> {
   // std::vector<vec2> uv = {{0.0, 1.0}};
   int uvsize = static_cast<int>(uv.size());
@@ -28,12 +28,12 @@ auto create(vec3 size, const std::vector<UV> &uv)
   float y_size = size.y / 2.0F;
   float z_size = size.z / 2.0F;
   // xp,xn,yp,yn,zp,zn
-  UV xp = (uv.empty()) ? UV{{0.0, 0.0}, {1.0, 1.0}} : uv[0];
-  UV xn = uv.size() > 1 ? uv[1] : xp;
-  UV yp = uv.size() > 2 ? uv[2] : xp;
-  UV yn = uv.size() > 3 ? uv[3] : xp;
-  UV zp = uv.size() > 4 ? uv[4] : xp;
-  UV zn = uv.size() > 5 ? uv[5] : xp;
+  vec4 xp = (uv.empty()) ? vec4{0.0, 0.0, 1.0, 1.0} : uv[0];
+  vec4 xn = uv.size() > 1 ? uv[1] : xp;
+  vec4 yp = uv.size() > 2 ? uv[2] : xp;
+  vec4 yn = uv.size() > 3 ? uv[3] : xp;
+  vec4 zp = uv.size() > 4 ? uv[4] : xp;
+  vec4 zn = uv.size() > 5 ? uv[5] : xp;
 
   // float: 4 bytes
   // int: 4 bytes
@@ -51,47 +51,47 @@ auto create(vec3 size, const std::vector<UV> &uv)
   // clang-format off
   std::vector<GLfloat> vertices{
       // x positive (Right)
-       x_size,  y_size,  z_size, xp.u.x, xp.u.y, // C
-       x_size,  y_size, -z_size, xp.v.x, xp.u.y, // H
-       x_size, -y_size, -z_size, xp.v.x, xp.v.y, // E
-       x_size, -y_size, -z_size, xp.v.x, xp.v.y, // E
-       x_size, -y_size,  z_size, xp.u.x, xp.v.y, // B
-       x_size,  y_size,  z_size, xp.u.x, xp.u.y, // C
+       x_size,  y_size,  z_size, xp.x, xp.y, // C
+       x_size,  y_size, -z_size, xp.z, xp.y, // H
+       x_size, -y_size, -z_size, xp.z, xp.w, // E
+       x_size, -y_size, -z_size, xp.z, xp.w, // E
+       x_size, -y_size,  z_size, xp.x, xp.w, // B
+       x_size,  y_size,  z_size, xp.x, xp.y, // C
       // x negative (Left)
-      -x_size,  y_size,  z_size, zn.v.x, zn.u.y, // D
-      -x_size,  y_size, -z_size, zn.u.x, zn.u.y, // G
-      -x_size, -y_size, -z_size, zn.u.x, zn.v.y, // F
-      -x_size, -y_size, -z_size, zn.u.x, zn.v.y, // F
-      -x_size, -y_size,  z_size, zn.v.x, zn.v.y, // A
-      -x_size,  y_size,  z_size, zn.v.x, zn.u.y, // D
+      -x_size,  y_size,  z_size, zn.z, zn.y, // D
+      -x_size,  y_size, -z_size, zn.x, zn.y, // G
+      -x_size, -y_size, -z_size, zn.x, zn.w, // F
+      -x_size, -y_size, -z_size, zn.x, zn.w, // F
+      -x_size, -y_size,  z_size, zn.z, zn.w, // A
+      -x_size,  y_size,  z_size, zn.z, zn.y, // D
       // y positive (Top)
-      -x_size,  y_size, -z_size, yp.u.x, yp.u.y, // G
-       x_size,  y_size, -z_size, yp.v.x, yp.u.y, // H
-       x_size,  y_size,  z_size, yp.v.x, yp.v.y, // C
-       x_size,  y_size,  z_size, yp.v.x, yp.v.y, // C
-      -x_size,  y_size,  z_size, yp.u.x, yp.v.y, // D
-      -x_size,  y_size, -z_size, yp.u.x, yp.u.y, // G
+      -x_size,  y_size, -z_size, yp.x, yp.y, // G
+       x_size,  y_size, -z_size, yp.z, yp.y, // H
+       x_size,  y_size,  z_size, yp.z, yp.w, // C
+       x_size,  y_size,  z_size, yp.z, yp.w, // C
+      -x_size,  y_size,  z_size, yp.x, yp.w, // D
+      -x_size,  y_size, -z_size, yp.x, yp.y, // G
       // y negative (Bottom)
-      -x_size, -y_size, -z_size, yn.u.x, yn.v.y, // F
-       x_size, -y_size, -z_size, yn.v.x, yn.v.y, // E
-       x_size, -y_size,  z_size, yn.v.x, yn.u.y, // B
-       x_size, -y_size,  z_size, yn.v.x, yn.u.y, // B
-      -x_size, -y_size,  z_size, yn.u.x, yn.u.y, // A
-      -x_size, -y_size, -z_size, yn.u.x, yn.v.y, // F
+      -x_size, -y_size, -z_size, yn.x, yn.w, // F
+       x_size, -y_size, -z_size, yn.z, yn.w, // E
+       x_size, -y_size,  z_size, yn.z, yn.y, // B
+       x_size, -y_size,  z_size, yn.z, yn.y, // B
+      -x_size, -y_size,  z_size, yn.x, yn.y, // A
+      -x_size, -y_size, -z_size, yn.x, yn.w, // F
       // z positive (Front)
-      -x_size, -y_size,  z_size, zp.u.x, zp.v.y, // A
-       x_size, -y_size,  z_size, zp.v.x, zp.v.y, // B
-       x_size,  y_size,  z_size, zp.v.x, zp.u.y, // C
-       x_size,  y_size,  z_size, zp.v.x, zp.u.y, // C
-      -x_size,  y_size,  z_size, zp.u.x, zp.u.y, // D
-      -x_size, -y_size,  z_size, zp.u.x, zp.v.y, // A
+      -x_size, -y_size,  z_size, zp.x, zp.w, // A
+       x_size, -y_size,  z_size, zp.z, zp.w, // B
+       x_size,  y_size,  z_size, zp.z, zp.y, // C
+       x_size,  y_size,  z_size, zp.z, zp.y, // C
+      -x_size,  y_size,  z_size, zp.x, zp.y, // D
+      -x_size, -y_size,  z_size, zp.x, zp.w, // A
       // z negative (Back)
-      -x_size, -y_size, -z_size, zn.v.x, zn.v.y, // F
-       x_size, -y_size, -z_size, zn.u.x, zn.v.y, // E
-       x_size,  y_size, -z_size, zn.u.x, zn.u.y, // H
-       x_size,  y_size, -z_size, zn.u.x, zn.u.y, // H
-      -x_size,  y_size, -z_size, zn.v.x, zn.u.y, // G
-      -x_size, -y_size, -z_size, zn.v.x, zn.v.y, // F
+      -x_size, -y_size, -z_size, zn.z, zn.w, // F
+       x_size, -y_size, -z_size, zn.x, zn.w, // E
+       x_size,  y_size, -z_size, zn.x, zn.y, // H
+       x_size,  y_size, -z_size, zn.x, zn.y, // H
+      -x_size,  y_size, -z_size, zn.z, zn.y, // G
+      -x_size, -y_size, -z_size, zn.z, zn.w, // F
 
   };
   // clang-format on

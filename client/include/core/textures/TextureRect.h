@@ -8,12 +8,6 @@
 
 namespace app {
 
-struct UV {
- public:
-  vec2 u;
-  vec2 v;
-};
-
 struct TextureRect {
  public:
   uint16 id{};
@@ -23,7 +17,7 @@ struct TextureRect {
   uint16 width{};
   uint16 height{};
   std::filesystem::path path{};
-  UV uv{};
+  vec4 uv{};
 };
 
 }  // namespace app

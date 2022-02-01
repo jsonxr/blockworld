@@ -8,8 +8,7 @@
 
 namespace app::box_geometry {
 
-auto create(vec3 size,
-            const std::vector<UV> &uv = {{{0.0F, 0.0F}, {1.0F, 1.0F}}})
+auto create(vec3 size, const std::vector<vec4> &uv = {{0.0F, 0.0F, 1.0F, 1.0F}})
     -> std::unique_ptr<BufferGeometry>;
 
 }  // namespace app::box_geometry

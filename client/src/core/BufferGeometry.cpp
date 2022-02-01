@@ -35,15 +35,6 @@ auto sizeofGlType(GLenum t) -> int {
 
 BufferGeometry::BufferGeometry(const std::vector<GLfloat> &vertices,
                                const std::vector<BufferAttribute> &attributes) {
-  // std::array<BufferAttribute, 2> attributes2{{
-  //     {.type = GL_FLOAT, .size = sizeof(GLfloat), .count = 3},  // position
-  //     {.type = GL_FLOAT, .size = sizeof(GLfloat), .count = 2}   // uv
-  // }};
-
-  // geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 )
-  // geometry.setAttribute( 'color', new THREE.BufferAttribute( vertices, 3 )
-  // geometry.setAttribute( 'uv', new THREE.BufferAttribute( vertices, 2 ) );
-
   int size = static_cast<GLint>(vertices.size() * sizeof(GLfloat));
   if (size < 0) {
     std::cerr << "Nothing in the mesh to compile. skipping..." << std::endl;
