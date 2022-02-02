@@ -6,17 +6,30 @@
 
 namespace app {
 
-BufferGeometry::BufferGeometry(BufferGeometry &&other) noexcept
-    : glVao_(std::exchange(other.glVao_, 0)),
-      glVbo_(std::exchange(other.glVbo_, 0)),
-      count_(std::exchange(other.count_, 0)){};  // move
+void BufferGeometry::append(const BufferGeometry &v) {
+  int stride = 0;
+  for (auto a : attributes) {
+    stride += a.count;
+  }
 
-auto BufferGeometry::operator=(BufferGeometry &&other) noexcept
-    -> BufferGeometry & {
-  std::swap(glVao_, other.glVao_);
-  std::swap(glVbo_, other.glVbo_);
-  std::swap(count_, other.count_);
-  return *this;
+  // size=1, index = 1
+  size_t size = vertices.size() / stride;
+  // Add all the vertices
+
+  // int count = 0;
+  for (auto v : v.vertices) {
+    // std::cout << count << ": v=" << v << std::endl;
+    vertices.emplace_back(v);
+    // count++;
+  }
+
+  // Add all the indexes, but they start with size
+  // count = 0;
+  for (auto index : v.elements) {
+    // std::cout << count << ": index=" << (size + index) << std::endl;
+    elements.emplace_back(size + index);
+    // count++;
+  };
 }
 
 auto sizeofGlType(GLenum t) -> int {
@@ -33,16 +46,16 @@ auto sizeofGlType(GLenum t) -> int {
   return 0;
 }
 
-BufferGeometry::BufferGeometry(const std::vector<GLfloat> &vertices,
-                               const std::vector<BufferAttribute> &attributes) {
-  int size = static_cast<GLint>(vertices.size() * sizeof(GLfloat));
+BufferGeometryGfx::BufferGeometryGfx(const BufferGeometry &geometry) {
+  std::cout << "BufferGeometryGfx()" << std::endl;
+  int size = static_cast<GLint>(geometry.vertices.size() * sizeof(GLfloat));
   if (size < 0) {
     std::cerr << "Nothing in the mesh to compile. skipping..." << std::endl;
     return;
   }
 
   int stride = 0;
-  for (const auto &a : attributes) {
+  for (const auto &a : geometry.attributes) {
     stride += a.count * sizeofGlType(a.type);
   }
 
@@ -53,7 +66,7 @@ BufferGeometry::BufferGeometry(const std::vector<GLfloat> &vertices,
 
   glGenBuffers(1, &glVbo_);
   glBindBuffer(GL_ARRAY_BUFFER, glVbo_);
-  glBufferData(GL_ARRAY_BUFFER, size, vertices.data(),  // NOLINT
+  glBufferData(GL_ARRAY_BUFFER, size, geometry.vertices.data(),  // NOLINT
                GL_STATIC_DRAW);
 
   // HALF_FLOAT Maybe a half float for these texture coordinates between 0 and
@@ -63,7 +76,7 @@ BufferGeometry::BufferGeometry(const std::vector<GLfloat> &vertices,
 
   int index = 0;
   long offset = 0;
-  for (const auto &a : attributes) {
+  for (const auto &a : geometry.attributes) {
     const GLvoid *offset_ptr = (GLvoid *)offset;  // NOLINT
     glEnableVertexAttribArray(index);
     glVertexAttribPointer(index, a.count, a.type, GL_FALSE, stride, offset_ptr);
@@ -72,10 +85,33 @@ BufferGeometry::BufferGeometry(const std::vector<GLfloat> &vertices,
     index++;
   }
 
+  if (!geometry.elements.empty()) {
+    glGenBuffers(1, &glEbo_);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, glEbo_);
+    glBufferData(
+        GL_ELEMENT_ARRAY_BUFFER,
+        static_cast<GLsizeiptr>(sizeof(int) * geometry.elements.size()),
+        geometry.elements.data(), GL_STATIC_DRAW);
+    elements_size_ = static_cast<GLsizei>(geometry.elements.size());
+  }
+
   glBindVertexArray(NULL);
 }
 
-BufferGeometry::~BufferGeometry() noexcept {
+BufferGeometryGfx::BufferGeometryGfx(BufferGeometryGfx &&other) noexcept
+    : glVao_(std::exchange(other.glVao_, 0)),
+      glVbo_(std::exchange(other.glVbo_, 0)),
+      count_(std::exchange(other.count_, 0)){};  // move
+
+auto BufferGeometryGfx::operator=(BufferGeometryGfx &&other) noexcept
+    -> BufferGeometryGfx & {
+  std::swap(glVao_, other.glVao_);
+  std::swap(glVbo_, other.glVbo_);
+  std::swap(count_, other.count_);
+  return *this;
+}
+
+BufferGeometryGfx::~BufferGeometryGfx() noexcept {
   if (glVao_ > 0) {
     glDeleteVertexArrays(1, &glVao_);
     glVao_ = 0;
@@ -84,12 +120,19 @@ BufferGeometry::~BufferGeometry() noexcept {
     glDeleteBuffers(1, &glVbo_);
     glVbo_ = 0;
   }
+  if (glEbo_ > 0) {
+    glDeleteBuffers(1, &glEbo_);
+  }
 }
 
-void BufferGeometry::render() const {
-  glBindVertexArray(glVao_);  // Is this even needed?
-  glDrawArrays(GL_TRIANGLES, 0, count_);
-  //  glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0);
+void BufferGeometryGfx::render() const {
+  if (elements_size_ == 0) {
+    glBindVertexArray(glVao_);  // Is this even needed?
+    glDrawArrays(GL_TRIANGLES, 0, count_);
+  } else {
+    glBindVertexArray(glVao_);  // Is this even needed?
+    glDrawElements(GL_TRIANGLES, elements_size_, GL_UNSIGNED_INT, nullptr);
+  }
 }
 
 }  // namespace app

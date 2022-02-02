@@ -89,27 +89,9 @@ auto main() -> int {  // NOLINT(bugprone-exception-escape)
       "minecraft:block/", "/minecraft/textures/block", app::Size{512, 1024});
   atlas->save("test.png");
 
-  // auto material = std::make_shared<Material>(atlas);
-  // auto chunk = std::make_shared<Chunk>();
-  // ChunkGfx chunk_gfx{chunk, atlas};
-
-  // xp,xn,yp,yn,zp,zn
-
-  auto grass_side = atlas->getRectByName("minecraft:block/grass_block_side");
-  auto top = atlas->getRectByName("minecraft:block/azalea_top");
-  auto dirt = atlas->getRectByName("minecraft:block/dirt");
-  if (!grass_side) {
-    std::cout << "no grass_side...!!!!!!!!!!!!!!!" << std::endl;
-  }
-  auto geometry = app::box_geometry::create(
-      {1, 1, 1}, {grass_side->uv, grass_side->uv, top->uv, dirt->uv,
-                  grass_side->uv, grass_side->uv});
-
-  auto material = std::make_shared<Material>(std::move(atlas));
-  auto cube = std::make_shared<Mesh>(std::move(geometry), material);
-  //
-  Scene scene{};
-  scene.add(std::move(cube));
+  auto material = std::make_shared<Material>(atlas);
+  auto chunk = std::make_shared<Chunk>();
+  ChunkGfx chunk_gfx{chunk, atlas};
 
   WebGLRenderer renderer{};
 
@@ -132,18 +114,13 @@ auto main() -> int {  // NOLINT(bugprone-exception-escape)
     glClearColor(0.F, 0.F, 0.F, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 
+    glm::mat4 model = glm::mat4(1.0F);
+    material->setModelMatrix(model);
     material->render(window.camera());
 
-    // material->render(window.camera());
-    // chunk_gfx.render();
-
-    //   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-    const auto &nodes = scene.getNodes();
-    for (const auto &node : nodes) {
-      node->render(window.camera());
-    }
+    chunk_gfx.render();
 
     glfwSwapBuffers(window.nativeWindow());
   };

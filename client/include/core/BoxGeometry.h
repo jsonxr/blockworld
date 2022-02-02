@@ -8,8 +8,22 @@
 
 namespace app::box_geometry {
 
-auto create(vec3 size, const std::vector<vec4> &uv = {{0.0F, 0.0F, 1.0F, 1.0F}})
-    -> std::unique_ptr<BufferGeometry>;
+struct BoxOptions {
+  bool indexed{};
+  vec3 position{0.0, 0.0, 0.0};
+  vec3 size{1.0, 1.0, 1.0};
+  vec4 uv_xp{0.0, 0.0, 1.0, 1.0};
+  vec4 uv_xn{0.0, 0.0, 1.0, 1.0};
+  vec4 uv_yp{0.0, 0.0, 1.0, 1.0};
+  vec4 uv_yn{0.0, 0.0, 1.0, 1.0};
+  vec4 uv_zp{0.0, 0.0, 1.0, 1.0};
+  vec4 uv_zn{0.0, 0.0, 1.0, 1.0};
+};
+
+auto create_box(const BoxOptions &options) -> std::unique_ptr<BufferGeometry>;
+
+auto create_buffer_geometry(const BoxOptions &options)
+    -> std::unique_ptr<BufferGeometryGfx>;
 
 }  // namespace app::box_geometry
 

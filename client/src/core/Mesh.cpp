@@ -16,25 +16,18 @@ constexpr std::array<vec3, 10> kCubePositions{
     vec3(1.3F, -2.0F, -2.5F),  vec3(1.5F, 2.0F, -2.5F),
     vec3(1.5F, 0.2F, -1.5F),   vec3(-1.3F, 1.0F, -1.5F)};
 
-Mesh::Mesh(std::shared_ptr<BufferGeometry> bufferGeometry,
+Mesh::Mesh(std::shared_ptr<BufferGeometryGfx> bufferGeometry,
            std::shared_ptr<Material> material) noexcept
     : bufferGeometry_(std::move(bufferGeometry)),
       material_(std::move(material)) {}
 
 void Mesh::render(Camera &camera) const {
+  glm::mat4 model = glm::mat4(1.0F);
+  model = glm::translate(model, kCubePositions.at(0));
+  material_->setModelMatrix(model);
   material_->render(camera);
 
-  for (int i = 0; i < kCubePositions.size(); i++) {
-    // calculate the model matrix for each object and pass it to shader before
-    // drawing
-    glm::mat4 model = glm::mat4(1.0F);
-    model = glm::translate(model, kCubePositions.at(i));
-    float angle = static_cast<float>(i) * kAngleIncrement;
-    model = glm::rotate(model, glm::radians(angle), vec3(1.0F, kThird, kHalf));
-
-    material_->setModelMatrix(model);
-    bufferGeometry_->render();
-  }
+  bufferGeometry_->render();
 }
 
 }  // namespace app

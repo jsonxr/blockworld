@@ -36,6 +36,7 @@ list(APPEND SOURCES
         client/src/core/BufferGeometry.cpp
         client/src/core/Camera.cpp
         client/src/core/Input.cpp
+        client/src/core/Logger.cpp
         client/src/core/Material.cpp
         client/src/core/Mesh.cpp
         client/src/core/Scene.cpp
@@ -81,9 +82,8 @@ if (EMSCRIPTEN)
     # SAFE_HEAP (adds additional memory checks and give clear errors during debug)
     # SAFE_HEAP_LOG (writes safe heap operations
     # STACK_OVERFLOW_CHECK=2 enables slightly more detailed stack guard checks, which can give a more precise callstack at the expense of some performance
-
-    set(EMCC_LINKER_FLAGS "-O0 -s EXIT_RUNTIME=1 --bind -s WASM=1 -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s USE_GLFW=3 -s WASM_BIGINT=1 -std=c++${CMAKE_CXX_STANDARD} --embed-file ${PROJECT_SOURCE_DIR}/client/assets@/assets -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s GL_ASSERTIONS=1")
-
+    set(EMCC_LINKER_FLAGS "-O0 -s EXIT_RUNTIME=1 --bind -s INITIAL_MEMORY=512MB -s WASM=1  -s ALLOW_MEMORY_GROWTH=1 -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s USE_GLFW=3 -s WASM_BIGINT=1 -std=c++${CMAKE_CXX_STANDARD} --embed-file ${PROJECT_SOURCE_DIR}/client/assets@/assets -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s GL_ASSERTIONS=1")
+    
     set(CMAKE_EXECUTABLE_SUFFIX .html)
     set_target_properties(blockworld PROPERTIES LINK_FLAGS ${EMCC_LINKER_FLAGS})
 else ()

@@ -16,12 +16,12 @@ enum class MeshMode {
 class Mesh {
  public:
   Mesh() = default;
-  Mesh(std::shared_ptr<BufferGeometry> bufferGeometry,
+  Mesh(std::shared_ptr<BufferGeometryGfx> bufferGeometry,
        std::shared_ptr<Material> material) noexcept;
   void render(Camera &camera) const;
 
  private:
-  std::shared_ptr<BufferGeometry> bufferGeometry_{};
+  std::shared_ptr<BufferGeometryGfx> bufferGeometry_{};
   std::shared_ptr<Material> material_{};
   MeshMode mode_{MeshMode::kTriangles};
 };

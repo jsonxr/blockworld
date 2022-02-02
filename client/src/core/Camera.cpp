@@ -1,25 +1,29 @@
 #include "core/Camera.h"
 
+#include "core/Logger.h"
 #include "vendor/glm.h"
 
 namespace app {
 
+static Logger log{"Camera.cpp"};
+
 Camera::Camera(const CameraOptions options) : options_(options) {}
 
 auto Camera::get_view_matrix() -> mat4 {
-  vec3 direction;
-  direction.x = cos(glm::radians(options_.orientation.y)) *
-                cos(glm::radians(options_.orientation.x));
-  direction.y = sin(glm::radians(options_.orientation.x));
-  direction.z = sin(glm::radians(options_.orientation.y)) *
-                cos(glm::radians(options_.orientation.x));
+  auto pos = options_.position;
+  auto yaw = options_.yaw;
+  auto pitch = options_.pitch;
+
+  glm::vec3 direction;
+  direction.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
+  direction.y = sin(glm::radians(pitch));
+  direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+
   forward_ = glm::normalize(direction);
-  // 0 1 0
   vec3 local_right = glm::cross(forward_, vec3(0, 1, 0));
   vec3 local_up = glm::cross(local_right, forward_);
 
-  auto view_matrix =
-      glm::lookAt(options_.position, options_.position + forward_, local_up);
+  auto view_matrix = glm::lookAt(pos, pos + forward_, local_up);
   return view_matrix;
 }
 
@@ -112,35 +116,35 @@ auto Camera::get_projection_matrix() const -> mat4 {
 //   }
 // }
 
-void Camera::update_camera_vectors() const {
-  vec3 direction;
-  direction.x = cos(glm::radians(options_.orientation.y)) *
-                cos(glm::radians(options_.orientation.x));
-  direction.y = sin(glm::radians(options_.orientation.x));
-  direction.z = sin(glm::radians(options_.orientation.y)) *
-                cos(glm::radians(options_.orientation.x));
-  vec3 forward = glm::normalize(direction);
-  // 0 1 0
-  vec3 local_right = glm::cross(forward, vec3(0, 1, 0));
-  vec3 local_up = glm::cross(local_right, forward);
+// void Camera::update_camera_vectors() const {
+//   vec3 direction;
+//   direction.x = cos(glm::radians(options_.orientation.y)) *
+//                 cos(glm::radians(options_.orientation.x));
+//   direction.y = sin(glm::radians(options_.orientation.x));
+//   direction.z = sin(glm::radians(options_.orientation.y)) *
+//                 cos(glm::radians(options_.orientation.x));
+//   vec3 forward = glm::normalize(direction);
+//   // 0 1 0
+//   vec3 local_right = glm::cross(forward, vec3(0, 1, 0));
+//   vec3 local_up = glm::cross(local_right, forward);
 
-  glm::mat4x4 view_matrix =
-      glm::lookAt(options_.position, options_.position + forward, local_up);
+//   glm::mat4x4 view_matrix =
+//       glm::lookAt(options_.position, options_.position + forward, local_up);
 
-  // // calculate the new Front vector
-  // vec3 front;
-  // front[0] =
-  //     cos(glm::radians(options_.yaw)) * cos(glm::radians(options_.pitch));
-  // front[1] = sin(glm::radians(options_.pitch));
-  // front[2] =
-  //     sin(glm::radians(options_.yaw)) * cos(glm::radians(options_.pitch));
-  // front_ = glm::normalize(front);
-  // // also re-calculate the Right and Up vector
-  // // normalize the vectors, because their length gets
-  // // closer to 0 the more you look up or down which
-  // // results in slower movement.
-  // right_ = glm::normalize(glm::cross(front_, options_.worldUp));
-  // options_.up = glm::normalize(glm::cross(right_, front_));
-}
+//   // // calculate the new Front vector
+//   // vec3 front;
+//   // front[0] =
+//   //     cos(glm::radians(options_.yaw)) * cos(glm::radians(options_.pitch));
+//   // front[1] = sin(glm::radians(options_.pitch));
+//   // front[2] =
+//   //     sin(glm::radians(options_.yaw)) * cos(glm::radians(options_.pitch));
+//   // front_ = glm::normalize(front);
+//   // // also re-calculate the Right and Up vector
+//   // // normalize the vectors, because their length gets
+//   // // closer to 0 the more you look up or down which
+//   // // results in slower movement.
+//   // right_ = glm::normalize(glm::cross(front_, options_.worldUp));
+//   // options_.up = glm::normalize(glm::cross(right_, front_));
+// }
 
 }  // namespace app

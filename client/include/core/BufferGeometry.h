@@ -11,22 +11,33 @@ struct BufferAttribute {
   short count{};
 };
 
-class BufferGeometry {
+struct BufferGeometry {
+  std::vector<BufferAttribute> attributes{};
+  std::vector<GLfloat> vertices{};
+  std::vector<int> elements{};
+
+  void append(const BufferGeometry &v);
+};
+
+class BufferGeometryGfx {
  public:
-  explicit BufferGeometry(const std::vector<GLfloat> &vertices,
-                          const std::vector<BufferAttribute> &attributes);
-  ~BufferGeometry() noexcept;
-  BufferGeometry(const BufferGeometry &other) = delete;
-  auto operator=(const BufferGeometry &other) = delete;
-  BufferGeometry(BufferGeometry &&other) noexcept;
-  auto operator=(BufferGeometry &&other) noexcept -> BufferGeometry &;
+  explicit BufferGeometryGfx(const BufferGeometry &geometry);
+  ~BufferGeometryGfx() noexcept;
+  BufferGeometryGfx(const BufferGeometryGfx &other) = delete;
+  auto operator=(const BufferGeometryGfx &other) = delete;
+  BufferGeometryGfx(BufferGeometryGfx &&other) noexcept;
+  auto operator=(BufferGeometryGfx &&other) noexcept -> BufferGeometryGfx &;
 
   void render() const;
 
+ private:
   GLuint glVao_{0};
   GLuint glVbo_{0};
+  GLuint glEbo_{0};
   GLsizei count_{0};
+  GLsizei elements_size_{0};
 };
 
 }  // namespace app
+
 #endif  // APP_BUFFER_GEOMETRY_H

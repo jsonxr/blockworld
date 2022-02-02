@@ -23,22 +23,14 @@ constexpr vec3 kFront = glm::vec3(0.0F, 0.0F, -1.0F);
 
 enum class CameraMovement { kForward, kBackward, kLeft, kRight };
 struct CameraOptions {
-  vec3 position{0.0, 1.6, 5.0};
-  vec3 orientation{0.0, 0.0, 0.0};
+  vec3 position{0.0, 1.6, 50};
+  float yaw{270.0};
+  float pitch{0};
 
   float fov{45.0};
   float near{0.1F};
   float far{100.0F};
   float aspect{1920.F / 1080.F};  // width/height of window
-  // vec3 up = kWorldUp;
-  // vec3 worldUp = kWorldUp;
-  // float yaw = {kYaw};
-  // float pitch{kPitch};
-  // float speed{kSpeed};
-  // float sensitivity{kSensitivity};
-  // float zoom{kZoom};
-  // float width{kDefaultWindowWidth};
-  // float height{kDefaultWindowHeight};
 };
 
 class Camera {
@@ -50,22 +42,27 @@ class Camera {
   [[nodiscard]] auto get_projection_matrix() const -> mat4;
 
   void set_aspect(float aspect) { options_.aspect = aspect; }
-  void set_position(const vec3 &pos) { options_.position = pos; }
   void set_fov(float fov) { options_.fov = fov; }
-  void set_orientation(const vec3 &orientation) {}
+  void set_pitch(float pitch) { options_.pitch = pitch; }
+  void set_position(const vec3 &pos) { options_.position = pos; }
+  void set_yaw(float yaw) {
+    options_.yaw = yaw;
+    if (options_.yaw > 360) options_.yaw = 0;
+    if (options_.yaw < 0) options_.yaw = 360;
+  }
 
-  auto orientation() -> vec3 & { return options_.orientation; }
-  auto position() -> vec3 & { return options_.position; }
-  auto forward() -> const vec3 & { return forward_; }
+  auto aspect() const -> const float & { return options_.aspect; }
+  auto forward() const -> const vec3 & { return forward_; }
+  auto fov() const -> const float & { return options_.fov; }
+  auto pitch() const -> const float & { return options_.pitch; }
+  auto position() const -> const vec3 & { return options_.position; }
+  auto yaw() const -> const float & { return options_.yaw; }
 
  private:
-  glm::vec3 forward_{};
   CameraOptions options_{};
   glm::mat4x4 view_matrix_{};
   glm::mat4x4 projection_matrix_{};
-
-  // calculates the front vector from the Camera's (updated) Euler Angles
-  void update_camera_vectors() const;
+  glm::vec3 forward_{};
 };
 
 }  // namespace app
