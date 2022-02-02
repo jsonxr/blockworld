@@ -1,9 +1,9 @@
-#include "core/webgl/WebGLRenderer.h"
+#include "WebGLRenderer.h"
 
-#include "core.h"
-#include "core/BufferGeometry.h"
-#include "core/webgl/WebGLProgram.h"
-#include "core/webgl/WebGLShader.h"
+#include "../../core.h"
+#include "../BufferGeometry.h"
+#include "WebGLProgram.h"
+#include "WebGLShader.h"
 
 namespace app {
 

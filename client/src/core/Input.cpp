@@ -1,6 +1,6 @@
-#include "core/Input.h"
+#include "Input.h"
 
-#include "core/Window.h"
+#include "Window.h"
 
 namespace app {
 
@@ -42,6 +42,8 @@ void Input::process(Camera &camera, double /*deltaTime*/) {
   camera.set_yaw(yaw + mx);
   camera.set_pitch(pitch + my);
 
+    vec3 local_right = glm::cross(camera.forward(), glm::vec3(0, 1, 0));
+   vec3 local_up = glm::cross(local_right, camera.forward());
   const float player_speed = 0.2F;
   if (Input::isKeyPressed(GLFW_KEY_W)) {
     // camera.position() += camera.forward() * player_speed;
@@ -51,12 +53,16 @@ void Input::process(Camera &camera, double /*deltaTime*/) {
     camera.set_position(camera.position() - camera.forward() * player_speed);
   }
   if (Input::isKeyPressed(GLFW_KEY_A)) {
-    glm::vec3 local_right = glm::cross(camera.forward(), glm::vec3(0, 1, 0));
     camera.set_position(camera.position() - local_right * player_speed);
   }
   if (Input::isKeyPressed(GLFW_KEY_D)) {
-    glm::vec3 local_right = glm::cross(camera.forward(), glm::vec3(0, 1, 0));
     camera.set_position(camera.position() + local_right * player_speed);
+  }
+  if (Input::isKeyPressed(GLFW_KEY_SPACE)) {
+    camera.set_position(camera.position() + local_up * player_speed);
+  }
+  if (Input::isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
+    camera.set_position(camera.position() - local_up * player_speed);
   }
 
   deltaMouseX_ = 0;

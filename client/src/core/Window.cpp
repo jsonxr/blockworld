@@ -1,8 +1,8 @@
-#include "core/Window.h"
+#include "Window.h"
 
 #include <utility>
 
-#include "core/Input.h"
+#include "Input.h"
 
 namespace app {
 
@@ -88,6 +88,8 @@ Window::Window(const char *title, WindowSize size, bool fullScreenMode) noexcept
   glfwSetKeyCallback(native_window_, key_callback);
   glfwSetCursorPosCallback(native_window_, mouse_callback);
   glfwSetMouseButtonCallback(native_window_, mouse_button_callback);
+
+  glfwSetInputMode(native_window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 //------------------------------------------------------------------------------

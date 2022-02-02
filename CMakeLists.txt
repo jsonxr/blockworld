@@ -1,17 +1,22 @@
 cmake_minimum_required(VERSION 3.21)
 project(blockworld)
 
+set(CONAN_COMPILER "bob")
+set(CONAN_COMPILER_VERSION "14.0")
+
 set(CMAKE_CXX_STANDARD 20)
+set(CONAN_CMAKE_CXX_STANDARD 20)
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if (!EMSCRIPTEN)
-  set(CMAKE_CXX_CLANG_TIDY "clang-tidy;--config-file=${CMAKE_SOURCE_DIR}/.clang-tidy;-p ${CMAKE_BINARY_DIR}/compile_commands.json")
+    set(CMAKE_CXX_CLANG_TIDY "clang-tidy;--config-file=${CMAKE_SOURCE_DIR}/.clang-tidy;-p ${CMAKE_BINARY_DIR}/compile_commands.json")
 endif ()
 
 # Conan package manager include
-set(CONAN_CMAKE_CXX_STANDARD 20)
-set(CONAN_COMPILER "cmake")
-set(CONAN_COMPILER_VERSION "13.0")
+#set(CONAN_COMPILER "apple-clang")
+#set(CONAN_COMPILER_VERSION "14.0")
+
 if (EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     conan_basic_setup()
@@ -19,7 +24,7 @@ else ()
     message(WARNING "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first")
 endif ()
 
-include_directories(${PROJECT_SOURCE_DIR}/client/include)
+include_directories(${PROJECT_SOURCE_DIR}/client/include ${PROJECT_SOURCE_DIR}/client/src)
 
 list(APPEND SOURCES
         # src/vendor
@@ -28,9 +33,9 @@ list(APPEND SOURCES
         client/src/core/webgl/WebGLProgram.cpp
         client/src/core/webgl/WebGLRenderer.cpp
         client/src/core/webgl/WebGLShader.cpp
-        # src/core
+        # src/core/textures
         client/src/core/textures/TextureAtlas.cpp
-
+        # src/core
         client/src/core/Assets.cpp
         client/src/core/BoxGeometry.cpp
         client/src/core/BufferGeometry.cpp
@@ -41,17 +46,20 @@ list(APPEND SOURCES
         client/src/core/Mesh.cpp
         client/src/core/Scene.cpp
         client/src/core/Window.cpp
-
+        #src/importer
+        client/src/importer/MinecraftImporter.cpp
+        #src/world
         client/src/world/Chunk.cpp
-
-
+        client/src/world/BlockMap.cpp
+        client/src/world/Block.cpp
         # src
         client/src/main.cpp
-        client/src/memory.cpp
-        client/src/utils.cpp
-    )
+        client/src/utils/memory.cpp
+        client/src/utils/executable.cpp
 
-add_executable(blockworld ${SOURCES} )
+        )
+
+add_executable(blockworld ${SOURCES})
 target_link_libraries(blockworld ${CONAN_LIBS})
 
 if (EMSCRIPTEN)
@@ -83,9 +91,9 @@ if (EMSCRIPTEN)
     # SAFE_HEAP_LOG (writes safe heap operations
     # STACK_OVERFLOW_CHECK=2 enables slightly more detailed stack guard checks, which can give a more precise callstack at the expense of some performance
     set(EMCC_LINKER_FLAGS "-O0 -s EXIT_RUNTIME=1 --bind -s INITIAL_MEMORY=512MB -s WASM=1  -s ALLOW_MEMORY_GROWTH=1 -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s USE_GLFW=3 -s WASM_BIGINT=1 -std=c++${CMAKE_CXX_STANDARD} --embed-file ${PROJECT_SOURCE_DIR}/client/assets@/assets -s ASSERTIONS=1 -s DEMANGLE_SUPPORT=1 -s GL_ASSERTIONS=1")
-    
+
     set(CMAKE_EXECUTABLE_SUFFIX .html)
     set_target_properties(blockworld PROPERTIES LINK_FLAGS ${EMCC_LINKER_FLAGS})
 else ()
-  file(COPY client/assets DESTINATION ${CMAKE_BINARY_DIR}/bin)
+    file(COPY client/assets DESTINATION ${CMAKE_BINARY_DIR}/bin)
 endif ()

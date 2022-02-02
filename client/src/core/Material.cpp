@@ -1,12 +1,12 @@
-#include "core/Material.h"
+#include "Material.h"
 
 #include <cstdarg>
 #include <iostream>
 #include <regex>
 
-#include "core/Assets.h"
-#include "core/Logger.h"
-#include "core/Window.h"
+#include "Assets.h"
+#include "Logger.h"
+#include "Window.h"
 
 namespace app {
 
@@ -25,7 +25,7 @@ auto readAssetIntoString(const char *filename) -> std::string {
 }
 
 Material::Material(std::shared_ptr<TextureAtlas> textures)
-    : textures_(std::move(textures)) {
+    : textures_{std::move(textures)} {
   std::string vertex_shader_source =
       readAssetIntoString("/shaders/vertex.glsl");
   std::string fragment_shader_source =

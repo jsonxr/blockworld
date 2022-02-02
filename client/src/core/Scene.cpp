@@ -1,4 +1,4 @@
-#include "core/Scene.h"
+#include "Scene.h"
 
 namespace app {
 

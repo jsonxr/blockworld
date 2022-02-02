@@ -1,10 +1,10 @@
-#include "core/Assets.h"
+#include "Assets.h"
 
 #include <fstream>
 #include <iostream>
 #include <regex>
 
-#include "utils.h"
+#include "../utils/executable.h"
 
 namespace app {
 
@@ -14,7 +14,7 @@ const std::string kDir =
 #ifdef __EMSCRIPTEN__
     "";
 #else
-    get_executable_dir();
+    utils::get_executable_dir();
 #endif
 
 const std::string kAssetsFilename = kDir + "/assets";

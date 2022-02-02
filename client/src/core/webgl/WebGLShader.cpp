@@ -1,4 +1,4 @@
-#include "core/webgl/WebGLShader.h"
+#include "WebGLShader.h"
 
 namespace app {
 
@@ -10,7 +10,7 @@ WebGLShader::~WebGLShader() {
 }
 
 WebGLShader::WebGLShader(WebGLShaderType type, const char *source)
-    : handle_(glCreateShader(static_cast<GLenum>(type))) {
+    : handle_{glCreateShader(static_cast<GLenum>(type))} {
   std::cout << "WebGLShader " << handle_ << std::endl;
 
   glShaderSource(this->handle_, 1, &source, nullptr);

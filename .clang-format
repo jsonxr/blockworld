@@ -3,3 +3,4 @@ BasedOnStyle:  Google
 
 PointerAlignment: Right
 DerivePointerAlignment: false
+SortIncludes: CaseInsensitive

@@ -1,7 +1,7 @@
-#include "core/textures/TextureAtlas.h"
+#include "TextureAtlas.h"
 
-#include "core.h"
-#include "core/Assets.h"
+#include "../../core.h"
+#include "../Assets.h"
 
 namespace app {
 

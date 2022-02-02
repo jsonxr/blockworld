@@ -1,4 +1,4 @@
-#include "core/Mesh.h"
+#include "Mesh.h"
 
 #include <array>
 #include <cmath>
@@ -18,8 +18,8 @@ constexpr std::array<vec3, 10> kCubePositions{
 
 Mesh::Mesh(std::shared_ptr<BufferGeometryGfx> bufferGeometry,
            std::shared_ptr<Material> material) noexcept
-    : bufferGeometry_(std::move(bufferGeometry)),
-      material_(std::move(material)) {}
+    : bufferGeometry_{std::move(bufferGeometry)},
+      material_{std::move(material)} {}
 
 void Mesh::render(Camera &camera) const {
   glm::mat4 model = glm::mat4(1.0F);

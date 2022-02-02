@@ -92,7 +92,7 @@ open http://127.0.0.1:8080/blockworld.html
 
 ```sh
 # Install conan dependencies
-conan install . -s build_type=Debug --install-folder=cmake-build-debug --build missing
+conan install . -s build_type=Debug --install-folder=build-cmake-debug --build missing
 # dont do below, click on that conan install at the bottom and then reload the cmake project in the ide
 #cd cmake-build-debug && cmake ..
 ```
@@ -119,6 +119,7 @@ Install the following plugins, then follow compile directions.
 - [Minecraft Clone](https://github.com/codingminecraft/StreamMinecraftClone)
 - [Learn OpenGL](https://learnopengl.com)
 - [WebGL2 fundamentals](https://webgl2fundamentals.org/)
+- [clang-tidy list of checks](https://clang.llvm.org/extra/clang-tidy/checks/list.html)
 
 # C++ Standard
 
@@ -135,9 +136,12 @@ https://en.cppreference.com/w/cpp/compiler_support
 # TODO
 
 - Modify cmake to recompile for asset change
-  - [blog article](https://jeremimucha.com/2021/05/cmake-managing-resources/)
-  - [gist](https://gist.github.com/jamcodes/f79b3be24ed40c6c224cc9e91d3061cc)
+    - [blog article](https://jeremimucha.com/2021/05/cmake-managing-resources/)
+    - [gist](https://gist.github.com/jamcodes/f79b3be24ed40c6c224cc9e91d3061cc)
 - per vertex data... make vertex color use rgba=4bytes instead of 4 floats
+- Block map... load all available blocks in the minecraft models folder.
+- cull faces
+- https://github.com/SRombauts/SimplexNoise
 
 # WebGL2
 

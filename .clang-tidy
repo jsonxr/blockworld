@@ -30,6 +30,9 @@
 #      meaningless). It would also warn if `F` accepts by `const&`, which is
 #      another detail that the caller need not care about.
 #
+#  -readability-identifier-length: i like to use simple var names
+#      where appropriate.
+#
 #  -readability-redundant-declaration: A friend declaration inside a class
 #      counts as a declaration, so if we also declare that friend outside the
 #      class in order to document it as part of the public API, that will
@@ -55,12 +58,13 @@ Checks: >
   -misc-non-private-member-variables-in-classes,
   modernize-*,
   -modernize-return-braced-init-list,
-  -modernize-avoid-c-arrays,
+  modernize-avoid-c-arrays,
   -modernize-use-nodiscard,
   performance-*,
   -performance-move-const-arg,
   portability-*,
   readability-*,
+  -readability-identifier-length,
   -readability-braces-around-statements,
   -readability-magic-numbers,
   -readability-named-parameter,

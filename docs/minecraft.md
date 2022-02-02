@@ -1,8 +1,16 @@
 [tint index](https://forums.minecraftforge.net/topic/29532-18-solved-tintindex-anyone-gotten-it-to-do-anything-useful/) - How to blend color for grass
 
+[Minecraft JSON](https://github.com/thecodewarrior-archive/MineCraft-Draw) - 7 year old site but has some missing json things like bed.json
+
+[Microsoft Minecraft Bedrock JSON](https://docs.microsoft.com/en-us/minecraft/creator/reference/)
 [Minecraft shaders](https://minecraft.fandom.com/wiki/Shaders)
 [Minecraft Modding - Block Models](http://greyminecraftcoder.blogspot.com/2014/12/block-models-18.html) Information on blocks
+[Minecraft Modding - texturing quads](http://greyminecraftcoder.blogspot.com/2014/12/block-models-texturing-quads-faces.html)
 [Minecraft Modding - Lighting](http://greyminecraftcoder.blogspot.com/2014/12/lighting-18.html)
+
+[Minecraft Block Models](https://minecraft.fandom.com/wiki/Model#Block_models)
+[Minecraft Block file format](https://minecraft.fandom.com/wiki/Structure_Block_file_format)
+[Minecraft Development Resources](https://minecraft.fandom.com/wiki/Development_resources)
 
 # Example
 

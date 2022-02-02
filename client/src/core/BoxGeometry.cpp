@@ -1,6 +1,6 @@
-#include "core/BoxGeometry.h"
+#include "BoxGeometry.h"
 
-#include "core/BufferGeometry.h"
+#include "BufferGeometry.h"
 
 namespace app::box_geometry {
 
@@ -31,6 +31,11 @@ constexpr float kHalf = 0.5F;
                             A--------B (v)
 
 */
+
+struct Vertex {
+  vec3 pos{};
+  vec2 uv{};
+};
 
 auto create_geometry(const BoxOptions &options)
     -> std::unique_ptr<BufferGeometry> {
@@ -108,6 +113,9 @@ auto create_geometry(const BoxOptions &options)
   return result;
 }
 
+void add_quad(const BufferGeometry &geometry, Vertex p1, Vertex p2, Vertex p3,
+              Vertex p4) {}
+
 auto create_geometry_indexed(const BoxOptions &options)
     -> std::unique_ptr<BufferGeometry> {
   vec3 p = options.position;
@@ -121,6 +129,8 @@ auto create_geometry_indexed(const BoxOptions &options)
   vec4 yn = options.uv_yn;
   vec4 zp = options.uv_zp;
   vec4 zn = options.uv_zn;
+
+    // add_quad()
 
   // clang-format off
   std::vector<GLfloat> vertices{

@@ -1,14 +1,14 @@
-#include "core/webgl/WebGLProgram.h"
+#include "WebGLProgram.h"
 
 #include <array>
 
-#include "vendor/glm.h"
+#include "../../vendor/glm.h"
 
 namespace app {
 
 WebGLProgram::WebGLProgram(const WebGLShader &vertexShader,
                            const WebGLShader &fragmentShader)
-    : handle_(glCreateProgram()) {
+    : handle_{glCreateProgram()} {
   glAttachShader(handle_, vertexShader.handle());
   glAttachShader(handle_, fragmentShader.handle());
   glLinkProgram(handle_);
@@ -28,6 +28,14 @@ WebGLProgram::WebGLProgram(const WebGLShader &vertexShader,
 
   std::cout << "created WebGLProgram " << handle_ << std::endl;
   debug();
+}
+
+WebGLProgram::~WebGLProgram() {
+  if (handle_ > 0) {
+    std::cout << "~WebGLProgram " << handle_ << std::endl;
+    glDeleteProgram(handle_);
+    handle_ = 0;
+  }
 }
 
 void WebGLProgram::debug() {
@@ -58,14 +66,6 @@ void WebGLProgram::debug() {
     auto loc = get_uniform_location(name);
     uniforms_.emplace_back(name);
     printf("Uniform #%d Type: %u Loc: %u Name: %s\n", i, type, loc, name);
-  }
-}
-
-WebGLProgram::~WebGLProgram() {
-  if (handle_ > 0) {
-    std::cout << "~WebGLProgram " << handle_ << std::endl;
-    glDeleteProgram(handle_);
-    handle_ = 0;
   }
 }
 

@@ -1,28 +1,20 @@
-#include <regex>
 #include <set>
 
 #include "core.h"
-#include "core/Assets.h"
-#include "core/BoxGeometry.h"
-#include "core/BufferGeometry.h"
 #include "core/Camera.h"
-#include "core/Input.h"
 #include "core/Scene.h"
-#include "core/Window.h"
 #include "core/textures/TextureAtlas.h"
-#include "core/textures/TextureRect.h"
-#include "core/webgl/WebGLRenderer.h"
-#include "utils.h"
+#include "core/Window.h"
+#include "importer/MinecraftImporter.h"
+#include "utils/executable.h"
+#include "utils/Tracer.h"
+#include "world/BlockMap.h"
 #include "world/Chunk.h"
+#include "utils/memory.h"
+#include <boost/format.hpp>
+
 
 using namespace app;
-// using app::Material;
-// using app::Mesh;
-// using app::Scene;
-// using app::TextureAtlas;
-// using app::WebGLRenderer;
-// using app::Window;
-// using app::WindowSize;
 
 constexpr auto kWindowTitle = "BlockWorld";
 
@@ -37,43 +29,15 @@ static void error_callback(int error, const char *description) {
   std::cerr << "Error: " << error << "\n" << description << std::endl;
 }
 
-// static void key_callback(GLFWwindow* window, int key, int scancode, int
-// action,
-//                          int mods) {
-//   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-//     glfwSetWindowShouldClose(window, GLFW_TRUE);
-//   }
-//   if (key == GLFW_KEY_E && action == GLFW_PRESS) {
-//     std::cerr << "You pressed the e key" << std::endl;
-//   }
-// }
-
 std::function<void()> loop;
 void main_loop() { loop(); }
 
-// auto getFiles(const std::string &path) -> std::vector<std::filesystem::path>
-// {
-//   std::vector<std::filesystem::path> files_in_directory;
-//   std::copy(std::filesystem::directory_iterator(path),
-//             std::filesystem::directory_iterator(),
-//             std::back_inserter(files_in_directory));
-//   std::sort(files_in_directory.begin(), files_in_directory.end());
-//   return files_in_directory;
-// }
-
-// auto main2() -> int {
-//   auto atlas = TextureAtlas::loadFromDirectory(
-//       "minecraft:block/", "/minecraft/textures/block", app::Size{512, 1024});
-//   atlas->save("test.png");
-//   return 0;
-// }
-
-auto main() -> int {  // NOLINT(bugprone-exception-escape)
+auto main2() -> int {  // NOLINT(bugprone-exception-escape)
   if (glfwInit() == 0) {
     return EXIT_FAILURE;
   }
 
-  std::string path = get_executable_path();
+  std::string path = utils::get_executable_path();
   std::cout << "path: " << path.c_str() << std::endl;
 
   glfwSetErrorCallback(error_callback);
@@ -89,11 +53,14 @@ auto main() -> int {  // NOLINT(bugprone-exception-escape)
       "minecraft:block/", "/minecraft/textures/block", app::Size{512, 1024});
   atlas->save("test.png");
 
+  BlockMap block_map{};
+
   auto material = std::make_shared<Material>(atlas);
   auto chunk = std::make_shared<Chunk>();
-  ChunkGfx chunk_gfx{chunk, atlas};
+  chunk->generate();
+  ChunkGfx chunk_gfx{chunk, atlas, block_map};
 
-  WebGLRenderer renderer{};
+  // WebGLRenderer renderer{};
 
   // timing
   GLdouble delta_time{};
@@ -137,4 +104,23 @@ auto main() -> int {  // NOLINT(bugprone-exception-escape)
   window.close();
   glfwTerminate();
   return EXIT_SUCCESS;
+}
+
+auto main_import() -> int {
+  importer::MinecraftImporter map{};
+  map.load();
+  map.get_block("minecraft:block/oak_stairs");
+
+  return 0;
+}
+
+auto main() -> int {
+  cout << boost::format("writing %1%,  x=%2% : %3%-th try") % "toto" % 40.23 % 50 << endl;
+  utils::display_sizeof_values();
+  auto total_memory = utils::getTotalSystemMemory();
+  std::cout << "memory: " << utils::prettyBytes(total_memory) << "("<< total_memory << ")"<< std::endl;
+  //test_memory();
+  // main_import();
+  main2();
+  return 0;
 }

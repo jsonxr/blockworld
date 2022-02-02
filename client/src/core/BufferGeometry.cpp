@@ -1,10 +1,16 @@
-#include "core/BufferGeometry.h"
+#include "BufferGeometry.h"
 
 #include <bit>
 #include <iostream>
 #include <vector>
 
 namespace app {
+
+auto sizeofGlType(GLenum t) -> int;
+
+//------------------------------------------------------------------------------
+// BufferGeometry
+//------------------------------------------------------------------------------
 
 void BufferGeometry::append(const BufferGeometry &v) {
   int stride = 0;
@@ -32,20 +38,9 @@ void BufferGeometry::append(const BufferGeometry &v) {
   };
 }
 
-auto sizeofGlType(GLenum t) -> int {
-  if (t == GL_BYTE) return sizeof(GLbyte);
-  if (t == GL_UNSIGNED_BYTE) return sizeof(GLubyte);
-  if (t == GL_SHORT) return sizeof(GLshort);
-  if (t == GL_UNSIGNED_SHORT) return sizeof(GLushort);
-  if (t == GL_INT) return sizeof(GLint);
-  if (t == GL_UNSIGNED_INT) return sizeof(GLuint);
-  // if (t == GL_FIXED) return sizeof(GLfixed);
-  if (t == GL_HALF_FLOAT) return sizeof(GLhalf);
-  if (t == GL_FLOAT) return sizeof(GLfloat);
-  if (t == GL_DOUBLE) return sizeof(GLdouble);
-  return 0;
-}
-
+//------------------------------------------------------------------------------
+// BufferGeometryGfx
+//------------------------------------------------------------------------------
 BufferGeometryGfx::BufferGeometryGfx(const BufferGeometry &geometry) {
   std::cout << "BufferGeometryGfx()" << std::endl;
   int size = static_cast<GLint>(geometry.vertices.size() * sizeof(GLfloat));
@@ -99,9 +94,9 @@ BufferGeometryGfx::BufferGeometryGfx(const BufferGeometry &geometry) {
 }
 
 BufferGeometryGfx::BufferGeometryGfx(BufferGeometryGfx &&other) noexcept
-    : glVao_(std::exchange(other.glVao_, 0)),
-      glVbo_(std::exchange(other.glVbo_, 0)),
-      count_(std::exchange(other.count_, 0)){};  // move
+    : glVao_{std::exchange(other.glVao_, 0)},
+      glVbo_{std::exchange(other.glVbo_, 0)},
+      count_{std::exchange(other.count_, 0)}{};  // move
 
 auto BufferGeometryGfx::operator=(BufferGeometryGfx &&other) noexcept
     -> BufferGeometryGfx & {
@@ -134,5 +129,24 @@ void BufferGeometryGfx::render() const {
     glDrawElements(GL_TRIANGLES, elements_size_, GL_UNSIGNED_INT, nullptr);
   }
 }
+
+//------------------------------------------------------------------------------
+// Helper Functions
+//------------------------------------------------------------------------------
+
+auto sizeofGlType(GLenum t) -> int {
+  if (t == GL_BYTE) return sizeof(GLbyte);
+  if (t == GL_UNSIGNED_BYTE) return sizeof(GLubyte);
+  if (t == GL_SHORT) return sizeof(GLshort);
+  if (t == GL_UNSIGNED_SHORT) return sizeof(GLushort);
+  if (t == GL_INT) return sizeof(GLint);
+  if (t == GL_UNSIGNED_INT) return sizeof(GLuint);
+  // if (t == GL_FIXED) return sizeof(GLfixed);
+  if (t == GL_HALF_FLOAT) return sizeof(GLhalf);
+  if (t == GL_FLOAT) return sizeof(GLfloat);
+  if (t == GL_DOUBLE) return sizeof(GLdouble);
+  return 0;
+}
+
 
 }  // namespace app
