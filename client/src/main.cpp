@@ -1,18 +1,17 @@
+#include <boost/format.hpp>
 #include <set>
 
 #include "core.h"
 #include "core/Camera.h"
-#include "core/Scene.h"
+#include "core/Material.h"
 #include "core/textures/TextureAtlas.h"
 #include "core/Window.h"
 #include "importer/MinecraftImporter.h"
 #include "utils/executable.h"
+#include "utils/memory.h"
 #include "utils/Tracer.h"
 #include "world/BlockMap.h"
 #include "world/Chunk.h"
-#include "utils/memory.h"
-#include <boost/format.hpp>
-
 
 using namespace app;
 
@@ -115,12 +114,15 @@ auto main_import() -> int {
 }
 
 auto main() -> int {
-  cout << boost::format("writing %1%,  x=%2% : %3%-th try") % "toto" % 40.23 % 50 << endl;
+  cout << boost::format("writing %1%,  x=%2% : %3%-th try") % "toto" % 40.23 %
+              50
+       << endl;
   utils::display_sizeof_values();
   auto total_memory = utils::getTotalSystemMemory();
-  std::cout << "memory: " << utils::prettyBytes(total_memory) << "("<< total_memory << ")"<< std::endl;
-  //test_memory();
-  // main_import();
+  std::cout << "memory: " << utils::prettyBytes(total_memory) << "("
+            << total_memory << ")" << std::endl;
+  // test_memory();
+  //  main_import();
   main2();
   return 0;
 }

@@ -17,5 +17,5 @@ auto getTotalSystemMemory() -> size_t;
  */
 auto prettyBytes(size_t bytes) -> std::string;
 
-}
-#endif // APP_UTILS_MEMORY_H
+}  // namespace utils
+#endif  // APP_UTILS_MEMORY_H

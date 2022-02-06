@@ -14,21 +14,13 @@ auto Camera::get_view_matrix() -> mat4 {
   auto yaw = options_.yaw;
   auto pitch = options_.pitch;
 
+  forward_ = vec3(cos(glm::radians(yaw)), 0, sin(glm::radians(yaw)));
+  forward_ = glm::normalize(forward_);
+
   vec3 look_at = vec3(cos(glm::radians(pitch)) * cos(glm::radians(yaw)),
                       sin(glm::radians(pitch)),
                       sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
   look_at = glm::normalize((look_at));
-
-//  glm::vec3 direction;
-//  direction.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
-//  direction.y = sin(glm::radians(pitch));
-//  direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-
-  forward_ = vec3(cos(glm::radians(yaw)),
-                  0,
-                  sin(glm::radians(yaw))
-                  );
-  forward_ = glm::normalize(forward_);
 
   vec3 local_right = glm::cross(look_at, vec3(0, 1, 0));
   vec3 local_up = glm::cross(local_right, look_at);

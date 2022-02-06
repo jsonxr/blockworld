@@ -37,13 +37,14 @@ void Input::process(Camera &camera, double /*deltaTime*/) {
   float my = sensitivity_ * static_cast<float>(deltaMouseY_);
   // auto orientation = camera.orientation();
   auto yaw = camera.yaw();
+
   auto pitch = camera.pitch();
 
   camera.set_yaw(yaw + mx);
   camera.set_pitch(pitch + my);
 
-    vec3 local_right = glm::cross(camera.forward(), glm::vec3(0, 1, 0));
-   vec3 local_up = glm::cross(local_right, camera.forward());
+  vec3 local_right = glm::cross(camera.forward(), glm::vec3(0, 1, 0));
+  vec3 local_up = glm::cross(local_right, camera.forward());
   const float player_speed = 0.2F;
   if (Input::isKeyPressed(GLFW_KEY_W)) {
     // camera.position() += camera.forward() * player_speed;

@@ -3,7 +3,6 @@
 #include <filesystem>
 #include <string>
 
-
 #if (BOOST_OS_WINDOWS)
 #include <stdlib.h>
 #elif (BOOST_OS_SOLARIS)
@@ -50,6 +49,7 @@ auto get_executable_path() -> std::string {
       free(canonical_path);
     }
   }
+
 #elif (BOOST_OS_BSD_FREE)
   char exe_path[2048];
   int mib[4];
@@ -71,4 +71,4 @@ auto get_executable_dir() -> std::filesystem::path {
   return path.parent_path();
 }
 
-}
+}  // namespace utils

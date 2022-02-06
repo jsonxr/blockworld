@@ -12,6 +12,6 @@ namespace utils {
 auto get_executable_dir() -> std::filesystem::path;
 auto get_executable_path() -> std::string;
 
-}
+}  // namespace utils
 
-#endif // APP_UTILS_EXECUTABLE_H
+#endif  // APP_UTILS_EXECUTABLE_H

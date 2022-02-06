@@ -332,7 +332,6 @@ auto BlockModel::toJSON() -> std::string {
   }
 }
 
-
 //------------------------------------------------------------------------------
 // ImportedBlock
 //------------------------------------------------------------------------------
@@ -345,7 +344,6 @@ auto BlockModel::toJSON() -> std::string {
   j.at("states").get_to(b.states);
   j.at("models").get_to(b.models);
 }
-
 
 //------------------------------------------------------------------------------
 // Private Functions
@@ -423,8 +421,8 @@ auto MinecraftImporter::get_block(const std::string &name) -> ImportedBlock {
     auto list = variants_pair.second;
     for (const auto &variant : list) {
       auto model_name = variant.model;
-      if (! models.contains(model_name)) {
-        //auto model =
+      if (!models.contains(model_name)) {
+        // auto model =
         BlockModel model = get_block_model(model_name);
         models.emplace(model_name, model);
       }

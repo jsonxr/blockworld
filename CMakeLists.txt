@@ -31,7 +31,6 @@ list(APPEND SOURCES
         client/src/vendor/stb.cpp
         # src/core/webgl
         client/src/core/webgl/WebGLProgram.cpp
-        client/src/core/webgl/WebGLRenderer.cpp
         client/src/core/webgl/WebGLShader.cpp
         # src/core/textures
         client/src/core/textures/TextureAtlas.cpp
@@ -43,8 +42,6 @@ list(APPEND SOURCES
         client/src/core/Input.cpp
         client/src/core/Logger.cpp
         client/src/core/Material.cpp
-        client/src/core/Mesh.cpp
-        client/src/core/Scene.cpp
         client/src/core/Window.cpp
         #src/importer
         client/src/importer/MinecraftImporter.cpp
