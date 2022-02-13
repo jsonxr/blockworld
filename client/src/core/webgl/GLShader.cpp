@@ -1,15 +1,15 @@
-#include "WebGLShader.h"
+#include "GLShader.h"
 
 namespace app {
 
-WebGLShader::~WebGLShader() {
+GLShader::~GLShader() {
   std::cout << "~WebGLShader " << handle_ << std::endl;
   if (handle_ > 0) {
     glDeleteShader(handle_);
   }
 }
 
-WebGLShader::WebGLShader(WebGLShaderType type, const char *source)
+GLShader::GLShader(WebGLShaderType type, const char *source)
     : handle_{glCreateShader(static_cast<GLenum>(type))} {
   std::cout << "WebGLShader " << handle_ << std::endl;
 

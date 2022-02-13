@@ -284,11 +284,6 @@ namespace importer {
 // BlockModel
 //------------------------------------------------------------------------------
 
-auto BlockModel::toJSON() -> std::string {
-  json j2 = *this;
-  return j2.dump();
-}
-
 [[maybe_unused]] void to_json(json &j, const BlockModel &b) {
   j = json(json::value_t::object);
   if (!b.parent.empty()) {
@@ -551,7 +546,7 @@ auto debug_read_block_models(bool reparse = false)
   return map;
 }
 
-void debug_block_map(bool reparse) {
+[[maybe_unused]] void debug_block_map(bool reparse) {
   debug_read_block_states(reparse);
   debug_read_block_models(reparse);
   debug_missing_models();

@@ -4,10 +4,10 @@
 #include <optional>
 #include <vector>
 
-#include "Image.h"
-#include "Texture.h"
-#include "TextureRect.h"
 #include "../../core.h"
+#include "Image.h"
+// include "Texture.h"
+#include "TextureRect.h"
 
 namespace app {
 
@@ -17,39 +17,29 @@ constexpr uint16 kTextureAtlasMinSize = 16;
 using TextureGrid = std::vector<int>;
 using TexturePixels = std::vector<Pixel>;  // 4_194_304
 
-struct Size {
-  uint16 width;
-  uint16 height;
-};
-
 class TextureAtlas {
  public:
-  TextureAtlas()
-      : width_{kTextureAtlasDefaultSize}, height_{kTextureAtlasDefaultSize}{};
-  explicit TextureAtlas(uint16 width, uint16 height,  // NOLINT
-                        uint16 min_size = kTextureAtlasMinSize)
-      : width_{width}, height_{height}, min_size_{min_size} {}
+  TextureAtlas() = default;
+  explicit TextureAtlas(const ivec2 &size,
+                        uint8 min_size = kTextureAtlasMinSize);
 
-  [[nodiscard]] auto get_width() const -> uint16 { return width_; }
-  [[nodiscard]] auto get_height() const -> uint16 { return height_; }
-  [[nodiscard]] auto get_min_size() const -> uint16 { return min_size_; }
+  [[nodiscard]] auto width() const noexcept -> uint16;
+  [[nodiscard]] auto height() const noexcept -> uint16;
+  [[nodiscard]] auto min_size() const noexcept -> uint16;
 
   auto pack() -> std::unique_ptr<TextureGrid>;
   auto compile() -> GLuint;
   auto generatePixels() -> std::unique_ptr<TexturePixels>;
   auto add(TextureRect &&region) -> uint16;
   void save(const std::string &filename);
-  auto getRectByName(const std::string &name) -> std::optional<TextureRect>;
-  static auto loadFromDirectory(const std::string &prefix,
-                                const std::string &filepath,
-                                Size size = Size{kTextureAtlasDefaultSize,
-                                                 kTextureAtlasDefaultSize})
-      -> std::shared_ptr<TextureAtlas>;
+  auto getRectByName(const std::string &name) const noexcept
+      -> const TextureRect *;
+  void loadFromDirectory(const std::string &prefix, const std::string &filepath,
+                         bool sub_folders = false);
 
  private:
   uint16 min_size_{kTextureAtlasMinSize};
-  uint16 width_{kTextureAtlasDefaultSize};
-  uint16 height_{kTextureAtlasDefaultSize};
+  ivec2 size_{kTextureAtlasDefaultSize, kTextureAtlasDefaultSize};
   std::vector<TextureRect> regions_{};
   GLuint handle_{0};
 };

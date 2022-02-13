@@ -3,52 +3,50 @@
 
 #include "../core.h"
 #include "../core/BufferGeometry.h"
+#include "../core/Material.h"
 #include "../core/textures/TextureAtlas.h"
 
 namespace app {
 
 class BlockMap;
 
-struct Vertex {
-  vec3 pos_{};
-  vec2 uv{};
-};
-
 constexpr int kChunkWidth = 16;
 constexpr int kChunkHeight = 256;
-constexpr int kChunkSize = kChunkWidth * kChunkWidth * kChunkHeight;
 
 using ChunkData = std::vector<int16>;
-using ChunkDataPtr = std::shared_ptr<ChunkData>;
 
 class Chunk {
  public:
-  Chunk();
-  auto data() -> ChunkDataPtr;
-  auto size() -> int;
-  void generate();
-  auto get_position_from_index(int index) -> vec3;
-  auto get_index_from_position(int x, int y, int z) -> int;
+  Chunk(vec3 pos);
+  auto pos() const noexcept -> const vec3 &;
+  auto data() const noexcept -> const ChunkData &;
+  auto size() const noexcept -> int;
+  void generate(const BlockMap &map);
+  auto get_id_from_index(int index) const noexcept -> int16;
+  auto get_id_from_location(const ivec3 &loc) const noexcept -> int16;
+  auto get_location_from_index(int index) const noexcept -> ivec3;
+  auto get_index_from_location(const ivec3 &loc) const noexcept -> int;
+  int id_{};
 
  private:
+  vec3 pos_{};
   int width_{kChunkWidth};
   int height_{kChunkHeight};
-  ChunkDataPtr data_{};
+  ChunkData data_{};
 };
 
 class ChunkGfx {
  public:
-  ChunkGfx(std::shared_ptr<Chunk> chunk, std::shared_ptr<TextureAtlas> atlas,
-           const BlockMap &blockMap);
-  void render();
+  ChunkGfx(std::shared_ptr<Material> material, const Chunk &chunk,
+           const BlockMap &blockMap, const TextureAtlas &atlas);
+  void render(const Camera &camera) const;
+  auto pos() const -> const vec3 & { return pos_; }
+  int id_{};
 
  private:
-  std::shared_ptr<Chunk> chunk_;
+  vec3 pos_{};
   std::unique_ptr<BufferGeometryGfx> buffer_;
-  std::shared_ptr<TextureAtlas> atlas_;
-  std::unique_ptr<std::array<Vertex, kChunkSize>> vertices_;
-  GLuint glVao_{0};
-  GLuint glVbo_{0};
+  std::shared_ptr<Material> material_;
 };
 
 }  // namespace app

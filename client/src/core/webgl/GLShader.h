@@ -12,20 +12,20 @@ enum class WebGLShaderType : GLenum {
   kVertex = GL_VERTEX_SHADER,
 };
 
-class WebGLShader {
+class GLShader {
  public:
-  WebGLShader() = default;
-  WebGLShader(WebGLShaderType type, const char *source);
-  ~WebGLShader();
+  GLShader() = default;
+  GLShader(WebGLShaderType type, const char *source);
+  ~GLShader();
   [[nodiscard]] auto handle() const -> GLuint { return this->handle_; };
 
   // Copy: not supported
-  WebGLShader(const WebGLShader &other) = delete;
-  auto operator=(const WebGLShader &other) = delete;
+  GLShader(const GLShader &other) = delete;
+  auto operator=(const GLShader &other) = delete;
   // Move
-  WebGLShader(WebGLShader &&other) noexcept
+  GLShader(GLShader &&other) noexcept
       : handle_(std::exchange(other.handle_, NULL)){};
-  auto operator=(WebGLShader &&other) noexcept -> WebGLShader & {
+  auto operator=(GLShader &&other) noexcept -> GLShader & {
     std::swap(handle_, other.handle_);
     return *this;
   }

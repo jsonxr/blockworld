@@ -12,7 +12,7 @@ namespace app {
 class Logger {
  public:
   enum class LogLevel {
-    kError = 0,
+    kError [[maybe_unused]] = 0,
     kWarn = 1,
     kInfo = 2,
     kDebug = 3,
@@ -22,13 +22,12 @@ class Logger {
   Logger();
   Logger(std::string name);
 
-  void log(LogLevel level, std::string format, ...);  // NOLINT
-
-  void trace(std::string format, ...);  // NOLINT
-  void debug(std::string format, ...);  // NOLINT
-  void info(std::string format, ...);   // NOLINT
-  void warn(std::string format, ...);   // NOLINT
-  void error(std::string format, ...);  // NOLINT
+  [[maybe_unused]] void trace(std::string format, ...);  // NOLINT
+  [[maybe_unused]] [[maybe_unused]] void debug(std::string format,
+                                               ...);     // NOLINT
+  [[maybe_unused]] void info(std::string format, ...);   // NOLINT
+  [[maybe_unused]] void warn(std::string format, ...);   // NOLINT
+  [[maybe_unused]] void error(std::string format, ...);  // NOLINT
 
  private:
   std::string name_;

@@ -1,15 +1,16 @@
-#include <boost/format.hpp>
 #include <set>
 
+#include "constants.h"
 #include "core.h"
+#include "core/Assets.h"
 #include "core/Camera.h"
 #include "core/Material.h"
-#include "core/textures/TextureAtlas.h"
 #include "core/Window.h"
+#include "core/textures/TextureAtlas.h"
 #include "importer/MinecraftImporter.h"
-#include "utils/executable.h"
-#include "utils/memory.h"
 #include "utils/Tracer.h"
+#include "utils/env.h"
+#include "utils/memory.h"
 #include "world/BlockMap.h"
 #include "world/Chunk.h"
 
@@ -36,7 +37,7 @@ auto main2() -> int {  // NOLINT(bugprone-exception-escape)
     return EXIT_FAILURE;
   }
 
-  std::string path = utils::get_executable_path();
+  std::string path = Assets::getRootPath();
   std::cout << "path: " << path.c_str() << std::endl;
 
   glfwSetErrorCallback(error_callback);
@@ -48,18 +49,31 @@ auto main2() -> int {  // NOLINT(bugprone-exception-escape)
     return exitWithError("Failed to create GLFW window\n");
   }
 
-  auto atlas = app::TextureAtlas::loadFromDirectory(
-      "minecraft:block/", "/minecraft/textures/block", app::Size{512, 1024});
+  auto atlas = std::make_shared<TextureAtlas>(ivec2{1024, 1024});
+  atlas->loadFromDirectory("minecraft:block/", "/minecraft/textures/block");
+  atlas->loadFromDirectory("textures:block/", "/textures/block");
   atlas->save("test.png");
 
-  BlockMap block_map{};
-
+  auto block_map = std::make_shared<BlockMap>();
   auto material = std::make_shared<Material>(atlas);
-  auto chunk = std::make_shared<Chunk>();
-  chunk->generate();
-  ChunkGfx chunk_gfx{chunk, atlas, block_map};
 
-  // WebGLRenderer renderer{};
+  std::vector<std::shared_ptr<Chunk>> chunks{};
+  std::vector<ChunkGfx> chunks_gfx{};
+
+  for (int x = -kChunkRadius; x < +kChunkRadius + 1; x++) {
+    for (int z = -kChunkRadius; z < +kChunkRadius + 1; z++) {
+      cout << x << "," << z << endl;
+      auto chunk =
+          std::make_shared<Chunk>(vec3{x * kChunkWidth, 0, z * kChunkWidth});
+      chunk->generate(*block_map);
+      ChunkGfx chunk_gfx{material, *chunk, *block_map, *atlas};
+
+      cout << "emplace chunk..." << endl;
+      chunks.emplace_back(std::move(chunk));
+      cout << "emplace chunkgfx..." << endl;
+      chunks_gfx.emplace_back(std::move(chunk_gfx));
+    }
+  }
 
   // timing
   GLdouble delta_time{};
@@ -82,11 +96,9 @@ auto main2() -> int {  // NOLINT(bugprone-exception-escape)
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
-    glm::mat4 model = glm::mat4(1.0F);
-    material->setModelMatrix(model);
-    material->render(window.camera());
-
-    chunk_gfx.render();
+    for (const auto &c : chunks_gfx) {
+      c.render(window.camera());
+    }
 
     glfwSwapBuffers(window.nativeWindow());
   };
@@ -105,7 +117,7 @@ auto main2() -> int {  // NOLINT(bugprone-exception-escape)
   return EXIT_SUCCESS;
 }
 
-auto main_import() -> int {
+[[maybe_unused]] auto main_import() -> int {
   importer::MinecraftImporter map{};
   map.load();
   map.get_block("minecraft:block/oak_stairs");
@@ -113,16 +125,14 @@ auto main_import() -> int {
   return 0;
 }
 
-auto main() -> int {
-  cout << boost::format("writing %1%,  x=%2% : %3%-th try") % "toto" % 40.23 %
-              50
-       << endl;
-  utils::display_sizeof_values();
-  auto total_memory = utils::getTotalSystemMemory();
-  std::cout << "memory: " << utils::prettyBytes(total_memory) << "("
-            << total_memory << ")" << std::endl;
-  // test_memory();
-  //  main_import();
-  main2();
-  return 0;
+auto main(int /*argc*/, char ** /*argv*/, char **envp) -> int {
+  //  // utils::dump_env(envp);
+  //  // utils::display_sizeof_values();
+  //  auto total_memory = utils::getTotalSystemMemory();
+  //  std::cout << "memory: " << utils::prettyBytes(total_memory) << "("
+  //            << total_memory << ")" << std::endl;
+  //  // test_memory();
+  //  //  main_import();
+  return main2();
+  // return 0;
 }

@@ -1,6 +1,6 @@
 #include "Input.h"
 
-#include "Window.h"
+#include "constants.h"
 
 namespace app {
 
@@ -35,39 +35,74 @@ void Input::mouse_button_callback(int button, int action, int /*mods*/) {
 void Input::process(Camera &camera, double /*deltaTime*/) {
   float mx = sensitivity_ * static_cast<float>(deltaMouseX_);
   float my = sensitivity_ * static_cast<float>(deltaMouseY_);
-  // auto orientation = camera.orientation();
-  auto yaw = camera.yaw();
 
-  auto pitch = camera.pitch();
+  auto options = camera.options();
 
-  camera.set_yaw(yaw + mx);
-  camera.set_pitch(pitch + my);
+  options.yaw += mx;
+  options.pitch += my;
 
   vec3 local_right = glm::cross(camera.forward(), glm::vec3(0, 1, 0));
   vec3 local_up = glm::cross(local_right, camera.forward());
-  const float player_speed = 0.2F;
+
+  vec3 xy{0.0, 0.0, 0.0};
   if (Input::isKeyPressed(GLFW_KEY_W)) {
-    // camera.position() += camera.forward() * player_speed;
-    camera.set_position(camera.position() + camera.forward() * player_speed);
+    xy += camera.forward() * kPlayerSpeed;
   }
   if (Input::isKeyPressed(GLFW_KEY_S)) {
-    camera.set_position(camera.position() - camera.forward() * player_speed);
+    xy -= camera.forward() * kPlayerSpeed;
   }
   if (Input::isKeyPressed(GLFW_KEY_A)) {
-    camera.set_position(camera.position() - local_right * player_speed);
+    xy -= local_right * kPlayerSpeed;
   }
   if (Input::isKeyPressed(GLFW_KEY_D)) {
-    camera.set_position(camera.position() + local_right * player_speed);
-  }
-  if (Input::isKeyPressed(GLFW_KEY_SPACE)) {
-    camera.set_position(camera.position() + local_up * player_speed);
-  }
-  if (Input::isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
-    camera.set_position(camera.position() - local_up * player_speed);
+    xy += local_right * kPlayerSpeed;
   }
 
+  // Normalize the xz space, not the up/down
+  vec3 n = glm::normalize(xy);
+  xy = glm::isnan(n.x) ? xy : n;  // Use the normalized vector if it's not zero
+  xy *= kPlayerSpeed;             // Go speed in the normalized direction
+
+  if (Input::isKeyPressed(GLFW_KEY_SPACE)) {
+    xy += local_up * kPlayerSpeed;
+  }
+  if (Input::isKeyPressed(GLFW_KEY_F)) {
+    xy -= local_up * kPlayerSpeed;
+  }
+
+  options.pos += xy;
+
+  camera.set_options(options);
   deltaMouseX_ = 0;
   deltaMouseY_ = 0;
+
+  //  if (Input::isKeyPressed(GLFW_KEY_W)) {
+  //    xy += camera.forward() * kPlayerSpeed;
+  //    options.pos += xy;
+  //  }
+  //  if (Input::isKeyPressed(GLFW_KEY_S)) {
+  //    xy -= camera.forward() * kPlayerSpeed;
+  //    options.pos += xy;
+  //  }
+  //  if (Input::isKeyPressed(GLFW_KEY_A)) {
+  //    xy -= local_right * kPlayerSpeed;
+  //    // camera.set_position(camera.position() - local_right * kPlayerSpeed);
+  //  }
+  //  if (Input::isKeyPressed(GLFW_KEY_D)) {
+  //    xy += local_right * kPlayerSpeed;
+  //    // camera.set_position(camera.position() + local_right * kPlayerSpeed);
+  //  }
+  //  if (Input::isKeyPressed(GLFW_KEY_SPACE)) {
+  //    z += local_up * kPlayerSpeed;
+  //    // camera.set_position(camera.position() + local_up * kPlayerSpeed);
+  //  }
+  //  if (Input::isKeyPressed(GLFW_KEY_F)) {
+  //    z -= local_up * kPlayerSpeed;
+  //    // camera.set_position(camera.position() - local_up * kPlayerSpeed);
+  //  }
+  //
+  //  options.pos = camera.position() + glm::normalize(xy) + glm::normalize(z);
+  //  camera.set_options(options);
 }
 
 }  // namespace app

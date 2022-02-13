@@ -2,8 +2,12 @@
   "configurations": [
     {
       "name": "Mac",
-      "includePath": ["${workspaceFolder}/client/include", "~/.conan/data/**"],
-      "defines": [],
+      "includePath": [
+        "${workspaceFolder}/client/src",
+        "${workspaceFolder}/client/vendor",
+        "~/.conan/data/**"
+      ],
+      "defines": ["_DEBUG"],
       "macFrameworkPath": [
         "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
       ],

@@ -1,7 +1,7 @@
 #include "TextureAtlas.h"
 
-#include "../../core.h"
 #include "../Assets.h"
+#include "Image.h"
 
 namespace app {
 
@@ -11,10 +11,7 @@ namespace app {
 // Perhaps, do this more efficiently by using rectangles of available pixels...
 // https://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Rectangle_difference
 
-struct Position {
-  uint16 x;
-  uint16 y;
-};
+using Position = ivec2;
 
 void sortTextureRects(std::vector<TextureRect> &rects) {
   // Sort largest to smallest since larger are harder to place
@@ -31,13 +28,13 @@ auto checkPosition(const TextureAtlas &atlas, const TextureRect &texture,
                    const TextureGrid &used, const Position &pos) -> bool {
   uint16 pos_x = pos.x;
   uint16 pos_y = pos.y;
-  uint16 out_x_slots = atlas.get_width() / atlas.get_min_size();
-  uint16 out_y_slots = atlas.get_height() / atlas.get_min_size();
+  uint16 out_x_slots = atlas.width() / atlas.min_size();
+  uint16 out_y_slots = atlas.height() / atlas.min_size();
 
-  uint16 y_slots = texture.height / atlas.get_min_size() +
-                   std::min(1, texture.height % atlas.get_min_size());
-  uint16 x_slots = texture.width / atlas.get_min_size() +
-                   std::min(1, texture.width % atlas.get_min_size());
+  uint16 y_slots = texture.height / atlas.min_size() +
+                   std::min(1, texture.height % atlas.min_size());
+  uint16 x_slots = texture.width / atlas.min_size() +
+                   std::min(1, texture.width % atlas.min_size());
 
   if ((pos_x + x_slots > out_x_slots) || (pos_y + y_slots > out_y_slots)) {
     return false;
@@ -55,16 +52,16 @@ auto checkPosition(const TextureAtlas &atlas, const TextureRect &texture,
 
 void markPosition(const TextureAtlas &atlas, TextureRect &texture,
                   TextureGrid &used, const Position &pos) {
-  uint16 y_slots = texture.height / atlas.get_min_size() +
-                   std::min(1, texture.height % atlas.get_min_size());
-  uint16 x_slots = texture.width / atlas.get_min_size() +
-                   std::min(1, texture.width % atlas.get_min_size());
+  uint16 y_slots = texture.height / atlas.min_size() +
+                   std::min(1, texture.height % atlas.min_size());
+  uint16 x_slots = texture.width / atlas.min_size() +
+                   std::min(1, texture.width % atlas.min_size());
 
   uint16 pos_x = pos.x;
   uint16 pos_y = pos.y;
 
-  uint16 out_x_slots = atlas.get_width() / atlas.get_min_size();
-  uint16 out_y_slots = atlas.get_height() / atlas.get_min_size();
+  uint16 out_x_slots = atlas.width() / atlas.min_size();
+  // uint16 out_y_slots = atlas.height() / atlas.min_size();
 
   for (uint16 y = 0; y < y_slots; y++) {
     for (uint16 x = 0; x < x_slots; x++) {
@@ -76,11 +73,10 @@ void markPosition(const TextureAtlas &atlas, TextureRect &texture,
 
 auto findPosition(const TextureAtlas &atlas, const TextureRect &texture,
                   const TextureGrid &used) -> std::optional<Position> {
-  uint16 output_y_slots =
-      atlas.get_height() / atlas.get_min_size() +
-      std::min(1, atlas.get_height() % atlas.get_min_size());
-  uint16 output_x_slots = atlas.get_width() / atlas.get_min_size() +
-                          std::min(1, atlas.get_width() % atlas.get_min_size());
+  uint16 output_y_slots = atlas.height() / atlas.min_size() +
+                          std::min(1, atlas.height() % atlas.min_size());
+  uint16 output_x_slots = atlas.width() / atlas.min_size() +
+                          std::min(1, atlas.width() % atlas.min_size());
 
   for (uint16 y = 0; y < output_y_slots; y++) {
     for (uint16 x = 0; x < output_x_slots; x++) {
@@ -97,7 +93,7 @@ auto findPosition(const TextureAtlas &atlas, const TextureRect &texture,
 auto setPositionsForRegions(const TextureAtlas &atlas,
                             std::vector<TextureRect> &regions)
     -> std::unique_ptr<TextureGrid> {
-  int slots = (atlas.get_width() * atlas.get_height()) / atlas.get_min_size();
+  int slots = (atlas.width() * atlas.height()) / atlas.min_size();
   auto used = std::make_unique<TextureGrid>(slots);
   // TextureGrid used(slots);
 
@@ -109,14 +105,14 @@ auto setPositionsForRegions(const TextureAtlas &atlas,
       continue;
     }
 
-    r.x = pos->x * atlas.get_min_size();
-    r.y = pos->y * atlas.get_min_size();
-    float ux = static_cast<float>(r.x) / static_cast<float>(atlas.get_width());
-    float uy = static_cast<float>(r.y) / static_cast<float>(atlas.get_height());
-    float vx = static_cast<float>(r.x + r.width) /
-               static_cast<float>(atlas.get_width());
-    float vy = static_cast<float>(r.y + r.height) /
-               static_cast<float>(atlas.get_height());
+    r.x = pos->x * atlas.min_size();
+    r.y = pos->y * atlas.min_size();
+    float ux = static_cast<float>(r.x) / static_cast<float>(atlas.width());
+    float uy = static_cast<float>(r.y) / static_cast<float>(atlas.height());
+    float vx =
+        static_cast<float>(r.x + r.width) / static_cast<float>(atlas.width());
+    float vy =
+        static_cast<float>(r.y + r.height) / static_cast<float>(atlas.height());
     r.uv = {ux, uy, vx, vy};
     markPosition(atlas, r, *used, *pos);
   }
@@ -131,10 +127,10 @@ void copyPixels(const TextureAtlas &atlas, const TextureRect &texture,
 
   for (uint16 y = 0; y < texture.height; y++) {
     int offset = y * texture.width * kChannels;
-    unsigned char *current_raw_pixel = &image->get_pixels()[offset];
+    unsigned char *current_raw_pixel = &image->pixels()[offset];
 
     int calc_y = (texture.y) + y;
-    int y_offset = calc_y * atlas.get_width();
+    int y_offset = calc_y * atlas.width();
     int x_offset = texture.x;
     int byte_offset = y_offset + x_offset;
 
@@ -181,6 +177,23 @@ void copyPixels(const TextureAtlas &atlas, const TextureRect &texture,
 // TextureAtlas
 //------------------------------------------------------------------------------
 
+TextureAtlas::TextureAtlas(const ivec2 &size, uint8 min_size)
+    : size_{size}, min_size_{min_size} {
+  if (!isPowerOf2(size.x) || !isPowerOf2(size.y)) {
+    cout << "Warning!! not a power of 2" << endl;
+  }
+}
+
+[[nodiscard]] auto TextureAtlas::width() const noexcept -> uint16 {
+  return size_.x;
+}
+[[nodiscard]] auto TextureAtlas::height() const noexcept -> uint16 {
+  return size_.y;
+}
+[[nodiscard]] auto TextureAtlas::min_size() const noexcept -> uint16 {
+  return min_size_;
+}
+
 auto TextureAtlas::add(TextureRect &&region) -> uint16 {
   region.id = regions_.size();
   regions_.emplace_back(region);
@@ -195,10 +208,10 @@ auto TextureAtlas::pack() -> std::unique_ptr<TextureGrid> {
 
 auto TextureAtlas::generatePixels() -> std::unique_ptr<TexturePixels> {
   auto used = pack();
-  int size = width_ * height_;
-  auto pixels = std::make_unique<TexturePixels>(size);
+  int area = size_.x * size_.y;
+  auto pixels = std::make_unique<TexturePixels>(area);
 
-  // Copy the pixels from the source to the destinatioon
+  // Copy the pixels from the source to the dest
   for (auto const &r : regions_) {
     copyPixels(*this, r, *pixels);
   }
@@ -212,7 +225,7 @@ auto TextureAtlas::compile() -> GLuint {
   glBindTexture(GL_TEXTURE_2D, handle_);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width_, height_, 0, GL_RGBA,
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size_.x, size_.y, 0, GL_RGBA,
                GL_UNSIGNED_BYTE, pixels->data());
   glBindTexture(GL_TEXTURE_2D, NULL);  // reset
   return handle_;
@@ -220,39 +233,38 @@ auto TextureAtlas::compile() -> GLuint {
 
 void TextureAtlas::save(const std::string &filename) {
   auto pixels = this->generatePixels();
-  int size = width_ * static_cast<int>(sizeof(Pixel));
-  stbi_write_png(filename.c_str(), width_, height_, 4, pixels->data(), size);
+  int stride_in_bytes = size_.x * static_cast<int>(sizeof(Pixel));
+  stbi_write_png(filename.c_str(), size_.x, size_.y, 4, pixels->data(),
+                 stride_in_bytes);
 }
 
-auto TextureAtlas::getRectByName(const std::string &name)
-    -> std::optional<TextureRect> {
+auto TextureAtlas::getRectByName(const std::string &name) const noexcept
+    -> const TextureRect * {
   auto it = std::find_if(
       regions_.begin(), regions_.end(),
       [&name](const TextureRect &rect) { return rect.name == name; });
   if (it != regions_.end()) {
-    return *it;
+    return &(*it);
   }
-  return std::nullopt;
+  return nullptr;
 }
 
-auto TextureAtlas::loadFromDirectory(const std::string &prefix,
-                                     const std::string &path, const Size size)
-    -> std::shared_ptr<TextureAtlas> {
-  auto atlas = std::make_shared<TextureAtlas>(size.width, size.height);
-  Assets::forEachFile(path, ".+\\.png",
-                      [&atlas, &prefix](const std::filesystem::path &filepath) {
-                        auto image = std::make_unique<app::Image>(filepath);
-                        std::string name =
-                            prefix + image->get_path().stem().string();
-                        app::TextureRect rect{};
-                        rect.name = name;
-                        rect.path = image->get_path();
-                        rect.width = image->get_width();
-                        rect.height = image->get_height();
-                        atlas->add(std::move(rect));
-                      });
-  atlas->generatePixels();
-  return atlas;
+// TODO - Implement sub_folder recursion
+void TextureAtlas::loadFromDirectory(const std::string &prefix,
+                                     const std::string &path,
+                                     bool /*sub_folders*/) {
+  Assets::forEachFile(
+      path, ".+\\.png", [this, &prefix](const std::filesystem::path &filepath) {
+        auto image = std::make_unique<app::Image>(filepath);
+        std::string name = prefix + image->path().stem().string();
+        app::TextureRect rect{};
+        rect.name = name;
+        rect.path = image->path();
+        rect.width = image->width();
+        rect.height = image->height();
+        this->add(std::move(rect));
+      });
+  this->generatePixels();
 }
 
 }  // namespace app

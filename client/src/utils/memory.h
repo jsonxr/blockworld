@@ -5,6 +5,10 @@
 
 namespace utils {
 
+#ifdef _DEBUG
+void set_debug(bool debug);
+#endif
+
 void display_sizeof_values();
 
 auto getTotalSystemMemory() -> size_t;

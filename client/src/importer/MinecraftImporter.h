@@ -88,8 +88,6 @@ struct BlockModel {
   std::optional<bool> ambientocclusion{};
   std::string gui_light;
   std::map<std::string, BlockDisplay> display{};
-
-  auto toJSON() -> std::string;
 };
 [[maybe_unused]] void to_json(json &j, const BlockModel &b);
 [[maybe_unused]] void from_json(const json &j, BlockModel &b);
@@ -158,7 +156,7 @@ class MinecraftImporter {
   std::map<std::string, json> states_{};
 };
 
-void debug_block_map(bool reparse = false);
+[[maybe_unused]] void debug_block_map(bool reparse = false);
 void debug_missing_models();
 
 }  // namespace importer

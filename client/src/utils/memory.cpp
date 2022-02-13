@@ -17,7 +17,29 @@
 #include <iostream>
 #include <string>
 
+#ifdef _DEBUG
+thread_local bool debug_ = false;
+auto operator new(size_t size) -> void * {
+  auto *address = malloc(size);
+  if (debug_) {
+    std::cout << address << " - malloc " << size << "bytes" << std::endl;
+  }
+  return address;
+}
+
+void operator delete(void *address) noexcept {
+  if (debug_) {
+    std::cout << address << " - free" << std::endl;
+  }
+  free(address);
+}
+#endif
+
 namespace utils {
+
+#ifdef _DEBUG
+void set_debug(bool debug) { debug_ = debug; }
+#endif
 
 using std::cout;
 using std::endl;

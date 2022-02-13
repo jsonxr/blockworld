@@ -8,7 +8,7 @@
 namespace app {
 
 struct Pixel {
-  uint8 r, g, b, a;
+  [[maybe_unused]] uint8 r, g, b, a;
 };
 constexpr int kChannels = sizeof(Pixel) / sizeof(uint8);
 

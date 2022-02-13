@@ -1,10 +1,10 @@
 #include "BoxGeometry.h"
 
+#include <glm/gtx/normal.hpp>
+
 #include "BufferGeometry.h"
 
 namespace app::box_geometry {
-
-constexpr float kHalf = 0.5F;
 
 // float: 4 bytes
 // int: 4 bytes
@@ -20,196 +20,109 @@ constexpr float kHalf = 0.5F;
 // ...624 bytes
 
 /*
-                               G--------H
-                              /        /|
-                             /        / |
-                        (u) D--------C  |
-                            |  |     |  |
-                            |  F --  |  E
-                            | /      | /
-                            |        |/
-                            A--------B (v)
-
+                              +y
+                               |
+                               |
+                               F--------E
+ A=p1.x,p2.y,p2.z             /        /|
+ B=p1.x,p1.y,p2.z            /        / |
+ C=p2.x,p1.y,p2.z       (u) A--------D  | <-  p2
+ D=p2                       |  |     |  |
+ E=p2.x,p2.y,p1.z     p1->  |  G --  |  H- - - - +x
+ F=p1.x,p2.y,p1.z           | /      | /
+ G=p1                       |        |/
+ H=p2.x,p1.y,p1.z           B--------C (v)
+                           /
+                         +z
 */
 
-struct Vertex {
-  vec3 pos{};
-  vec2 uv{};
-};
+void add_quad(BufferGeometry &geometry, const std::array<vec3, 4> &vertices,
+              const vec4 &uv) {
+  auto v1 = vertices[0];
+  auto v2 = vertices[1];
+  auto v3 = vertices[2];
+  auto v4 = vertices[3];
 
-auto create_geometry(const BoxOptions &options)
-    -> std::unique_ptr<BufferGeometry> {
-  vec3 p = options.position;
-  float x_size = options.size.x / 2.0F;
-  float y_size = options.size.y / 2.0F;
-  float z_size = options.size.z / 2.0F;
-  // xp,xn,yp,yn,zp,zn
-  vec4 xp = options.uv_xp;
-  vec4 xn = options.uv_xn;
-  vec4 yp = options.uv_yp;
-  vec4 yn = options.uv_yn;
-  vec4 zp = options.uv_zp;
-  vec4 zn = options.uv_zn;
-
-  // clang-format off
-  std::vector<GLfloat> vertices{
-      // x positive (Right)
-      p.x+x_size, p.y-y_size, p.z-z_size, xp.z, xp.w, // E
-      p.x+x_size, p.y+y_size, p.z-z_size, xp.z, xp.y, // H
-      p.x+x_size, p.y+y_size, p.z+z_size, xp.x, xp.y, // C
-      p.x+x_size, p.y+y_size, p.z+z_size, xp.x, xp.y, // C
-      p.x+x_size, p.y-y_size, p.z+z_size, xp.x, xp.w, // B
-      p.x+x_size, p.y-y_size, p.z-z_size, xp.z, xp.w, // E
-      // x negative (Left)
-      p.x-x_size, p.y+y_size, p.z+z_size, zn.z, zn.y, // D
-      p.x-x_size, p.y+y_size, p.z-z_size, zn.x, zn.y, // G
-      p.x-x_size, p.y-y_size, p.z-z_size, zn.x, zn.w, // F
-      p.x-x_size, p.y-y_size, p.z-z_size, zn.x, zn.w, // F
-      p.x-x_size, p.y-y_size, p.z+z_size, zn.z, zn.w, // A
-      p.x-x_size, p.y+y_size, p.z+z_size, zn.z, zn.y, // D
-      // y positive (Top)
-      p.x+x_size, p.y+y_size, p.z+z_size, yp.z, yp.w, // C
-      p.x+x_size, p.y+y_size, p.z-z_size, yp.z, yp.y, // H
-      p.x-x_size, p.y+y_size, p.z-z_size, yp.x, yp.y, // G
-      p.x-x_size, p.y+y_size, p.z-z_size, yp.x, yp.y, // G
-      p.x-x_size, p.y+y_size, p.z+z_size, yp.x, yp.w, // D
-      p.x+x_size, p.y+y_size, p.z+z_size, yp.z, yp.w, // C
-      // y negative (Bottom)
-      p.x-x_size, p.y-y_size, p.z-z_size, yn.x, yn.w, // F
-      p.x+x_size, p.y-y_size, p.z-z_size, yn.z, yn.w, // E
-      p.x+x_size, p.y-y_size, p.z+z_size, yn.z, yn.y, // B
-      p.x+x_size, p.y-y_size, p.z+z_size, yn.z, yn.y, // B
-      p.x-x_size, p.y-y_size, p.z+z_size, yn.x, yn.y, // A
-      p.x-x_size, p.y-y_size, p.z-z_size, yn.x, yn.w, // F
-      // z positive (Front)
-      p.x-x_size, p.y-y_size, p.z+z_size, zp.x, zp.w, // A
-      p.x+x_size, p.y-y_size, p.z+z_size, zp.z, zp.w, // B
-      p.x+x_size, p.y+y_size, p.z+z_size, zp.z, zp.y, // C
-      p.x+x_size, p.y+y_size, p.z+z_size, zp.z, zp.y, // C
-      p.x-x_size, p.y+y_size, p.z+z_size, zp.x, zp.y, // D
-      p.x-x_size, p.y-y_size, p.z+z_size, zp.x, zp.w, // A
-      // z negative (Back)
-      p.x+x_size, p.y+y_size, p.z-z_size, zn.x, zn.y, // H
-      p.x+x_size, p.y-y_size, p.z-z_size, zn.x, zn.w, // E
-      p.x-x_size, p.y-y_size, p.z-z_size, zn.z, zn.w, // F
-      p.x-x_size, p.y-y_size, p.z-z_size, zn.z, zn.w, // F
-      p.x-x_size, p.y+y_size, p.z-z_size, zn.z, zn.y, // G
-      p.x+x_size, p.y+y_size, p.z-z_size, zn.x, zn.y, // H
-  };
-  // clang-format on
-  // auto result = std::make_unique<std::vector<GLfloat>>(std::move(vertices));
-
-  // return result;
-
-  std::vector<BufferAttribute> attributes{{
-      {.type = GL_FLOAT, .count = 3},  // position
-      {.type = GL_FLOAT, .count = 2}   // uv
-  }};
-  BufferGeometry geometry{
-      .attributes = std::move(attributes),
-      .vertices = std::move(vertices),
-  };
-  auto result = std::make_unique<BufferGeometry>(std::move(geometry));
-  return result;
-}
-
-void add_quad(const BufferGeometry &geometry, Vertex p1, Vertex p2, Vertex p3,
-              Vertex p4) {}
-
-auto create_geometry_indexed(const BoxOptions &options)
-    -> std::unique_ptr<BufferGeometry> {
-  vec3 p = options.position;
-  float x_size = options.size.x / 2.0F;
-  float y_size = options.size.y / 2.0F;
-  float z_size = options.size.z / 2.0F;
-  // xp,xn,yp,yn,zp,zn
-  vec4 xp = options.uv_xp;
-  vec4 xn = options.uv_xn;
-  vec4 yp = options.uv_yp;
-  vec4 yn = options.uv_yn;
-  vec4 zp = options.uv_zp;
-  vec4 zn = options.uv_zn;
-
-    // add_quad()
-
-  // clang-format off
-  std::vector<GLfloat> vertices{
-      // x positive (Right) - EHC, CBE (0,1,2,2,3,0)
-      p.x+x_size, p.y-y_size, p.z-z_size, xp.z, xp.w, // E 0
-      p.x+x_size, p.y+y_size, p.z-z_size, xp.z, xp.y, // H 1
-      p.x+x_size, p.y+y_size, p.z+z_size, xp.x, xp.y, // C 2
-      p.x+x_size, p.y-y_size, p.z+z_size, xp.x, xp.w, // B 3
-      // x negative (Left) - DGF, FAD (4,5,6,6,7,4)
-      p.x-x_size, p.y+y_size, p.z+z_size, zn.z, zn.y, // D 4
-      p.x-x_size, p.y+y_size, p.z-z_size, zn.x, zn.y, // G 5
-      p.x-x_size, p.y-y_size, p.z-z_size, zn.x, zn.w, // F 6
-      p.x-x_size, p.y-y_size, p.z+z_size, zn.z, zn.w, // A 7
-      // y positive (Top) - CHG, GDC (8,9,10,10,11,8)
-      p.x+x_size, p.y+y_size, p.z+z_size, yp.z, yp.w, // C 8
-      p.x+x_size, p.y+y_size, p.z-z_size, yp.z, yp.y, // H 9
-      p.x-x_size, p.y+y_size, p.z-z_size, yp.x, yp.y, // G 10
-      p.x-x_size, p.y+y_size, p.z+z_size, yp.x, yp.w, // D 11
-      // y negative (Bottom) - FEB, BAF (12,13,14,14,15,12)
-      p.x-x_size, p.y-y_size, p.z-z_size, yn.x, yn.w, // F 12
-      p.x+x_size, p.y-y_size, p.z-z_size, yn.z, yn.w, // E 13
-      p.x+x_size, p.y-y_size, p.z+z_size, yn.z, yn.y, // B 14
-      p.x-x_size, p.y-y_size, p.z+z_size, yn.x, yn.y, // A 15
-      // z positive (Front) - ABC, CDA (16,17,18,18,19,16)
-      p.x-x_size, p.y-y_size, p.z+z_size, zp.x, zp.w, // A 16
-      p.x+x_size, p.y-y_size, p.z+z_size, zp.z, zp.w, // B 17
-      p.x+x_size, p.y+y_size, p.z+z_size, zp.z, zp.y, // C 18
-      p.x-x_size, p.y+y_size, p.z+z_size, zp.x, zp.y, // D 19
-      // z negative (Back) - HEF, FGH (20,21,22,22,23,20)
-      p.x+x_size, p.y+y_size, p.z-z_size, zn.x, zn.y, // H 20
-      p.x+x_size, p.y-y_size, p.z-z_size, zn.x, zn.w, // E 21
-      p.x-x_size, p.y-y_size, p.z-z_size, zn.z, zn.w, // F 22
-      p.x-x_size, p.y+y_size, p.z-z_size, zn.z, zn.y, // G 23
-  };
-
-  std::vector<int> elements{
-      // x positive (Right) - EHC, CBE
-       0,  1,  2,  2,  3,  0,
-      // x negative (Left) - DGF, FAD
-       4,  5,  6,  6,  7,  4,
-      // y positive (Top) - CHG, GDC
-       8,  9, 10, 10, 11,  8,
-      // y negative (Bottom) - FEB, BAF
-      12, 13, 14, 14, 15, 12,
-      // z positive (Front) - ABC, CDA 
-      16, 17, 18, 18, 19, 16,
-      // z negative (Back) - HEF, FGH 
-      20, 21, 22, 22, 23, 20,
-  };
-  // clang-format on
-
-  std::vector<BufferAttribute> attributes{{
-      {.type = GL_FLOAT, .count = 3},  // position
-      {.type = GL_FLOAT, .count = 2}   // uv
-  }};
-  BufferGeometry geometry{
-      .attributes = std::move(attributes),
-      .vertices = std::move(vertices),
-      .elements = std::move(elements),
-  };
-  auto result = std::make_unique<BufferGeometry>(std::move(geometry));
-  return result;
-}
-
-auto create_box(const BoxOptions &options) -> std::unique_ptr<BufferGeometry> {
-  if (options.indexed) {
-    return create_geometry_indexed(options);
+  auto normal = glm::normalize(glm::triangleNormal(v1, v2, v3));
+  if (geometry.isIndexed) {
+    // TODO: Should be number of vertices... count()?
+    int size = static_cast<int>(geometry.vertices.size());
+    geometry.vertices.insert(geometry.vertices.end(),
+                             {
+                                 Vertex{.pos = vec3{v1.x, v1.y, v1.z},
+                                        .normal = normal,
+                                        .uv = vec2{uv.x, uv.y}},  // a
+                                 Vertex{.pos = vec3{v2.x, v2.y, v2.z},
+                                        .normal = normal,
+                                        .uv = vec2{uv.x, uv.w}},  // b
+                                 Vertex{.pos = vec3{v3.x, v3.y, v3.z},
+                                        .normal = normal,
+                                        .uv = vec2{uv.z, uv.w}},  // c
+                                 Vertex{.pos = vec3{v4.x, v4.y, v4.z},
+                                        .normal = normal,
+                                        .uv = vec2{uv.z, uv.y}},  // d
+                             });
+    geometry.elements.insert(
+        geometry.elements.end(),
+        {size + 0, size + 1, size + 2, size + 2, size + 3, size + 0});
+  } else {
+    geometry.vertices.insert(geometry.vertices.end(),
+                             {
+                                 Vertex{.pos = vec3{v1.x, v1.y, v1.z},
+                                        .normal = normal,
+                                        .uv = vec2{uv.x, uv.y}},  // a
+                                 Vertex{.pos = vec3{v2.x, v2.y, v2.z},
+                                        .normal = normal,
+                                        .uv = vec2{uv.x, uv.w}},  // b
+                                 Vertex{.pos = vec3{v3.x, v3.y, v3.z},
+                                        .normal = normal,
+                                        .uv = vec2{uv.z, uv.w}},  // c
+                                 Vertex{.pos = vec3{v3.x, v3.y, v3.z},
+                                        .normal = normal,
+                                        .uv = vec2{uv.z, uv.w}},  // c
+                                 Vertex{.pos = vec3{v4.x, v4.y, v4.z},
+                                        .normal = normal,
+                                        .uv = vec2{uv.z, uv.y}},  // d
+                                 Vertex{.pos = vec3{v1.x, v1.y, v1.z},
+                                        .normal = normal,
+                                        .uv = vec2{uv.x, uv.y}},  // a
+                             });
   }
-  return create_geometry(options);
 }
 
-auto create_buffer_geometry(const BoxOptions &options)
-    -> std::unique_ptr<BufferGeometryGfx> {
-  auto geometry = create_box(options);
+static vec4 vec4_zero{};
 
-  BufferGeometryGfx gfx{*geometry};
+void add_cube(BufferGeometry &bufferGeometry, const BoxOptions &options) {
+  auto p1 = options.p1;  // vec3{-x_size, -y_size, -z_size};
+  auto p2 = options.p2;  // vec3{+x_size, +y_size, +z_size};
 
-  auto geometry2 = std::make_unique<BufferGeometryGfx>(std::move(gfx));
-  return geometry2;
+  auto a = vec3{p1.x, p2.y, p2.z};
+  auto b = vec3{p1.x, p1.y, p2.z};
+  auto c = vec3{p2.x, p1.y, p2.z};
+  auto d = p2;
+  auto e = vec3{p2.x, p2.y, p1.z};
+  auto f = vec3{p1.x, p2.y, p1.z};
+  auto g = p1;
+  auto h = vec3{p2.x, p1.y, p1.z};
+
+  if (options.xp != vec4_zero) {
+    add_quad(bufferGeometry, {d, c, h, e}, options.xp);  // right
+  }
+  if (options.xn != vec4_zero) {
+    add_quad(bufferGeometry, {f, g, b, a}, options.xn);  // left
+  }
+  if (options.yp != vec4_zero) {
+    add_quad(bufferGeometry, {f, a, d, e}, options.yp);  // top
+  }
+  if (options.yn != vec4_zero) {
+    add_quad(bufferGeometry, {b, g, h, c}, options.yn);  // bottom
+  }
+  if (options.zp != vec4_zero) {
+    add_quad(bufferGeometry, {a, b, c, d}, options.zp);  // front
+  }
+  if (options.zn != vec4_zero) {
+    add_quad(bufferGeometry, {e, h, g, f}, options.zn);  // back
+  }
 }
 
 }  // namespace app::box_geometry

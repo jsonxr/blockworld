@@ -6,12 +6,12 @@ namespace app {
 
 Logger::Logger() = default;
 
-Logger::Logger(std::string name) : name_(std::move(name)){};
+Logger::Logger(std::string name) : name_(std::move(name)) {}
 
 // TODO: @jsonxr Learn templates
 // TODO: @jsonxr Figure out how to templatize
 
-void Logger::trace(std::string format, ...) {  // NOLINT
+[[maybe_unused]] void Logger::trace(std::string format, ...) {  // NOLINT
   if (level_ > LogLevel::kTrace) {
     return;
   }
@@ -22,7 +22,7 @@ void Logger::trace(std::string format, ...) {  // NOLINT
   va_end(vargs);
 }
 
-void Logger::debug(std::string format, ...) {  // NOLINT
+[[maybe_unused]] void Logger::debug(std::string format, ...) {  // NOLINT
   if (level_ > LogLevel::kDebug) {
     return;
   }
@@ -33,7 +33,7 @@ void Logger::debug(std::string format, ...) {  // NOLINT
   va_end(vargs);
 }
 
-void Logger::info(std::string format, ...) {  // NOLINT
+[[maybe_unused]] void Logger::info(std::string format, ...) {  // NOLINT
   if (level_ > LogLevel::kInfo) {
     return;
   }
@@ -44,7 +44,7 @@ void Logger::info(std::string format, ...) {  // NOLINT
   va_end(vargs);
 }
 
-void Logger::warn(std::string format, ...) {  // NOLINT
+[[maybe_unused]] void Logger::warn(std::string format, ...) {  // NOLINT
   if (level_ > LogLevel::kWarn) {
     return;
   }
@@ -55,7 +55,7 @@ void Logger::warn(std::string format, ...) {  // NOLINT
   va_end(vargs);
 }
 
-void Logger::error(std::string format, ...) {  // NOLINT
+[[maybe_unused]] void Logger::error(std::string format, ...) {  // NOLINT
   va_list vargs;
   va_start(vargs, format);
   std::cout << "[" << name_ << "] - ";

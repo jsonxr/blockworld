@@ -1,37 +1,48 @@
 #include "Camera.h"
 
 #include "../vendor/glm.h"
-#include "Logger.h"
 
 namespace app {
 
-static Logger log{"Camera.cpp"};
+constexpr float kUp = 89.9999;
 
 Camera::Camera(const CameraOptions options) : options_{options} {}
 
-auto Camera::get_view_matrix() -> mat4 {
-  auto pos = options_.position;
-  auto yaw = options_.yaw;
-  auto pitch = options_.pitch;
+// auto Camera::options() -> CameraOptions & { return options_; }
+void Camera::set_options(CameraOptions options) {
+  options_ = options;
+  // pitch
+  if (options_.pitch > kUp) options_.pitch = kUp;
+  if (options_.pitch < -kUp) options_.pitch = -kUp;
+  // yaw
+  if (options_.yaw > 360) options_.yaw = 0;
+  if (options_.yaw < 0) options_.yaw = 360;
 
-  forward_ = vec3(cos(glm::radians(yaw)), 0, sin(glm::radians(yaw)));
-  forward_ = glm::normalize(forward_);
+  calculateMatrices();
+}
+auto Camera::options() const -> const CameraOptions & { return options_; }
+auto Camera::forward() const -> const vec3 & { return forward_; }
+auto Camera::position() const -> const vec3 & { return options_.pos; }
+auto Camera::view_matrix() const -> const mat4 & { return view_; }
+auto Camera::projection_matrix() const -> const mat4 & { return projection_; }
 
-  vec3 look_at = vec3(cos(glm::radians(pitch)) * cos(glm::radians(yaw)),
-                      sin(glm::radians(pitch)),
-                      sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
-  look_at = glm::normalize((look_at));
+void Camera::calculateMatrices() {
+  // forward vector
+  forward_ = glm::normalize(vec3(cos(glm::radians(options_.yaw)), 0,
+                                 sin(glm::radians(options_.yaw))));
 
+  // projection matrix
+  projection_ = glm::perspective(glm::radians(options_.fov), options_.aspect,
+                                 options_.near, options_.far);
+
+  // view matrix
+  vec3 look_at = glm::normalize(vec3(
+      cos(glm::radians(options_.pitch)) * cos(glm::radians(options_.yaw)),
+      sin(glm::radians(options_.pitch)),
+      sin(glm::radians(options_.yaw)) * cos(glm::radians(options_.pitch))));
   vec3 local_right = glm::cross(look_at, vec3(0, 1, 0));
   vec3 local_up = glm::cross(local_right, look_at);
-  auto view_matrix = glm::lookAt(pos, pos + look_at, local_up);
-  return view_matrix;
-}
-
-auto Camera::get_projection_matrix() const -> mat4 {
-  auto projection_matrix = glm::perspective(
-      glm::radians(options_.fov), options_.aspect, options_.near, options_.far);
-  return projection_matrix;
+  view_ = glm::lookAt(options_.pos, options_.pos + look_at, local_up);
 }
 
 }  // namespace app

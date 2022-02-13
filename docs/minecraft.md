@@ -1,3 +1,9 @@
+# Minecraft Implementation
+
+- Particle effects 1 chunk radius (3x3)
+- Entities like sheep 160 block radius from player
+- 40 block radius for items
+
 [tint index](https://forums.minecraftforge.net/topic/29532-18-solved-tintindex-anyone-gotten-it-to-do-anything-useful/) - How to blend color for grass
 
 [Minecraft JSON](https://github.com/thecodewarrior-archive/MineCraft-Draw) - 7 year old site but has some missing json things like bed.json

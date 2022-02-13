@@ -2,6 +2,7 @@
 #define MINECRAFT_WINDOW_H
 #include "../core.h"
 #include "Camera.h"
+#include "constants.h"
 #include "Input.h"
 
 namespace app {
@@ -14,7 +15,7 @@ struct WindowSize {
   int height{kDefaultWindowHeight};
 };
 
-enum class CursorMode { kHidden, kLocked, kNormal };
+enum class CursorMode { kLocked, kNormal };
 
 // struct Destroy_GLFWwindow {
 //   void operator()(GLFWwindow* ptr) { glfwDestroyWindow(ptr); }
@@ -28,7 +29,6 @@ class Window {
   // Constructors
   //----------------------------------------------------------------------------
   Window();
-  explicit Window(const char *title) noexcept;
   explicit Window(const char *title, WindowSize size,
                   bool fullScreenMode = false) noexcept;
   //----------------------------------------------------------------------------
@@ -52,11 +52,9 @@ class Window {
   //----------------------------------------------------------------------------
   // Properties
   //----------------------------------------------------------------------------
-  auto camera() -> Camera & { return camera_; }
+  auto camera() const -> const Camera & { return camera_; }
   auto input() -> Input & { return input_; }
   auto shouldClose() const noexcept -> bool;
-  auto width() const noexcept -> int { return size_.width; }
-  auto height() const noexcept -> int { return size_.height; }
   auto nativeWindow() const noexcept -> GLFWwindow * { return native_window_; }
 
   //----------------------------------------------------------------------------
@@ -65,14 +63,18 @@ class Window {
   void close() noexcept;
   void onResize(int width, int height);
   void process(double deltaTime);
-  void setCursorMode(CursorMode cursorMode);
+  [[maybe_unused]] void setCursorMode(CursorMode cursorMode);
   static void pollEvents();
 
  private:
   GLFWwindow *native_window_ = nullptr;
   GLFWmonitor *primary_monitor_ = nullptr;
   WindowSize size_{};
-  Camera camera_{};
+  Camera camera_{{
+      .pos = vec3{0, kPlayerHeight, 0},
+      .yaw = 270.0,
+      .pitch = -15,
+  }};
   Input input_{};
 };
 

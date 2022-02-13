@@ -6,6 +6,7 @@ Following along with the [YouTube series](https://www.youtube.com/watch?v=HhH_9D
 
 Install
 
+- direnv `brew install direnv`
 - cmake `brew install cmake`
 - [emscripten](https://emscripten.org/)
 
@@ -48,6 +49,11 @@ Install
 # Install
 conan install . -s build_type=Debug -s compiler.libcxx=libc++ -s cppstd=20 --install-folder=build --build missing
 cd build && cmake .. && cmake --build .
+
+# optional...
+# This will use the assets in the project instead of relying on cmake to copy.
+# This avoids being confused when you change a shader and nothing happens.
+# BLOCKWORLD_ASSETS_PATH=$(pwd)/client/assets
 
 # Run app...
 bin/blockworld
@@ -136,8 +142,8 @@ https://en.cppreference.com/w/cpp/compiler_support
 # TODO
 
 - Modify cmake to recompile for asset change
-    - [blog article](https://jeremimucha.com/2021/05/cmake-managing-resources/)
-    - [gist](https://gist.github.com/jamcodes/f79b3be24ed40c6c224cc9e91d3061cc)
+  - [blog article](https://jeremimucha.com/2021/05/cmake-managing-resources/)
+  - [gist](https://gist.github.com/jamcodes/f79b3be24ed40c6c224cc9e91d3061cc)
 - per vertex data... make vertex color use rgba=4bytes instead of 4 floats
 - Block map... load all available blocks in the minecraft models folder.
 - cull faces
@@ -146,3 +152,12 @@ https://en.cppreference.com/w/cpp/compiler_support
 # WebGL2
 
 - TextureArray (Bug in m1 mac that causes it to fail)
+
+# Noise
+
+- []()
+- [Seed a perlin noise](https://solarianprogrammer.com/2012/07/18/perlin-noise-cpp-11/)
+
+# Ambient Lighting
+
+# Serialization

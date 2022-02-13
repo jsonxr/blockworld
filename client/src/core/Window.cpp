@@ -1,9 +1,5 @@
 #include "Window.h"
 
-#include <utility>
-
-#include "Input.h"
-
 namespace app {
 
 //------------------------------------------------------------------------------
@@ -48,8 +44,6 @@ void mouse_button_callback(GLFWwindow *native_window, int button, int action,
 // Constructors
 //------------------------------------------------------------------------------
 Window::Window() : Window("OpenGL Window", WindowSize{}, false) {}
-Window::Window(const char *title) noexcept
-    : Window(title, WindowSize{}, false) {}
 Window::Window(const char *title, WindowSize size, bool fullScreenMode) noexcept
     : size_(size) {
   // Highest OpenGL version Mac supports is 4.1
@@ -103,7 +97,7 @@ Window::~Window() {
   if (primary_monitor_) {
     primary_monitor_ = nullptr;
   }
-};
+}
 
 //------------------------------------------------------------------------------
 // Events
@@ -113,7 +107,9 @@ void Window::onResize(int width, int height) {
   this->size_.height = height;
   glViewport(0, 0, width, height);
   float aspect = static_cast<float>(width) / static_cast<float>(height);
-  camera_.set_aspect(aspect);
+  auto options = camera_.options();
+  options.aspect = aspect;
+  camera_.set_options(options);
 }
 
 //------------------------------------------------------------------------------
@@ -135,7 +131,7 @@ void Window::process(double deltaTime) {
   // camera_.set_position
 }
 
-void Window::setCursorMode(CursorMode cursorMode) {
+[[maybe_unused]] void Window::setCursorMode(CursorMode cursorMode) {
   int glfw_cursor_mode =
       cursorMode == CursorMode::kLocked   ? GLFW_CURSOR_DISABLED
       : cursorMode == CursorMode::kNormal ? GLFW_CURSOR_NORMAL
